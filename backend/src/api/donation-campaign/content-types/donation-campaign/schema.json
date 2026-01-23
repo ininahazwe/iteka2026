@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "donation_campaigns",
+  "info": {
+    "singularName": "donation-campaign",
+    "pluralName": "donation-campaigns",
+    "displayName": "Donation Campaign"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "goal_amount": {
+      "type": "decimal"
+    },
+    "current_amount": {
+      "type": "decimal",
+      "default": 0
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "EUR", "RWF"]
+    },
+    "start_date": {
+      "type": "date"
+    },
+    "end_date": {
+      "type": "date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false
+    },
+    "featured_image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

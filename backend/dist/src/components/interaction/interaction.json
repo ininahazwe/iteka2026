@@ -1,0 +1,29 @@
+{
+    "collectionName": "components_interaction_interactions",
+    "info": {
+        "displayName": "Interaction"
+    },
+    "options": {},
+    "attributes": {
+        "date": {
+            "type": "datetime"
+        },
+        "type": {
+            "type": "enumeration",
+            "enum": [
+                "call",
+                "meeting",
+                "email",
+                "encrypted",
+                "other"
+            ]
+        },
+        "notes": {
+            "type": "text"
+        },
+        "attachments": {
+            "type": "media",
+            "multiple": true
+        }
+    }
+}
