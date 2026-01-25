@@ -1,8 +1,3 @@
-/**
- * Seed script for Iteka backend
- * Run with: npm run seed
- */
-
 require('dotenv').config();
 
 const axios = require('axios');
@@ -41,7 +36,7 @@ async function seedData() {
                 await api.post('/impact-stats', { data: stat });
                 console.log(`  ✓ Created: ${stat.label}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${stat.label} (may already exist)`);
+                console.log(`  ℹ Attempt: ${stat.label}`);
             }
         }
 
@@ -79,7 +74,7 @@ async function seedData() {
                 await api.post('/programmes', { data: prog });
                 console.log(`  ✓ Created: ${prog.name}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${prog.name} (may already exist)`);
+                console.log(`  ℹ Attempt: ${prog.name}`);
             }
         }
 
@@ -118,7 +113,7 @@ async function seedData() {
                 await api.post('/actualites', { data: article });
                 console.log(`  ✓ Created: ${article.title}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${article.title} (may already exist)`);
+                console.log(`  ℹ Attempt: ${article.title}`);
             }
         }
 
@@ -153,7 +148,7 @@ async function seedData() {
                 await api.post('/testimonials', { data: testimonial });
                 console.log(`  ✓ Created: ${testimonial.author_name}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${testimonial.author_name} (may already exist)`);
+                console.log(`  ℹ Attempt: ${testimonial.author_name}`);
             }
         }
 
@@ -199,7 +194,7 @@ async function seedData() {
                 await api.post('/team-members', { data: member });
                 console.log(`  ✓ Created: ${member.name}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${member.name} (may already exist)`);
+                console.log(`  ℹ Attempt: ${member.name}`);
             }
         }
 
@@ -241,7 +236,7 @@ async function seedData() {
                 await api.post('/partners', { data: partner });
                 console.log(`  ✓ Created: ${partner.name}`);
             } catch (err) {
-                console.log(`  ⚠ Skipped: ${partner.name} (may already exist)`);
+                console.log(`  ℹ Attempt: ${partner.name}`);
             }
         }
 
@@ -261,12 +256,12 @@ async function seedData() {
             await api.put('/festival', { data: festival });
             console.log(`  ✓ Created: ${festival.title}`);
         } catch (err) {
-            console.log(`  ⚠ Skipped: Festival (may already exist)`);
+            console.log(`  ℹ Attempt: Festival`);
         }
 
-        console.log('\n✅ Seed completed successfully!');
+        console.log('\n✅ Seed completed!');
     } catch (error) {
-        console.error('❌ Seed failed:', error.message);
+        console.error('❌ Fatal error:', error.message);
         process.exit(1);
     }
 }
