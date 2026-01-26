@@ -33,7 +33,7 @@ export default function Home() {
     queryFn: fetchImpactStats,
   });
 
-  const featuredProgrammes = programmes.filter(p => p.attributes?.is_featured);
+  const featuredProgrammes = programmes.filter((p: any) => p.attributes?.is_featured);
   const featuredNews = actualites.slice(0, 3);
 
   return (
@@ -88,7 +88,7 @@ export default function Home() {
             <div className="max-w-7xl mx-auto px-4">
               <h2 className="text-4xl font-bold text-center mb-16">Our Impact</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                {stats.map((stat) => (
+                {stats.map((stat: any) => (
                   <div key={stat.id} className="text-center">
                     <div className="text-5xl font-bold text-iteka-orange mb-2">
                       {stat.attributes?.value}
@@ -112,7 +112,7 @@ export default function Home() {
                 Discover our core initiatives empowering youth
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {featuredProgrammes.slice(0, 3).map((prog) => (
+                {featuredProgrammes.slice(0, 3).map((prog: any) => (
                   <Link
                     key={prog.id}
                     href={`/programmes/${prog.attributes?.slug}`}
@@ -158,7 +158,7 @@ export default function Home() {
                 What Our Youth Say
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {testimonials.slice(0, 4).map((testimonial) => (
+                {testimonials.slice(0, 4).map((testimonial: any) => (
                   <div
                     key={testimonial.id}
                     className="bg-gray-50 p-8 rounded-lg border-l-4 border-iteka-orange"
@@ -201,7 +201,7 @@ export default function Home() {
                 Stay updated with our latest initiatives and achievements
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {featuredNews.map((article) => (
+                {featuredNews.map((article: any) => (
                   <Link
                     key={article.id}
                     href={`/news/${article.attributes?.slug}`}
