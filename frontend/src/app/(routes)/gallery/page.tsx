@@ -6,17 +6,17 @@ import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchGalleries } from '@/src/lib/api';
 
-interface StrapiImage {
+interface GalleryImage {
   id: number;
-  attributes: {
-    caption?: string;
-    image: {
-      data: {
-        attributes: {
+  attributes?: {
+    image?: {
+      data?: {
+        attributes?: {
           url: string;
         };
       };
     };
+    caption?: string;
   };
 }
 
@@ -33,7 +33,7 @@ export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const { data: images = [] as StrapiImage[], isLoading } = useQuery({
+  const { data: images = [], isLoading } = useQuery({
     queryKey: ['galleries', selectedCategory],
     queryFn: () => fetchGalleries(selectedCategory || undefined),
   });
@@ -83,7 +83,7 @@ export default function GalleryPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {images.map((img) => (
+                {images.map((img: GalleryImage) => (
                   <button
                     key={img.id}
                     onClick={() =>
