@@ -39,7 +39,7 @@ export default function ProgrammesPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {programmes.map((prog) => (
+                {programmes.map((prog: any) => (
                   <Link
                     key={prog.id}
                     href={`/programmes/${prog.attributes?.slug}`}

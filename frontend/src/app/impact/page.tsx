@@ -37,7 +37,7 @@ export default function ImpactPage() {
 
             {stats.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {stats.map((stat) => (
+                {stats.map((stat: any) => (
                   <div key={stat.id} className="text-center p-8 bg-gradient-to-br from-iteka-orange to-iteka-brown rounded-lg text-white hover:shadow-xl transition">
                     <div className="text-6xl font-bold mb-2">{stat.attributes?.value}</div>
                     <p className="text-lg">{stat.attributes?.label}</p>
@@ -63,7 +63,7 @@ export default function ImpactPage() {
 
             {testimonials.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {testimonials.map((testimonial) => (
+                {testimonials.map((testimonial: any) => (
                   <div
                     key={testimonial.id}
                     className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition"
