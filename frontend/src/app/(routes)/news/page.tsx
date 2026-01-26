@@ -6,6 +6,23 @@ import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchActualites } from '@/src/lib/api';
 
+interface Article {
+  id: number;
+  attributes?: {
+    slug?: string;
+    title?: string;
+    excerpt?: string;
+    category?: string;
+    article_date?: string;
+    featured_image?: {
+      data?: {
+        attributes?: {
+          url: string;
+        };
+      };
+    };
+  };
+}
 export default function NewsPage() {
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['actualites'],
@@ -39,7 +56,7 @@ export default function NewsPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {articles.map((article) => (
+                {articles.map((article: any) => (
                   <Link
                     key={article.id}
                     href={`/news/${article.attributes?.slug}`}
@@ -60,7 +77,7 @@ export default function NewsPage() {
                           {article.attributes?.category}
                         </span>
                         <span className="text-gray-500 text-sm">
-                          {new Date(article.attributes?.article_date).toLocaleDateString()}
+                          {new Date(article.attributes?.article_date || '').toLocaleDateString()}
                         </span>
                       </div>
                       <h3 className="text-xl font-bold text-iteka-dark mb-3 group-hover:text-iteka-orange transition line-clamp-2">
