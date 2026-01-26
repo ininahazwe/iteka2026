@@ -36,7 +36,7 @@ async function seedData() {
                 await api.post('/impact-stats', { data: stat });
                 console.log(`  ✓ Created: ${stat.label}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${stat.label}`);
+                console.log(`  ℹ Attempt: ${stat.label}`, err.response?.data || err.message);
             }
         }
 
@@ -74,7 +74,7 @@ async function seedData() {
                 await api.post('/programmes', { data: prog });
                 console.log(`  ✓ Created: ${prog.name}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${prog.name}`);
+                console.log(`  ℹ Attempt: ${prog.name}`, err.response?.data || err.message);
             }
         }
 
@@ -113,7 +113,7 @@ async function seedData() {
                 await api.post('/actualites', { data: article });
                 console.log(`  ✓ Created: ${article.title}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${article.title}`);
+                console.log(`  ℹ Attempt: ${article.title}`, err.response?.data || err.message);
             }
         }
 
@@ -148,7 +148,7 @@ async function seedData() {
                 await api.post('/testimonials', { data: testimonial });
                 console.log(`  ✓ Created: ${testimonial.author_name}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${testimonial.author_name}`);
+                console.log(`  ℹ Attempt: ${testimonial.author_name}`, err.response?.data || err.message);
             }
         }
 
@@ -194,7 +194,7 @@ async function seedData() {
                 await api.post('/team-members', { data: member });
                 console.log(`  ✓ Created: ${member.name}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${member.name}`);
+                console.log(`  ℹ Attempt: ${member.name}`, err.response?.data || err.message);
             }
         }
 
@@ -236,7 +236,7 @@ async function seedData() {
                 await api.post('/partners', { data: partner });
                 console.log(`  ✓ Created: ${partner.name}`);
             } catch (err) {
-                console.log(`  ℹ Attempt: ${partner.name}`);
+                console.log(`  ℹ Attempt: ${partner.name}`, err.response?.data || err.message);
             }
         }
 
@@ -256,7 +256,7 @@ async function seedData() {
             await api.put('/festival', { data: festival });
             console.log(`  ✓ Created: ${festival.title}`);
         } catch (err) {
-            console.log(`  ℹ Attempt: Festival`);
+            console.log(`  ℹ Attempt: Festival`, err.response?.data || err.message);
         }
 
         console.log('\n✅ Seed completed!');
