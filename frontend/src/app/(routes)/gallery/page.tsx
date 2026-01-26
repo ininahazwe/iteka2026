@@ -6,6 +6,20 @@ import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchGalleries } from '@/src/lib/api';
 
+interface StrapiImage {
+  id: number;
+  attributes: {
+    caption?: string;
+    image: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+  };
+}
+
 const CATEGORIES = [
   { value: '', label: 'All' },
   { value: 'Events', label: 'Events' },
@@ -19,7 +33,7 @@ export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const { data: images = [], isLoading } = useQuery({
+  const { data: images = [] as StrapiImage[], isLoading } = useQuery({
     queryKey: ['galleries', selectedCategory],
     queryFn: () => fetchGalleries(selectedCategory || undefined),
   });
