@@ -11,8 +11,8 @@ export default function PartnersPage() {
     queryFn: fetchPartners,
   });
 
-  const featured = partners.filter((p) => p.attributes?.is_featured);
-  const others = partners.filter((p) => !p.attributes?.is_featured);
+  const featured = partners.filter((p: any) => p.attributes?.is_featured);
+  const others = partners.filter((p: any) => !p.attributes?.is_featured);
 
   return (
     <>
@@ -47,7 +47,7 @@ export default function PartnersPage() {
             <div className="max-w-7xl mx-auto px-4">
               <h2 className="text-3xl font-bold mb-12 text-center">Strategic Partners</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featured.map((partner) => (
+                {featured.map((partner: any) => (
                   <div key={partner.id} className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition">
                     {partner.attributes?.logo?.data && (
                       <div className="mb-6 h-24 flex items-center justify-center bg-gray-50 rounded">
@@ -92,7 +92,7 @@ export default function PartnersPage() {
             <div className="max-w-7xl mx-auto px-4">
               <h2 className="text-3xl font-bold mb-12 text-center">Our Partners</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {others.map((partner) => (
+                {others.map((partner: any) => (
                   <div
                     key={partner.id}
                     className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition group"

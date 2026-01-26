@@ -67,7 +67,7 @@ export default function ApproachPage() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {approaches.map((approach) => (
+              {approaches.map((approach: any) => (
                 <div key={approach.number} className="group">
                   <div className="flex gap-6">
                     <div>

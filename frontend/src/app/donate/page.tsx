@@ -75,7 +75,7 @@ function DonateForm() {
       <div>
         <label className="block text-sm font-semibold mb-4">Select Amount (USD)</label>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
-          {presetAmounts.map((amnt) => (
+          {presetAmounts.map((amnt: any) => (
             <button
               key={amnt}
               type="button"
