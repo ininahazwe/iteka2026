@@ -14,7 +14,7 @@ export default function NewsDetailPage() {
         queryKey: ['news', id],
         queryFn: async () => {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/news-articles/${id}?populate=*`
+                `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/actualites/${id}?populate=*`
             );
             const json = await res.json();
             return json.data;
