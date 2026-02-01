@@ -66,7 +66,7 @@ export const fetchTestimonials = async () => {
 };
 
 export const fetchFestival = async () => {
-  const response = await strapiClient.get('/festival?populate=*');
+  const response = await strapiClient.get('/festival?populate=deep');
   return response.data.data;
 };
 

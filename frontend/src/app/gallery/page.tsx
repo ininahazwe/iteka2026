@@ -12,7 +12,7 @@ export default function GalleryPage() {
         queryKey: ['gallery'],
         queryFn: async () => {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/gallery-items?populate=*&sort=order:asc`
+                `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/galleries?populate=*&sort=order:asc`
             );
             const json = await res.json();
             return json.data;

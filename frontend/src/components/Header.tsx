@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -25,8 +26,15 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-iteka-orange">iteka</div>
+          <Link href="/" className="flex items-center">
+            <Image
+                src="/logo-iteka.png" // ou le chemin de ton logo
+                alt="Iteka Youth Organization"
+                width={120}
+                height={40}
+                className="h-10 w-auto"
+                priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
