@@ -1,3 +1,4 @@
+// app/partners/page.tsx
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
@@ -13,9 +14,32 @@ export default function PartnersPage() {
 
   const featured = partners.filter((p: any) => p.attributes?.is_featured);
   const others = partners.filter((p: any) => !p.attributes?.is_featured);
+  console.log(others);
+
+  // Fonction helper pour obtenir l'URL du logo
+  const getLogoUrl = (logo: any) => {
+    if (!logo) return null;
+
+    // Si c'est le format Strapi v4 (avec data)
+    if (logo.data?.attributes?.url) {
+      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo.data.attributes.url}`;
+    }
+
+    // Si c'est le format Strapi v5 (sans data)
+    if (logo.url) {
+      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo.url}`;
+    }
+
+    // Si c'est juste l'URL directe
+    if (typeof logo === 'string') {
+      return logo.startsWith('http') ? logo : `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo}`;
+    }
+
+    return null;
+  };
 
   return (
-    <>
+      <>
       <Header />
 
       <main>
@@ -43,87 +67,95 @@ export default function PartnersPage() {
 
         {/* Featured Partners */}
         {featured.length > 0 && (
-          <section className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl font-bold mb-12 text-center">Strategic Partners</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featured.map((partner: any) => (
-                  <div key={partner.id} className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition">
-                    {partner.attributes?.logo?.data && (
-                      <div className="mb-6 h-24 flex items-center justify-center bg-gray-50 rounded">
-                        <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${partner.attributes.logo.data.attributes.url}`}
-                          alt={partner.attributes?.name}
-                          className="max-h-20 max-w-full object-contain"
-                        />
-                      </div>
-                    )}
-                    <h3 className="text-xl font-bold text-iteka-dark mb-2">
-                      {partner.attributes?.name}
-                    </h3>
-                    <p className="text-sm text-iteka-orange font-semibold mb-3">
-                      {partner.attributes?.partnership_type}
-                    </p>
-                    {partner.attributes?.description && (
-                      <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                        {partner.attributes.description}
-                      </p>
-                    )}
-                    {partner.attributes?.website && (
-                      <a
-                        href={partner.attributes.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-iteka-orange hover:underline text-sm font-semibold"
-                      >
-                        Visit Website →
-                      </a>
-                    )}
-                  </div>
-                ))}
+            <section className="py-20 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4">
+                <h2 className="text-3xl font-bold mb-12 text-center">Strategic Partners</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {featured.map((partner: any) => {
+                    const logoUrl = getLogoUrl(partner.attributes?.logo);
+
+                    return (
+                        <div key={partner.id} className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition">
+                          {logoUrl && (
+                              <div className="mb-6 h-24 flex items-center justify-center bg-gray-50 rounded">
+                                <img
+                                    src={logoUrl}
+                                    alt={partner.attributes?.name}
+                                    className="max-h-20 max-w-full object-contain"
+                                />
+                              </div>
+                          )}
+                          <h3 className="text-xl font-bold text-iteka-dark mb-2">
+                            {partner.attributes?.name}
+                          </h3>
+                          <p className="text-sm text-iteka-orange font-semibold mb-3">
+                            {partner.attributes?.partnership_type}
+                          </p>
+                          {partner.attributes?.description && (
+                              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                                {partner.attributes.description}
+                              </p>
+                          )}
+                          {partner.attributes?.website && (
+
+                            <a href={partner.attributes.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-iteka-orange hover:underline text-sm font-semibold"
+                            >
+                            Visit Website →
+                            </a>
+                            )}
+                    </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </section>
-        )}
+            </section>
+          )}
 
         {/* All Partners */}
         {others.length > 0 && (
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl font-bold mb-12 text-center">Our Partners</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {others.map((partner: any) => (
-                  <div
-                    key={partner.id}
-                    className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition group"
-                  >
-                    {partner.attributes?.logo?.data && (
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${partner.attributes.logo.data.attributes.url}`}
-                        alt={partner.attributes?.name}
-                        className="max-h-16 max-w-full object-contain mb-3 group-hover:scale-110 transition"
-                      />
-                    )}
-                    <p className="text-xs text-gray-600 text-center group-hover:text-iteka-orange transition font-semibold">
-                      {partner.attributes?.name}
-                    </p>
-                  </div>
-                ))}
+            <section className="py-20 bg-white">
+              <div className="max-w-7xl mx-auto px-4">
+                <h2 className="text-3xl font-bold mb-12 text-center">Our Partners</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {others.map((partner: any) => {
+                    const logoUrl = getLogoUrl(partner.attributes?.logo);
+
+                    return (
+                        <div
+                            key={partner.id}
+                            className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition group"
+                        >
+                          {logoUrl && (
+                              <img
+                                  src={logoUrl}
+                                  alt={partner.attributes?.name}
+                                  className="max-h-16 max-w-full object-contain mb-3 group-hover:scale-110 transition"
+                              />
+                          )}
+                          <p className="text-xs text-gray-600 text-center group-hover:text-iteka-orange transition font-semibold">
+                            {partner.attributes?.name}
+                          </p>
+                        </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
         )}
 
         {isLoading && (
-          <section className="py-20 bg-white text-center">
-            <p className="text-gray-600">Loading partners...</p>
-          </section>
+            <section className="py-20 bg-white text-center">
+              <p className="text-gray-600">Loading partners...</p>
+            </section>
         )}
 
         {!isLoading && partners.length === 0 && (
-          <section className="py-20 bg-white text-center">
-            <p className="text-gray-600">No partners found</p>
-          </section>
+            <section className="py-20 bg-white text-center">
+              <p className="text-gray-600">No partners found</p>
+            </section>
         )}
 
         {/* Partnership Types */}
@@ -166,17 +198,17 @@ export default function PartnersPage() {
               We welcome partnerships with organizations committed to youth empowerment. Let's work
               together to create lasting impact.
             </p>
-            <a
-              href="mailto:hello@itekarwanda.org?subject=Partnership Inquiry"
+
+            <a href="mailto:hello@itekarwanda.org?subject=Partnership Inquiry"
               className="inline-block bg-white text-iteka-orange px-8 py-3 rounded font-semibold hover:bg-opacity-90 transition"
             >
-              Get In Touch
-            </a>
-          </div>
-        </section>
+            Get In Touch
+          </a>
+        </div>
+      </section>
       </main>
 
-      <Footer />
-    </>
-  );
+  <Footer />
+</>
+);
 }
