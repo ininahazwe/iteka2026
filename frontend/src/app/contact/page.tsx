@@ -1,10 +1,10 @@
+// app/contact/page.tsx
 'use client';
 
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
-import { submitContactMessage } from '@/src/lib/api';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,180 +13,175 @@ export default function ContactPage() {
     subject: '',
     message: '',
     phone: '',
+    honeypot: '', // Champ caché anti-bot
   });
 
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const mutation = useMutation({
-    mutationFn: submitContactMessage,
-    onSuccess: () => {
-      setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '', phone: '' });
-      setTimeout(() => setSubmitted(false), 5000);
-    },
-  });
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate(formData);
+    setStatus('loading');
+    setErrorMessage('');
+
+    try {
+      // Obtenir le token reCAPTCHA
+      if (!executeRecaptcha) {
+        throw new Error('reCAPTCHA not loaded');
+      }
+
+      const recaptchaToken = await executeRecaptcha('contact_form');
+
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setStatus('success');
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        phone: '',
+        honeypot: '',
+      });
+    } catch (error: any) {
+      setStatus('error');
+      setErrorMessage(error.message || 'Failed to send message');
+    }
   };
 
   return (
-    <>
-      <Header />
+      <>
+        <Header />
+        <main className="min-h-screen py-20 bg-gray-50">
+          <div className="max-w-2xl mx-auto px-4">
+            <h1 className="text-4xl font-bold mb-8 text-center">Get In Touch</h1>
 
-      <main>
-        {/* Hero Section */}
-        <section className="relative h-96 bg-gradient-to-r from-iteka-pink to-iteka-orange flex items-center justify-center text-white">
-          <div className="absolute inset-0 bg-black opacity-30"></div>
-          <div className="relative z-10 text-center">
-            <h1 className="text-5xl font-bold mb-4">Get In Touch</h1>
-            <p className="text-xl opacity-90">We'd love to hear from you</p>
-          </div>
-        </section>
-
-        {/* Contact Content */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-              {/* Info Cards */}
-              <div className="text-center">
-                <div className="bg-iteka-orange text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+            {status === 'success' ? (
+                <div className="bg-green-50 border border-green-200 text-green-800 p-6 rounded-lg text-center">
+                  <h3 className="font-bold text-lg mb-2">Message Sent!</h3>
+                  <p>Thank you for contacting us. We'll get back to you soon.</p>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Location</h3>
-                <p className="text-gray-600">Kigali, Rwanda</p>
-              </div>
-
-              <div className="text-center">
-                <div className="bg-iteka-orange text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">Email</h3>
-                <a href="mailto:hello@itekarwanda.org" className="text-iteka-orange hover:underline">
-                  hello@itekarwanda.org
-                </a>
-              </div>
-
-              <div className="text-center">
-                <div className="bg-iteka-orange text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">Phone</h3>
-                <p className="text-gray-600">+250 XXX XXX XXX</p>
-              </div>
-            </div>
-
-            {/* Form */}
-            <div className="max-w-2xl mx-auto bg-gray-50 p-8 rounded-lg">
-              <h2 className="text-3xl font-bold mb-8">Send us a Message</h2>
-
-              {submitted && (
-                <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                  ✓ Thank you! Your message has been sent successfully.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Full Name *</label>
-                    <input
+            ) : (
+                <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow">
+                  {/* Honeypot field (hidden) */}
+                  <input
                       type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-iteka-orange"
-                      placeholder="Your name"
-                    />
-                  </div>
+                      name="honeypot"
+                      value={formData.honeypot}
+                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                      style={{ display: 'none' }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                  />
 
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Email *</label>
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2">
+                      Name <span className="text-red-500">*</span>
+                    </label>
                     <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-iteka-orange"
-                      placeholder="your@email.com"
+                        type="text"
+                        required
+                        maxLength={100}
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
                     />
                   </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Phone</label>
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2">
+                      Email <span className="text-red-500">*</span>
+                    </label>
                     <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-iteka-orange"
-                      placeholder="+250 XXX XXX XXX"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
                     />
                   </div>
 
-                  <div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2">Phone (optional)</label>
+                    <input
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                    />
+                  </div>
+
+                  <div className="mb-4">
                     <label className="block text-sm font-semibold mb-2">Subject</label>
                     <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-iteka-orange"
-                      placeholder="Subject"
+                        type="text"
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-semibold mb-2">Message *</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-iteka-orange"
-                    placeholder="Your message"
-                  ></textarea>
-                </div>
+                  <div className="mb-6">
+                    <label className="block text-sm font-semibold mb-2">
+                      Message <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        required
+                        rows={6}
+                        maxLength={2000}
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formData.message.length}/2000 characters
+                    </p>
+                  </div>
 
-                <button
-                  type="submit"
-                  disabled={mutation.isPending}
-                  className="w-full bg-iteka-orange text-white py-3 rounded font-semibold hover:bg-opacity-90 transition disabled:opacity-50"
-                >
-                  {mutation.isPending ? 'Sending...' : 'Send Message'}
-                </button>
+                  {status === 'error' && (
+                      <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded">
+                        {errorMessage}
+                      </div>
+                  )}
 
-                {mutation.isError && (
-                  <p className="text-red-600 text-sm">
-                    Error sending message. Please try again.
+                  <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="w-full bg-iteka-orange text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    {status === 'loading' ? 'Sending...' : 'Send Message'}
+                  </button>
+
+                  <p className="text-xs text-gray-500 mt-4 text-center">
+                    This site is protected by reCAPTCHA and the Google{' '}
+                    <a href="https://policies.google.com/privacy" className="underline">
+                      Privacy Policy
+                    </a>{' '}
+                    and{' '}
+                    <a href="https://policies.google.com/terms" className="underline">
+                      Terms of Service
+                    </a>{' '}
+                    apply.
                   </p>
-                )}
-              </form>
-            </div>
+                </form>
+            )}
           </div>
-        </section>
-      </main>
-
-      <Footer />
-    </>
+        </main>
+        <Footer />
+      </>
   );
 }

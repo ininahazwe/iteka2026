@@ -1,10 +1,11 @@
-import type { Metadata } from 'next';
+// app/layout.tsx
 import './globals.css';
-import { Providers } from '@/src/components/providers';
+import Providers from "@/src/components/providers";
 
-export const metadata: Metadata = {
+export const metadata = {
     title: 'Iteka Youth Organization',
-    description: 'Empowering Rwandan youth through talent discovery, skills development, and peace promotion',
+    description: 'Empowering Rwanda\'' +
+        's youth',
 };
 
 export default function RootLayout({
