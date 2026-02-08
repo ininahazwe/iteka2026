@@ -1,7 +1,7 @@
 // app/contact/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
@@ -13,25 +13,35 @@ export default function ContactPage() {
     subject: '',
     message: '',
     phone: '',
-    honeypot: '', // Champ caché anti-bot
+    honeypot: '',
   });
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [recaptchaReady, setRecaptchaReady] = useState(false);
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
+  // Vérifier que reCAPTCHA est chargé
+  useEffect(() => {
+    if (executeRecaptcha) {
+      setRecaptchaReady(true);
+    }
+  }, [executeRecaptcha]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!recaptchaReady || !executeRecaptcha) {
+      setStatus('error');
+      setErrorMessage('reCAPTCHA not loaded. Please refresh the page.');
+      return;
+    }
+
     setStatus('loading');
     setErrorMessage('');
 
     try {
-      // Obtenir le token reCAPTCHA
-      if (!executeRecaptcha) {
-        throw new Error('reCAPTCHA not loaded');
-      }
-
       const recaptchaToken = await executeRecaptcha('contact_form');
 
       const response = await fetch('/api/contact', {
@@ -43,8 +53,9 @@ export default function ContactPage() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || 'Failed to send message');
       }
 
@@ -73,10 +84,17 @@ export default function ContactPage() {
             {status === 'success' ? (
                 <div className="bg-green-50 border border-green-200 text-green-800 p-6 rounded-lg text-center">
                   <h3 className="font-bold text-lg mb-2">Message Sent!</h3>
-                  <p>Thank you for contacting us. We'll get back to you soon.</p>
+                  <p>Thank you for contacting us. We&apos;ll get back to you soon.</p>
                 </div>
             ) : (
                 <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow">
+                  {/* Afficher un avertissement si reCAPTCHA n'est pas chargé */}
+                  {!recaptchaReady && (
+                      <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded">
+                        Loading security verification...
+                      </div>
+                  )}
+
                   {/* Honeypot field (hidden) */}
                   <input
                       type="text"
@@ -98,7 +116,7 @@ export default function ContactPage() {
                         maxLength={100}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange focus:outline-none"
                     />
                   </div>
 
@@ -111,7 +129,7 @@ export default function ContactPage() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange focus:outline-none"
                     />
                   </div>
 
@@ -121,7 +139,7 @@ export default function ContactPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange focus:outline-none"
                     />
                   </div>
 
@@ -131,7 +149,7 @@ export default function ContactPage() {
                         type="text"
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange focus:outline-none"
                     />
                   </div>
 
@@ -145,7 +163,7 @@ export default function ContactPage() {
                         maxLength={2000}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-iteka-orange focus:outline-none"
                     />
                     <p className="text-xs text-gray-500 mt-1">
                       {formData.message.length}/2000 characters
@@ -160,7 +178,7 @@ export default function ContactPage() {
 
                   <button
                       type="submit"
-                      disabled={status === 'loading'}
+                      disabled={status === 'loading' || !recaptchaReady}
                       className="w-full bg-iteka-orange text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition"
                   >
                     {status === 'loading' ? 'Sending...' : 'Send Message'}
@@ -168,11 +186,11 @@ export default function ContactPage() {
 
                   <p className="text-xs text-gray-500 mt-4 text-center">
                     This site is protected by reCAPTCHA and the Google{' '}
-                    <a href="https://policies.google.com/privacy" className="underline">
+                    <a href="https://policies.google.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">
                       Privacy Policy
                     </a>{' '}
                     and{' '}
-                    <a href="https://policies.google.com/terms" className="underline">
+                    <a href="https://policies.google.com/terms" className="underline" target="_blank" rel="noopener noreferrer">
                       Terms of Service
                     </a>{' '}
                     apply.
