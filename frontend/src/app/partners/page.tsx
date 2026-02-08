@@ -12,30 +12,18 @@ export default function PartnersPage() {
     queryFn: fetchPartners,
   });
 
-  const featured = partners.filter((p: any) => p.attributes?.is_featured);
-  const others = partners.filter((p: any) => !p.attributes?.is_featured);
-  console.log(others);
-
+  // Strapi v5 : on accède directement à .is_featured
+  const featured = partners.filter((p: any) => p.is_featured);
+  const others = partners.filter((p: any) => !p.is_featured);
   // Fonction helper pour obtenir l'URL du logo
   const getLogoUrl = (logo: any) => {
     if (!logo) return null;
 
-    // Si c'est le format Strapi v4 (avec data)
-    if (logo.data?.attributes?.url) {
-      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo.data.attributes.url}`;
-    }
+    // Strapi v5 : l'URL est directement dans l'objet media
+    const url = logo.url;
 
-    // Si c'est le format Strapi v5 (sans data)
-    if (logo.url) {
-      return `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo.url}`;
-    }
-
-    // Si c'est juste l'URL directe
-    if (typeof logo === 'string') {
-      return logo.startsWith('http') ? logo : `${process.env.NEXT_PUBLIC_STRAPI_URL}${logo}`;
-    }
-
-    return null;
+    if (!url) return null;
+    return url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
   };
 
   return (
@@ -72,7 +60,8 @@ export default function PartnersPage() {
                 <h2 className="text-3xl font-bold mb-12 text-center">Strategic Partners</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {featured.map((partner: any) => {
-                    const logoUrl = getLogoUrl(partner.attributes?.logo);
+                    // Strapi v5 : on passe directement partner.logo
+                    const logoUrl = getLogoUrl(partner.logo);
 
                     return (
                         <div key={partner.id} className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition">
@@ -80,39 +69,38 @@ export default function PartnersPage() {
                               <div className="mb-6 h-24 flex items-center justify-center bg-gray-50 rounded">
                                 <img
                                     src={logoUrl}
-                                    alt={partner.attributes?.name}
+                                    alt={partner.name}
                                     className="max-h-20 max-w-full object-contain"
                                 />
                               </div>
                           )}
                           <h3 className="text-xl font-bold text-iteka-dark mb-2">
-                            {partner.attributes?.name}
+                            {partner.name}
                           </h3>
                           <p className="text-sm text-iteka-orange font-semibold mb-3">
-                            {partner.attributes?.partnership_type}
+                            {partner.partnership_type}
                           </p>
-                          {partner.attributes?.description && (
+                          {partner.description && (
                               <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                                {partner.attributes.description}
+                                {partner.description}
                               </p>
                           )}
-                          {partner.attributes?.website && (
-
-                            <a href={partner.attributes.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-iteka-orange hover:underline text-sm font-semibold"
-                            >
-                            Visit Website →
-                            </a>
-                            )}
-                    </div>
+                          {partner.website && (
+                              <a href={partner.website}
+                                 target="_blank"
+                                 rel="noopener noreferrer"
+                                 className="text-iteka-orange hover:underline text-sm font-semibold"
+                              >
+                                Visit Website →
+                              </a>
+                          )}
+                        </div>
                     );
                   })}
                 </div>
               </div>
             </section>
-          )}
+        )}
 
         {/* All Partners */}
         {others.length > 0 && (
@@ -121,22 +109,19 @@ export default function PartnersPage() {
                 <h2 className="text-3xl font-bold mb-12 text-center">Our Partners</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {others.map((partner: any) => {
-                    const logoUrl = getLogoUrl(partner.attributes?.logo);
+                    const logoUrl = getLogoUrl(partner.logo);
 
                     return (
-                        <div
-                            key={partner.id}
-                            className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition group"
-                        >
+                        <div key={partner.id} className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition group">
                           {logoUrl && (
                               <img
                                   src={logoUrl}
-                                  alt={partner.attributes?.name}
+                                  alt={partner.name}
                                   className="max-h-16 max-w-full object-contain mb-3 group-hover:scale-110 transition"
                               />
                           )}
                           <p className="text-xs text-gray-600 text-center group-hover:text-iteka-orange transition font-semibold">
-                            {partner.attributes?.name}
+                            {partner.name}
                           </p>
                         </div>
                     );

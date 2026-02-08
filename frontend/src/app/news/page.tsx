@@ -57,7 +57,7 @@ export default function NewsPage() {
                                             )}
                                             <div className="p-6">
                                                 <div className="text-sm text-gray-500 mb-2">
-                                                    {new Date(article.published_at).toLocaleDateString()}
+                                                    {new Date(article.publishedAt).toLocaleDateString()}
                                                 </div>
                                                 <h3 className="text-xl font-bold mb-3 group-hover:text-iteka-orange transition">
                                                     {article.title}

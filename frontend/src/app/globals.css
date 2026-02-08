@@ -1,8 +1,20 @@
+/* globals.css */
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Iteka Brand Colors */
+  --iteka-orange: #E87722;
+  --iteka-green: #2D5F3F;
+  --iteka-dark: #1A1A1A;
+  --iteka-pink: #E91E63;
+  --iteka-cyan: #00A3A3;
+  --iteka-yellow: #FFC107;
+  --iteka-brown: #795548;
+  --iteka-gray: #808080;
+  --iteka-light: #FFFFFF;
 }
 
 @theme inline {
@@ -10,6 +22,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Iteka Colors */
+  --color-iteka-orange: var(--iteka-orange);
+  --color-iteka-green: var(--iteka-green);
+  --color-iteka-dark: var(--iteka-dark);
+  --color-iteka-pink: var(--iteka-pink);
+  --color-iteka-cyan: var(--iteka-cyan);
+  --color-iteka-yellow: var(--iteka-yellow);
+  --color-iteka-brown: var(--iteka-brown);
+  --color-iteka-gray: var(--iteka-gray);
+  --color-iteka-light: var(--iteka-light);
 }
 
 @media (prefers-color-scheme: dark) {

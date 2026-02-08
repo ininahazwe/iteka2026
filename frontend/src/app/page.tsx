@@ -33,7 +33,7 @@ export default function Home() {
     queryFn: fetchImpactStats,
   });
 
-  const featuredProgrammes = programmes.filter((p: any) => p.attributes?.is_featured);
+  const featuredProgrammes = programmes.filter((p: any) => p?.is_featured);
   const featuredNews = actualites.slice(0, 3);
 
   return (
@@ -91,9 +91,9 @@ export default function Home() {
                 {stats.map((stat: any) => (
                   <div key={stat.id} className="text-center">
                     <div className="text-5xl font-bold text-iteka-orange mb-2">
-                      {stat.attributes?.value}
+                      {stat?.value}
                     </div>
-                    <p className="text-lg text-gray-300">{stat.attributes?.label}</p>
+                    <p className="text-lg text-gray-300">{stat?.label}</p>
                   </div>
                 ))}
               </div>
@@ -115,24 +115,24 @@ export default function Home() {
                 {featuredProgrammes.slice(0, 3).map((prog: any) => (
                   <Link
                     key={prog.id}
-                    href={`/programmes/${prog.attributes?.slug}`}
+                    href={`/programmes/${prog?.slug}`}
                     className="group bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition"
                   >
-                    {prog.attributes?.featured_image?.data && (
+                    {prog?.featured_image?.data && (
                       <div className="relative h-64 overflow-hidden bg-gray-200">
                         <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${prog.attributes.featured_image.data.attributes.url}`}
-                          alt={prog.attributes?.name}
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${prog.featured_image.data.url}`}
+                          alt={prog?.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                         />
                       </div>
                     )}
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-iteka-dark mb-2 group-hover:text-iteka-orange transition">
-                        {prog.attributes?.name}
+                        {prog?.name}
                       </h3>
                       <p className="text-gray-600 line-clamp-3">
-                        {prog.attributes?.short_description}
+                        {prog?.short_description}
                       </p>
                     </div>
                   </Link>
@@ -164,22 +164,22 @@ export default function Home() {
                     className="bg-gray-50 p-8 rounded-lg border-l-4 border-iteka-orange"
                   >
                     <p className="text-gray-700 mb-4 italic">
-                      &quot;{testimonial.attributes?.quote}&quot;
+                      &quot;{testimonial?.quote}&quot;
                     </p>
                     <div className="flex items-center">
-                      {testimonial.attributes?.author_photo?.data && (
+                      {testimonial?.author_photo?.data && (
                         <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.attributes.author_photo.data.attributes.url}`}
-                          alt={testimonial.attributes?.author_name}
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
+                          alt={testimonial?.author_name}
                           className="w-12 h-12 rounded-full mr-4 object-cover"
                         />
                       )}
                       <div>
                         <p className="font-bold text-iteka-dark">
-                          {testimonial.attributes?.author_name}
+                          {testimonial?.author_name}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {testimonial.attributes?.author_role}
+                          {testimonial?.author_role}
                         </p>
                       </div>
                     </div>
@@ -204,14 +204,14 @@ export default function Home() {
                 {featuredNews.map((article: any) => (
                   <Link
                     key={article.id}
-                    href={`/news/${article.attributes?.slug}`}
+                    href={`/news/${article?.slug}`}
                     className="group bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition"
                   >
-                    {article.attributes?.featured_image?.data && (
+                    {article?.featured_image?.data && (
                       <div className="relative h-48 overflow-hidden bg-gray-200">
                         <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.attributes.featured_image.data.attributes.url}`}
-                          alt={article.attributes?.title}
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.featured_image.data.url}`}
+                          alt={article?.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                         />
                       </div>
@@ -219,14 +219,14 @@ export default function Home() {
                     <div className="p-6">
                       <div className="flex items-center space-x-2 mb-2">
                         <span className="bg-iteka-orange text-white text-xs px-3 py-1 rounded-full">
-                          {article.attributes?.category}
+                          {article?.category}
                         </span>
                       </div>
                       <h3 className="text-lg font-bold text-iteka-dark mb-2 group-hover:text-iteka-orange transition">
-                        {article.attributes?.title}
+                        {article?.title}
                       </h3>
                       <p className="text-gray-600 text-sm line-clamp-2">
-                        {article.attributes?.excerpt}
+                        {article?.excerpt}
                       </p>
                     </div>
                   </Link>

@@ -25,6 +25,9 @@ export default function GalleryPage() {
         filter === 'all' || item.category?.toLowerCase() === filter
     );
 
+    console.log("Images URLs:", filteredData?.map((i: any) => i.image?.url));
+    console.log("Base URL:", process.env.NEXT_PUBLIC_STRAPI_URL);
+
     return (
         <>
             <Header />
@@ -66,7 +69,7 @@ export default function GalleryPage() {
                                 {filteredData?.map((item: any) => (
                                     <div
                                         key={item.id}
-                                        className="aspect-square overflow-hidden rounded-lg group cursor-pointer"
+                                        className="relative aspect-square overflow-hidden rounded-lg group cursor-pointer"
                                     >
                                         <img
                                             src={

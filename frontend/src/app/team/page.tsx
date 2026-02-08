@@ -33,16 +33,16 @@ export default function ImpactPage() {
         {/* Impact Statistics */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-12 text-center">By The Numbers</h2>
+            <h2 className="text-4xl font-bold mb-12 text-center">By the Numbers</h2>
 
             {stats.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {stats.map((stat: any) => (
                   <div key={stat.id} className="text-center p-8 bg-gradient-to-br from-iteka-orange to-iteka-brown rounded-lg text-white hover:shadow-xl transition">
-                    <div className="text-6xl font-bold mb-2">{stat.attributes?.value}</div>
-                    <p className="text-lg">{stat.attributes?.label}</p>
-                    {stat.attributes?.description && (
-                      <p className="text-sm mt-2 opacity-80">{stat.attributes.description}</p>
+                    <div className="text-6xl font-bold mb-2">{stat?.value}</div>
+                    <p className="text-lg">{stat?.label}</p>
+                    {stat?.description && (
+                      <p className="text-sm mt-2 opacity-80">{stat?.description}</p>
                     )}
                   </div>
                 ))}
@@ -83,22 +83,22 @@ export default function ImpactPage() {
                       </svg>
                     </div>
                     <p className="text-gray-700 italic mb-4">
-                      &quot;{testimonial.attributes?.quote}&quot;
+                      &quot;{testimonial?.quote}&quot;
                     </p>
                     <div className="flex items-center">
-                      {testimonial.attributes?.author_photo?.data && (
+                      {testimonial?.author_photo?.data && (
                         <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.attributes.author_photo.data.attributes.url}`}
-                          alt={testimonial.attributes?.author_name}
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
+                          alt={testimonial?.author_name}
                           className="w-12 h-12 rounded-full mr-4 object-cover"
                         />
                       )}
                       <div>
                         <p className="font-bold text-iteka-dark">
-                          {testimonial.attributes?.author_name}
+                          {testimonial?.author_name}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {testimonial.attributes?.author_role}
+                          {testimonial?.author_role}
                         </p>
                       </div>
                     </div>

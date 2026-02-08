@@ -45,7 +45,6 @@ export const fetchGalleries = async (category?: string) => {
 
 export const fetchPartners = async () => {
   const response = await strapiClient.get('/partners?sort=order:asc&populate=*');
-  console.log(fetchPartners);
   return response.data.data;
 };
 
@@ -67,7 +66,7 @@ export const fetchTestimonials = async () => {
 };
 
 export const fetchFestival = async () => {
-  const response = await strapiClient.get('/festival?populate=deep');
+  const response = await strapiClient.get('/festival?populate=*');
   return response.data.data;
 };
 
