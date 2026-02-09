@@ -34,27 +34,38 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
         return false;
     }
 
-    const response = await fetch(
-        `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
-        { method: 'POST' }
-    );
+    try {
+        const response = await fetch(
+            `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
+            { method: 'POST' }
+        );
 
-    const data = await response.json();
+        const data = await response.json();
 
-    // Score > 0.5 = probablement humain
-    return data.success && data.score > 0.5;
+        // Score > 0.5 = probablement humain
+        return data.success && data.score > 0.5;
+    } catch (error) {
+        console.error('reCAPTCHA verification error:', error);
+        return false;
+    }
 }
 
-// Configuration SMTP
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false,
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
-});
+// Configuration SMTP (uniquement si configuré)
+function createTransporter() {
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+        return null;
+    }
+
+    return nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: false,
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
+    });
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -122,13 +133,23 @@ export async function POST(request: NextRequest) {
         }
 
         // 5. Sauvegarder dans Strapi
+        const strapiToken = process.env.STRAPI_API_TOKEN;
+
+        if (!strapiToken) {
+            console.error('STRAPI_API_TOKEN not configured');
+            return NextResponse.json(
+                { error: 'Server configuration error' },
+                { status: 500 }
+            );
+        }
+
         const strapiResponse = await fetch(
             `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/contact-messages`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+                    Authorization: `Bearer ${strapiToken}`,
                 },
                 body: JSON.stringify({
                     data: {
@@ -143,27 +164,41 @@ export async function POST(request: NextRequest) {
         );
 
         if (!strapiResponse.ok) {
+            const errorData = await strapiResponse.json();
+            console.error('Strapi error:', errorData);
             throw new Error('Failed to save to Strapi');
         }
 
-        // 6. Envoyer email de notification
-        await transporter.sendMail({
-            from: `"Iteka Website" <${process.env.SMTP_USER}>`,
-            to: process.env.CONTACT_EMAIL,
-            replyTo: email,
-            subject: `New Contact Form: ${subject || 'No subject'}`,
-            html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-        <p><strong>Subject:</strong> ${subject || 'No subject'}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-        <hr>
-        <p><small>Sent from Iteka Website Contact Form</small></p>
-      `,
-        });
+        // 6. Envoyer email de notification (optionnel)
+        const transporter = createTransporter();
+
+        if (transporter) {
+            try {
+                await transporter.sendMail({
+                    from: `"Iteka Website" <${process.env.SMTP_USER}>`,
+                    to: process.env.CONTACT_EMAIL,
+                    replyTo: email,
+                    subject: `New Contact Form: ${subject || 'No subject'}`,
+                    html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+            <p><strong>Subject:</strong> ${subject || 'No subject'}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, '<br>')}</p>
+            <hr>
+            <p><small>Sent from Iteka Website Contact Form</small></p>
+          `,
+                });
+                console.log('Email notification sent successfully');
+            } catch (emailError) {
+                console.error('Failed to send email notification:', emailError);
+                // Continue quand même - le message est sauvegardé dans Strapi
+            }
+        } else {
+            console.warn('SMTP not configured - email notification skipped');
+        }
 
         return NextResponse.json({ success: true });
     } catch (error) {
