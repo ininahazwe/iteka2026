@@ -1,7 +1,7 @@
 // app/layout.tsx
-import Providers from "@/src/components/providers";
 import Script from 'next/script';
 import './globals.css';
+import Providers from "@/src/components/providers";
 
 export const metadata = {
     title: 'Iteka Youth Organization',
