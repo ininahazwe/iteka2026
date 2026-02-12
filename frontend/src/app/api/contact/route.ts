@@ -1,129 +1,88 @@
 // app/api/contact/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { RateLimiterMemory } from 'rate-limiter-flexible';
+import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
 
-const rateLimiter = new RateLimiterMemory({
-    points: 3,
-    duration: 60 * 60,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-function getClientIp(request: NextRequest): string {
-    const forwarded = request.headers.get('x-forwarded-for');
-    const realIp = request.headers.get('x-real-ip');
-    if (forwarded) return forwarded.split(',')[0].trim();
-    return realIp || 'unknown';
-}
-
+// Validation reCAPTCHA
 async function verifyRecaptcha(token: string): Promise<boolean> {
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
-    if (!secretKey) {
-        console.error('[DEBUG] reCAPTCHA: SECRET_KEY manquante dans .env');
-        return false;
-    }
+    const secret = process.env.RECAPTCHA_SECRET_KEY;
 
-    try {
-        const response = await fetch(
-            `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`,
-            { method: 'POST' }
-        );
-        const data = await response.json();
-        console.log('[DEBUG] reCAPTCHA response:', data);
-        return data.success && data.score > 0.5;
-    } catch (error) {
-        console.error('[DEBUG] reCAPTCHA: Erreur de fetch:', error);
-        return false;
-    }
-}
-
-function createTransporter() {
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) return null;
-    return nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: false,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
+    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${secret}&response=${token}`,
     });
+
+    const data = await response.json();
+    return data.success && data.score > 0.5;
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
     try {
-        const ip = getClientIp(request);
-
-        // 1. Rate limiting
-        try {
-            await rateLimiter.consume(ip);
-        } catch {
-            console.warn(`[DEBUG] Rate limit atteint pour l'IP: ${ip}`);
-            return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
-        }
-
         const body = await request.json();
-        const { name, email, subject, message, phone, recaptchaToken, honeypot } = body;
+        const { name, email, subject, message, phone, honeypot, recaptchaToken } = body;
 
-        // 2. Honeypot
+        // Anti-spam honeypot
         if (honeypot) {
-            console.log('[DEBUG] Bot détecté via honeypot');
-            return NextResponse.json({ success: true });
+            return NextResponse.json({ error: 'Invalid submission' }, { status: 400 });
         }
 
-        // 3. Validation reCAPTCHA
-        if (!recaptchaToken) {
-            console.error('[DEBUG] Token reCAPTCHA manquant dans le body');
-            return NextResponse.json({ error: 'reCAPTCHA token missing' }, { status: 400 });
+        // Validation des champs
+        if (!name || !email || !message) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
-        const isHuman = await verifyRecaptcha(recaptchaToken);
-        if (!isHuman) {
+
+        // Vérification reCAPTCHA
+        const isValidRecaptcha = await verifyRecaptcha(recaptchaToken);
+        if (!isValidRecaptcha) {
             return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
         }
 
-        // 4. Envoi vers Strapi
-        const strapiToken = process.env.STRAPI_API_TOKEN;
-        const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
-
-        if (!strapiToken || !strapiUrl) {
-            console.error('[DEBUG] Config Strapi manquante:', { hasToken: !!strapiToken, hasUrl: !!strapiUrl });
-            return NextResponse.json({ error: 'Server config error' }, { status: 500 });
-        }
-
-        console.log(`[DEBUG] Tentative d'envoi vers Strapi: ${strapiUrl}/api/contact-messages`);
-
-        const strapiResponse = await fetch(`${strapiUrl}/api/contact-messages`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${strapiToken}`,
-            },
-            body: JSON.stringify({
-                data: { name, email, subject: subject || 'No subject', message, phone: phone || null },
-            }),
+        // Envoyer l'email via Resend
+        const { data, error } = await resend.emails.send({
+            from: 'Iteka Contact Form <onboarding@resend.dev>', // Email par défaut Resend
+            to: ['yves.cri@gmail.com'], // Votre email de destination
+            replyTo: email,
+            subject: subject || `New Contact Form Submission from ${name}`,
+            html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+        <p><strong>Subject:</strong> ${subject || 'No subject'}</p>
+        <hr />
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      `,
         });
 
-        if (!strapiResponse.ok) {
-            const errorData = await strapiResponse.json();
-            console.error('[DEBUG] Strapi a rejeté la requête:', JSON.stringify(errorData, null, 2));
-            return NextResponse.json({ error: 'Failed to save to database' }, { status: 500 });
+        if (error) {
+            console.error('Resend error:', error);
+            return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
         }
 
-        // 5. Email (Optionnel - ne bloque pas la réponse)
-        const transporter = createTransporter();
-        if (transporter) {
-            transporter.sendMail({
-                from: `"Iteka Website" <${process.env.SMTP_USER}>`,
-                to: process.env.CONTACT_EMAIL,
-                replyTo: email,
-                subject: `New Contact Form: ${subject || 'No subject'}`,
-                html: `<p><strong>Name:</strong> ${name}</p><p><strong>Message:</strong> ${message}</p>`,
-            }).catch(err => console.error('[DEBUG] Email error (non-bloquante):', err));
+        // Optionnel : Enregistrer dans Strapi
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/contact-messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.STRAPI_API_TOKEN}`,
+                },
+                body: JSON.stringify({
+                    data: { name, email, subject, message, phone, is_read: false }
+                }),
+            });
+        } catch (err) {
+            console.error('Strapi save error:', err);
+            // Continuer même si Strapi échoue
         }
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, data });
 
-    } catch (error: any) {
-        console.error('[DEBUG] Erreur critique API Route:', error.message || error);
-        return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
+    } catch (error) {
+        console.error('Contact form error:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
