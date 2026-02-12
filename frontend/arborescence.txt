@@ -9,35 +9,39 @@
 ├── public
 │   ├── file.svg
 │   ├── globe.svg
+│   ├── logo-iteka.png
 │   ├── next.svg
 │   ├── vercel.svg
 │   └── window.svg
 ├── src
 │   ├── app
-│   │   ├── (routes)
 │   │   ├── about
 │   │   ├── api
 │   │   ├── approach
 │   │   ├── contact
 │   │   ├── donate
 │   │   ├── festival
+│   │   ├── gallery
 │   │   ├── globals.css
 │   │   ├── impact
 │   │   ├── layout.tsx
+│   │   ├── news
 │   │   ├── page.tsx
 │   │   ├── partners
+│   │   ├── programmes
 │   │   ├── robots.ts
 │   │   ├── sitemap.ts
 │   │   └── team
 │   ├── components
 │   │   ├── Footer.tsx
 │   │   ├── Header.tsx
+│   │   ├── RecaptchaProvider.tsx
+│   │   ├── StructureData.tsx
 │   │   └── providers.tsx
 │   ├── favicon.ico
 │   └── lib
 │       └── api.ts
-├── structure.txt
 ├── tailwind.config.ts
 └── tsconfig.json
 
-16 directories, 25 files
+18 directories, 27 files
