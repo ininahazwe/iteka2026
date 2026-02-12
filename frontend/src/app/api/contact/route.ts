@@ -15,6 +15,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
     });
 
     const data = await response.json();
+    console.log('reCAPTCHA response:', data);
     return data.success && data.score > 0.5;
 }
 
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
         // Envoyer l'email via Resend
         const { data, error } = await resend.emails.send({
             from: 'Iteka Contact Form <onboarding@resend.dev>', // Email par défaut Resend
-            to: ['yves.cri@gmail.com'], // Votre email de destination
+            to: ['singleb@hotmail.fr'], // Votre email de destination
             replyTo: email,
             subject: subject || `New Contact Form Submission from ${name}`,
             html: `
