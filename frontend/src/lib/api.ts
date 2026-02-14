@@ -18,7 +18,7 @@ export const fetchProgrammes = async () => {
 
 export const fetchProgrammeBySlug = async (slug: string) => {
   const response = await strapiClient.get(
-    `/programmes?filters[slug][$eq]=${slug}&populate=*`
+      `/programmes?filters[slug][$eq]=${slug}&populate=*`
   );
   return response.data.data[0];
 };
@@ -30,16 +30,22 @@ export const fetchActualites = async () => {
 
 export const fetchActualiteBySlug = async (slug: string) => {
   const response = await strapiClient.get(
-    `/actualites?filters[slug][$eq]=${slug}&populate=*`
+      `/actualites?filters[slug][$eq]=${slug}&populate=*`
   );
   return response.data.data[0];
 };
 
 export const fetchGalleries = async (category?: string) => {
   const url = category
-    ? `/galleries?filters[category][$eq]=${category}&sort=order:asc&populate=*`
-    : '/galleries?sort=order:asc&populate=*';
+      ? `/galleries?filters[category][$eq]=${category}&sort=order:asc&populate=*`
+      : '/galleries?sort=order:asc&populate=*';
   const response = await strapiClient.get(url);
+  return response.data.data;
+};
+
+// Alias pour la home page
+export const fetchGalleryImages = async () => {
+  const response = await strapiClient.get('/galleries?sort=order:asc&populate=*');
   return response.data.data;
 };
 
@@ -60,7 +66,7 @@ export const fetchImpactStats = async () => {
 
 export const fetchTestimonials = async () => {
   const response = await strapiClient.get(
-    '/testimonials?filters[is_featured][$eq]=true&sort=order:asc&populate=*'
+      '/testimonials?filters[is_featured][$eq]=true&sort=order:asc&populate=*'
   );
   return response.data.data;
 };
