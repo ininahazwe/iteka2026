@@ -1,188 +1,160 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { Users, Linkedin } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
-import { fetchImpactStats, fetchTestimonials } from '@/src/lib/api';
+import { fetchTeamMembers } from '@/src/lib/api';
 
-export default function ImpactPage() {
-  const { data: stats = [] } = useQuery({
-    queryKey: ['impact-stats'],
-    queryFn: fetchImpactStats,
+export default function TeamPage() {
+  const { data: teamMembers = [], isLoading } = useQuery({
+    queryKey: ['team-members'],
+    queryFn: fetchTeamMembers,
   });
 
-  const { data: testimonials = [] } = useQuery({
-    queryKey: ['testimonials'],
-    queryFn: fetchTestimonials,
-  });
+  const leadership = teamMembers.filter((member: any) => member?.is_leadership);
+  const team = teamMembers.filter((member: any) => !member?.is_leadership);
 
   return (
-    <>
+      <>
       <Header />
 
       <main>
         {/* Hero Section */}
-        <section className="relative h-96 bg-gradient-to-r from-iteka-pink to-iteka-orange flex items-center justify-center text-white">
-          <div className="absolute inset-0 bg-black opacity-30"></div>
-          <div className="relative z-10 text-center">
-            <h1 className="text-5xl font-bold mb-4">Our Impact</h1>
-            <p className="text-xl opacity-90">Transforming lives and communities across Rwanda</p>
-          </div>
-        </section>
-
-        {/* Impact Statistics */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-12 text-center">By the Numbers</h2>
-
-            {stats.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {stats.map((stat: any) => (
-                  <div key={stat.id} className="text-center p-8 bg-gradient-to-br from-iteka-orange to-iteka-brown rounded-lg text-white hover:shadow-xl transition">
-                    <div className="text-6xl font-bold mb-2">{stat?.value}</div>
-                    <p className="text-lg">{stat?.label}</p>
-                    {stat?.description && (
-                      <p className="text-sm mt-2 opacity-80">{stat?.description}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-gray-600">Loading impact data...</div>
-            )}
-          </div>
-        </section>
-
-        {/* Impact Stories */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-4 text-center">Stories of Change</h2>
-            <p className="text-center text-gray-600 mb-12 text-lg max-w-2xl mx-auto">
-              Hear directly from the young people whose lives have been transformed through our programmes
-            </p>
-
-            {testimonials.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {testimonials.map((testimonial: any) => (
-                  <div
-                    key={testimonial.id}
-                    className="bg-white p-8 rounded-lg shadow hover:shadow-xl transition"
-                  >
-                    <div className="flex items-start mb-4">
-                      <svg className="w-5 h-5 text-iteka-orange mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-5 h-5 text-iteka-orange mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-5 h-5 text-iteka-orange mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                      <svg className="w-5 h-5 text-iteka-orange mr-2 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    </div>
-                    <p className="text-gray-700 italic mb-4">
-                      &quot;{testimonial?.quote}&quot;
-                    </p>
-                    <div className="flex items-center">
-                      {testimonial?.author_photo?.data && (
-                        <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
-                          alt={testimonial?.author_name}
-                          className="w-12 h-12 rounded-full mr-4 object-cover"
-                        />
-                      )}
-                      <div>
-                        <p className="font-bold text-iteka-dark">
-                          {testimonial?.author_name}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {testimonial?.author_role}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-gray-600">Loading testimonials...</div>
-            )}
-          </div>
-        </section>
-
-        {/* Impact Focus Areas */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-12 text-center">Areas of Impact</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div className="bg-gradient-to-br from-iteka-orange to-iteka-brown text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Youth Employment</h3>
-                <p>
-                  We equip young people with job-ready skills and connect them to employment
-                  opportunities with leading organizations.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-iteka-pink to-iteka-orange text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Entrepreneurship</h3>
-                <p>
-                  Through our business training and mentorship, we help youth start and grow their own
-                  ventures.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-iteka-green to-iteka-cyan text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Education</h3>
-                <p>
-                  We provide scholarships, tutoring, and mentoring to help young people succeed
-                  academically.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-iteka-cyan to-iteka-brown text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Peace & Unity</h3>
-                <p>
-                  Our intercultural programmes build bridges between youth and promote reconciliation and
-                  unity.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-iteka-yellow to-iteka-orange text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Leadership</h3>
-                <p>
-                  We develop future leaders through specialized training and community leadership
-                  opportunities.
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-iteka-brown to-iteka-pink text-white p-8 rounded-lg">
-                <h3 className="text-2xl font-bold mb-4">Community Development</h3>
-                <p>
-                  Young people apply their skills to address local challenges and drive positive community
-                  change.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Commitment */}
-        <section className="py-20 bg-iteka-dark text-white">
+        <section className="bg-white py-16 md:py-24">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-4xl font-bold mb-6">Our Commitment</h2>
-            <p className="text-xl opacity-90 leading-relaxed">
-              We are committed to measuring and demonstrating our impact. Every programme is evaluated
-              using rigorous metrics to ensure we are creating lasting positive change in the lives of
-              young people and their communities. Our impact reports are available for transparency and
-              accountability.
+            <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
+              <Users className="w-8 h-8 text-iteka-dark" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark mb-6">
+              Meet Our Team
+            </h1>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              Dedicated professionals committed to empowering Rwanda's youth and creating lasting change
             </p>
           </div>
         </section>
+
+        {/* Leadership Team */}
+        {leadership.length > 0 && (
+            <section className="py-20 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
+                  Leadership Team
+                </h2>
+                <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                  Our experienced leaders guide Iteka's vision and strategy
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {leadership.map((member: any) => (
+                      <div key={member.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition group">
+                        {member?.photo?.data?.url && (
+                            <div className="aspect-square overflow-hidden bg-gray-200">
+                              <img
+                                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.photo.data.url}`}
+                                  alt={member?.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                              />
+                            </div>
+                        )}
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold text-iteka-dark mb-1">{member?.name}</h3>
+                          <p className="text-sm text-iteka-orange font-semibold mb-3">{member?.role}</p>
+                          {member?.bio && (
+                              <p className="text-sm text-gray-600 line-clamp-4 leading-relaxed mb-4">
+                                {member.bio.replace(/<[^>]*>/g, '')}
+                              </p>
+                          )}
+                          {member?.linkedin_url && (
+                          <a
+                              href={member.linkedin_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-iteka-orange hover:underline text-sm font-semibold"
+                            >
+                            <Linkedin className="w-4 h-4" />
+                            Connect on LinkedIn
+                            </a>
+                            )}
+                        </div>
+                      </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+        )}
+
+        {/* Team Members */}
+        {team.length > 0 && (
+            <section className="py-20 bg-white">
+              <div className="max-w-7xl mx-auto px-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
+                  Our Team
+                </h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {team.map((member: any) => (
+                      <div key={member.id} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-iteka-orange hover:shadow-md transition group">
+                        {member?.photo?.data?.url && (
+                            <div className="aspect-square overflow-hidden bg-gray-200">
+                              <img
+                                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.photo.data.url}`}
+                                  alt={member?.name}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                              />
+                            </div>
+                        )}
+                        <div className="p-4">
+                          <h3 className="font-bold text-iteka-dark mb-1">{member?.name}</h3>
+                          <p className="text-sm text-gray-600">{member?.role}</p>
+                        </div>
+                      </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+        )}
+
+        {/* Loading State */}
+        {isLoading && (
+            <section className="py-20 bg-white">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-iteka-orange border-t-transparent"></div>
+                <p className="text-gray-600 mt-4">Loading team...</p>
+              </div>
+            </section>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && teamMembers.length === 0 && (
+            <section className="py-20 bg-white">
+              <div className="text-center">
+                <p className="text-gray-600 text-lg">No team members found.</p>
+              </div>
+            </section>
+        )}
+
+        {/* CTA */}
+        <section className="py-20 bg-[#E8F5E9]">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4">
+              Join Our Team
+            </h2>
+            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              We're always looking for passionate individuals to join our mission
+            </p>
+            <a
+              href="/contact"
+              className="inline-block bg-iteka-dark text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
+            >
+            Get In Touch
+          </a>
+        </div>
+      </section>
       </main>
 
-      <Footer />
-    </>
-  );
+  <Footer />
+</>
+);
 }
