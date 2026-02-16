@@ -15,6 +15,8 @@ export default function ProgrammesPage() {
 
     const icons = [Users, Target, Award, Globe, BookOpen, Heart];
 
+    console.log('hello');
+
     return (
         <>
             <Header />
