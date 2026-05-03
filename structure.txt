@@ -1,0 +1,63 @@
+.
+├── backend
+│   ├── README.md
+│   ├── actualites-data.json
+│   ├── config
+│   │   ├── admin.ts
+│   │   ├── api.ts
+│   │   ├── database.js
+│   │   ├── database.ts
+│   │   ├── middlewares.ts
+│   │   ├── plugins.ts
+│   │   └── server.ts
+│   ├── convert.js
+│   ├── database
+│   │   └── migrations
+│   ├── dist
+│   │   ├── config
+│   │   ├── src
+│   │   └── tsconfig.tsbuildinfo
+│   ├── favicon.png
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   ├── robots.txt
+│   │   └── uploads
+│   ├── scripts
+│   │   └── seed.js
+│   ├── src
+│   │   ├── admin
+│   │   ├── api
+│   │   ├── components
+│   │   ├── extensions
+│   │   └── index.ts
+│   ├── tsconfig.json
+│   └── types
+│       └── generated
+├── frontend
+│   ├── README.md
+│   ├── arborescence.txt
+│   ├── next-env.d.ts
+│   ├── next.config.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── logo-iteka.png
+│   │   ├── logo-transp.png
+│   │   ├── next.svg
+│   │   ├── vercel.svg
+│   │   └── window.svg
+│   ├── src
+│   │   ├── app
+│   │   ├── components
+│   │   ├── favicon.ico
+│   │   └── lib
+│   ├── tailwind.config.ts
+│   └── tsconfig.json
+├── railway.json
+└── structure.txt
+
+24 directories, 37 files

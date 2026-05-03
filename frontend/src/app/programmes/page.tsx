@@ -13,9 +13,11 @@ export default function ProgrammesPage() {
         queryFn: fetchProgrammes,
     });
 
+    console.log('Programmes reçus:', programmes);
+
     const icons = [Users, Target, Award, Globe, BookOpen, Heart];
 
-    console.log('hello');
+    console.log('hello my friend');
 
     return (
         <>

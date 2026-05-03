@@ -1,79 +1,96 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:1337';
-const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
+// Backend Strapi sur Render
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://iteka2026.onrender.com';
+const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 
 export const strapiClient = axios.create({
-  baseURL: `${API_URL}/api`,
+  baseURL: `${STRAPI_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
-    ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),
+    ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
   },
 });
 
+// Helper pour extraire les données Strapi v4
+const extractData = (response: any) => {
+  const data = response.data;
+
+  if (Array.isArray(data)) {
+    return data.map((item: any) => ({
+      id: item.id,
+      documentId: item.documentId,
+      slug: item.slug,
+      ...item,
+    }));
+  }
+
+  return {
+    id: data.id,
+    documentId: data.documentId,
+    ...data,
+  };
+};
 export const fetchProgrammes = async () => {
   const response = await strapiClient.get('/programmes?populate=*');
-  return response.data.data;
+  return response.data.data; // Retourne directement sans extractData
 };
 
 export const fetchProgrammeBySlug = async (slug: string) => {
-  const response = await strapiClient.get(
-      `/programmes?filters[slug][$eq]=${slug}&populate=*`
-  );
-  return response.data.data[0];
+  const response = await strapiClient.get(`/programmes?filters[slug][$eq]=${slug}&populate=*`);
+  const data = extractData(response.data);
+  return Array.isArray(data) ? data[0] : data;
 };
 
 export const fetchActualites = async () => {
-  const response = await strapiClient.get('/actualites?populate=*&sort=article_date:desc');
-  return response.data.data;
+  const response = await strapiClient.get('/news?sort=published_at:desc&populate=*');
+  return extractData(response.data);
 };
 
 export const fetchActualiteBySlug = async (slug: string) => {
-  const response = await strapiClient.get(
-      `/actualites?filters[slug][$eq]=${slug}&populate=*`
-  );
-  return response.data.data[0];
+  const response = await strapiClient.get(`/news?filters[slug][$eq]=${slug}&populate=*`);
+  const data = extractData(response.data);
+  return Array.isArray(data) ? data[0] : data;
 };
 
 export const fetchGalleries = async (category?: string) => {
   const url = category
-      ? `/galleries?filters[category][$eq]=${category}&sort=order:asc&populate=*`
-      : '/galleries?sort=order:asc&populate=*';
+      ? `/galleries?filters[category][$eq]=${category}&sort=order&populate=*`
+      : '/galleries?sort=order&populate=*';
   const response = await strapiClient.get(url);
-  return response.data.data;
+  return extractData(response.data);
 };
 
-// Alias pour la home page
 export const fetchGalleryImages = async () => {
-  const response = await strapiClient.get('/galleries?sort=order:asc&populate=*');
-  return response.data.data;
+  const response = await strapiClient.get('/galleries?sort=order&populate=*');
+  return extractData(response.data);
 };
 
 export const fetchPartners = async () => {
-  const response = await strapiClient.get('/partners?sort=order:asc&populate=*');
-  return response.data.data;
+  const response = await strapiClient.get('/partners?sort=order&populate=*');
+  return extractData(response.data);
 };
 
 export const fetchTeamMembers = async () => {
-  const response = await strapiClient.get('/team-members?sort=order:asc&populate=*');
-  return response.data.data;
+  const response = await strapiClient.get('/team-members?sort=order&populate=*');
+  return extractData(response.data);
 };
 
 export const fetchImpactStats = async () => {
-  const response = await strapiClient.get('/impact-stats?sort=order:asc');
-  return response.data.data;
+  const response = await strapiClient.get('/impact-stats?sort=order');
+  return extractData(response.data);
 };
 
 export const fetchTestimonials = async () => {
   const response = await strapiClient.get(
-      '/testimonials?filters[is_featured][$eq]=true&sort=order:asc&populate=*'
+      '/testimonials?filters[is_featured][$eq]=true&sort=order&populate=*'
   );
-  return response.data.data;
+  return extractData(response.data);
 };
 
 export const fetchFestival = async () => {
   const response = await strapiClient.get('/festival?populate=*');
-  return response.data.data;
+  return response.data.data.attributes;
 };
 
 export const submitContactMessage = async (data: {

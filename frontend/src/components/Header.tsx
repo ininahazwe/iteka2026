@@ -39,11 +39,11 @@ export default function Header() {
             <Link href="/" className="flex items-center">
               <div className="flex items-center gap-2">
                 <Image
-                    src="/logo-iteka.png"
+                    src="/logo-transp.png"
                     alt="Iteka"
                     width={100}
-                    height={32}
-                    className="h-8 w-auto"
+                    height={100}
+                    className="h-20 w-auto"
                     priority
                 />
               </div>
