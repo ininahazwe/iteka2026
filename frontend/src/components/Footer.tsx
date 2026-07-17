@@ -1,9 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import { Facebook, Twitter, Linkedin, Instagram, Mail, MapPin, Phone, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { Facebook, Twitter, Linkedin, Mail, MapPin, Phone, ArrowRight, Check } from 'lucide-react';
 
 export default function Footer() {
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+
+    setNewsletterStatus('loading');
+    try {
+      const recaptchaToken = executeRecaptcha ? await executeRecaptcha('newsletter_signup') : undefined;
+
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail, recaptchaToken }),
+      });
+
+      if (!response.ok) throw new Error('Subscription failed');
+
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+    } catch {
+      setNewsletterStatus('error');
+    }
+  };
+
   const footerLinks = {
     about: [
       { href: '/about', label: 'About Us' },
@@ -25,10 +54,9 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { href: '#', icon: Facebook, label: 'Facebook' },
-    { href: '#', icon: Twitter, label: 'Twitter' },
-    { href: '#', icon: Linkedin, label: 'LinkedIn' },
-    { href: '#', icon: Instagram, label: 'Instagram' },
+    { href: 'https://www.facebook.com/itekayouthorganization/', icon: Facebook, label: 'Facebook' },
+    { href: 'https://x.com/ItekaYouth', icon: Twitter, label: 'Twitter' },
+    { href: 'https://www.linkedin.com/company/iteka-youth-organization', icon: Linkedin, label: 'LinkedIn' },
   ];
 
   return (
@@ -49,20 +77,33 @@ export default function Footer() {
               {/* Newsletter */}
               <div className="mb-6">
                 <p className="text-sm font-semibold text-white mb-3">Stay Updated</p>
-                <form className="flex gap-2">
-                  <input
-                      type="email"
-                      placeholder="Your email"
-                      className="flex-1 px-4 py-2 rounded-md bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-iteka-orange"
-                  />
-                  <button
-                      type="submit"
-                      className="bg-iteka-orange text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition"
-                      aria-label="Subscribe"
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </form>
+                {newsletterStatus === 'success' ? (
+                    <p className="text-sm text-iteka-orange flex items-center gap-2">
+                      <Check className="w-4 h-4" /> Thanks for subscribing!
+                    </p>
+                ) : (
+                    <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+                      <input
+                          type="email"
+                          required
+                          value={newsletterEmail}
+                          onChange={(e) => setNewsletterEmail(e.target.value)}
+                          placeholder="Your email"
+                          className="flex-1 px-4 py-2 rounded-md bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-iteka-orange"
+                      />
+                      <button
+                          type="submit"
+                          disabled={newsletterStatus === 'loading'}
+                          className="bg-iteka-orange text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition disabled:opacity-50"
+                          aria-label="Subscribe"
+                      >
+                        <ArrowRight className="w-5 h-5" />
+                      </button>
+                    </form>
+                )}
+                {newsletterStatus === 'error' && (
+                    <p className="text-sm text-red-400 mt-2">Something went wrong. Try again.</p>
+                )}
               </div>
             </div>
 
@@ -136,7 +177,9 @@ export default function Footer() {
                 </li>
                 <li className="flex items-start gap-2 text-gray-300">
                   <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-iteka-orange" />
-                  <span>+250 XXX XXX XXX</span>
+                  <a href="tel:+250789429057" className="hover:text-iteka-orange transition">
+                    +250 789 429 057
+                  </a>
                 </li>
               </ul>
 

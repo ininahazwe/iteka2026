@@ -11,6 +11,7 @@ import {
   fetchTestimonials,
   fetchImpactStats,
   fetchGalleryImages,
+  fetchPartners,
 } from '../lib/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -40,6 +41,18 @@ export default function Home() {
     queryKey: ['gallery'],
     queryFn: fetchGalleryImages,
   });
+
+  const { data: partners = [] } = useQuery({
+    queryKey: ['partners'],
+    queryFn: fetchPartners,
+  });
+
+  const getLogoUrl = (logo: any) => {
+    if (!logo) return null;
+    const url = logo.url || logo.data?.url;
+    if (!url) return null;
+    return url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+  };
 
   const featuredProgrammes = programmes.filter((p: any) => p?.is_featured);
   const featuredNews = actualites.slice(0, 3);
@@ -172,11 +185,31 @@ export default function Home() {
             <div className="max-w-7xl mx-auto px-4">
               <p className="text-sm text-gray-500 text-center mb-6">Our Supported Partners</p>
               <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                {/* Placeholder - Remplacer par vraies logos partenaires */}
-                <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                {partners.length > 0 ? (
+                    partners.slice(0, 8).map((partner: any) => {
+                      const logoUrl = getLogoUrl(partner.logo);
+                      return (
+                          <div key={partner.id} className="h-12 w-24 relative grayscale hover:grayscale-0 transition">
+                            {logoUrl ? (
+                                <img
+                                    src={logoUrl}
+                                    alt={partner.name}
+                                    className="h-full w-full object-contain"
+                                />
+                            ) : (
+                                <div className="h-12 w-24 bg-gray-300 rounded" />
+                            )}
+                          </div>
+                      );
+                    })
+                ) : (
+                    <>
+                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                    </>
+                )}
               </div>
             </div>
           </section>
