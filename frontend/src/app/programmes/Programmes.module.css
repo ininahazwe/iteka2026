@@ -1,0 +1,291 @@
+/* Styles propres à /programmes. Boutons, band, section header, cards de
+   base viennent de src/styles/shared.module.css (importé en tant que
+   `shared`). */
+
+/* ============ Stats band ============ */
+.statsSection {
+  padding: 48px 0;
+  background: var(--iteka-cream);
+}
+
+/* ============ Focus Areas ============ */
+.focusSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.focusGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .focusGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.focusCard {
+  text-align: center;
+}
+
+.focusIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--iteka-ink);
+}
+
+.focusTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 12px;
+}
+
+.focusText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ Programmes grid ============ */
+.gridSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.loadingWrap {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.spinner {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(232, 119, 34, 0.2);
+  border-top-color: var(--iteka-orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  color: var(--iteka-muted);
+  margin-top: 16px;
+}
+
+.emptyWrap {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.emptyText {
+  color: var(--iteka-muted);
+  font-size: 18px;
+}
+
+.programmesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .programmesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .programmesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.programmeCard {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.programmeCard:hover {
+  transform: translateY(-4px);
+}
+
+.programmeImageWrap {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.programmeImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.programmeCard:hover .programmeImageWrap img {
+  transform: scale(1.05);
+}
+
+.programmeBody {
+  padding: 24px;
+}
+
+.programmeTopRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.programmeIconWrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--iteka-green) 12%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--iteka-ink);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.programmeCard:hover .programmeIconWrap {
+  background: var(--iteka-orange);
+  color: #fff;
+}
+
+.featuredBadge {
+  background: var(--iteka-orange);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.programmeTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 12px;
+  transition: color 0.15s ease;
+}
+
+.programmeCard:hover .programmeTitle {
+  color: var(--iteka-orange);
+}
+
+.programmeText {
+  font-size: 14px;
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.programmeLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.programmeLink svg {
+  transition: transform 0.15s ease;
+}
+
+.programmeCard:hover .programmeLink svg {
+  transform: translateX(4px);
+}
+
+/* ============ How to Join ============ */
+.joinSection {
+  padding: 80px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.joinInner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.stepsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .stepsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stepCard {
+  text-align: center;
+}
+
+.stepCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--iteka-orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stepTitle {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.stepText {
+  font-size: 14px;
+  color: var(--iteka-muted);
+  line-height: 1.6;
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 64px 0;
+  background: var(--iteka-cream);
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}

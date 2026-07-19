@@ -6,6 +6,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Heart, Shield, FileCheck, DollarSign, CheckCircle, HelpCircle } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
+import styles from './Donate.module.css';
+import shared from '@/src/styles/shared.module.css';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '');
 
@@ -67,11 +69,11 @@ function DonateForm() {
   };
 
   return (
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className={styles.form}>
         {/* Donation Amount */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-4">Select Amount (USD)</label>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+          <label className={styles.fieldLabel}>Select Amount (USD)</label>
+          <div className={styles.amountGrid}>
             {presetAmounts.map((amnt) => (
                 <button
                     key={amnt}
@@ -80,21 +82,17 @@ function DonateForm() {
                       setAmount(amnt);
                       setCustomAmount('');
                     }}
-                    className={`py-4 rounded-lg font-semibold transition ${
-                        amount === amnt && !customAmount
-                            ? 'bg-iteka-orange text-white shadow-md'
-                            : 'bg-white border-2 border-gray-200 text-gray-800 hover:border-iteka-orange'
-                    }`}
+                    className={`${styles.amountButton} ${amount === amnt && !customAmount ? styles.amountButtonActive : ''}`}
                 >
                   ${amnt}
                 </button>
             ))}
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Custom Amount</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <DollarSign className="h-5 w-5 text-gray-400" />
+            <label className={styles.fieldLabelSm}>Custom Amount</label>
+            <div className={styles.customAmountWrap}>
+              <div className={styles.customAmountIcon}>
+                <DollarSign size={20} />
               </div>
               <input
                   type="number"
@@ -103,17 +101,17 @@ function DonateForm() {
                   placeholder="Enter custom amount"
                   step="0.01"
                   min="1"
-                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                  className={`${styles.textInput} ${styles.textInputIndent}`}
               />
             </div>
           </div>
         </div>
 
         {/* Donor Info */}
-        <div className="space-y-4">
+        <div className={styles.donorFields}>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Full Name <span className="text-red-500">*</span>
+            <label className={styles.fieldLabelSm}>
+              Full Name <span className={styles.required}>*</span>
             </label>
             <input
                 type="text"
@@ -121,13 +119,13 @@ function DonateForm() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
                 placeholder="Your name"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                className={styles.textInput}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Email <span className="text-red-500">*</span>
+            <label className={styles.fieldLabelSm}>
+              Email <span className={styles.required}>*</span>
             </label>
             <input
                 type="email"
@@ -135,17 +133,17 @@ function DonateForm() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                className={styles.textInput}
             />
           </div>
         </div>
 
         {/* Card Element */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Card Details <span className="text-red-500">*</span>
+          <label className={styles.fieldLabelSm}>
+            Card Details <span className={styles.required}>*</span>
           </label>
-          <div className="px-4 py-4 border-2 border-gray-200 rounded-lg">
+          <div className={styles.cardElementWrap}>
             <CardElement
                 options={{
                   style: {
@@ -164,36 +162,28 @@ function DonateForm() {
 
         {/* Message */}
         {message && (
-            <div className={`p-4 rounded-lg flex items-start gap-3 ${
-                message.includes('✓')
-                    ? 'bg-green-50 text-green-700 border border-green-200'
-                    : 'bg-red-50 text-red-700 border border-red-200'
-            }`}>
+            <div className={`${styles.messageBox} ${message.includes('✓') ? styles.messageSuccess : styles.messageError}`}>
               {message}
             </div>
         )}
 
         {/* Submit Button */}
-        <button
-            type="submit"
-            disabled={!stripe || loading}
-            className="w-full bg-iteka-orange text-white py-4 rounded-lg font-semibold hover:bg-opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
+        <button type="submit" disabled={!stripe || loading} className={styles.submitButton}>
           {loading ? (
               <>
-                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                <div className={styles.spinnerSm}></div>
                 Processing...
               </>
           ) : (
               <>
-                <Heart className="w-5 h-5" />
+                <Heart size={20} />
                 Donate ${finalAmount || amount}
               </>
           )}
         </button>
 
-        <p className="text-xs text-gray-500 text-center flex items-center justify-center gap-2">
-          <Shield className="w-4 h-4" />
+        <p className={styles.secureNote}>
+          <Shield size={16} />
           Your donation is secure and encrypted. We never store your card information.
         </p>
       </form>
@@ -250,16 +240,14 @@ export default function DonatePage() {
       <Header />
 
       <main>
-        {/* Hero Section */}
-        <section className="bg-white py-16 md:py-24">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
-              <Heart className="w-8 h-8 text-iteka-dark" />
+        {/* Hero */}
+        <section className={shared.pageHero}>
+          <div className={shared.pageHeroInner}>
+            <div className={styles.heroIcon}>
+              <Heart size={28} />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark mb-6">
-              Support Our Mission
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            <h1 className={shared.pageHeroTitle}>Support Our Mission</h1>
+            <p className={shared.pageHeroText}>
               Help us empower young people in Rwanda through talent discovery, skills development,
               and peace promotion
             </p>
@@ -267,31 +255,31 @@ export default function DonatePage() {
         </section>
 
         {/* Main Donate Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-              {/* Info - 2 colonnes */}
-              <div className="lg:col-span-2 space-y-8">
+        <section className={styles.mainSection}>
+          <div className={shared.container}>
+            <div className={styles.mainGrid}>
+              {/* Info */}
+              <div className={styles.infoCol}>
                 <div>
-                  <h2 className="text-3xl font-bold text-iteka-dark mb-6">Make a Difference</h2>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h2 className={styles.infoTitle}>Make a Difference</h2>
+                  <p className={styles.infoText}>
                     Your donation directly supports our programmes that empower young people in Rwanda
                     through talent discovery, skills development, and peace promotion.
                   </p>
                 </div>
 
                 {/* Benefits */}
-                <div className="space-y-4">
+                <div className={styles.benefitsList}>
                   {benefits.map((benefit, idx) => {
                     const Icon = benefit.icon;
                     return (
-                        <div key={idx} className="flex items-start gap-4 bg-white p-4 rounded-lg">
-                          <div className="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-5 h-5 text-iteka-dark" />
+                        <div key={idx} className={styles.benefitItem}>
+                          <div className={styles.benefitIconCircle}>
+                            <Icon size={20} />
                           </div>
                           <div>
-                            <h4 className="font-bold text-iteka-dark mb-1">{benefit.title}</h4>
-                            <p className="text-gray-600 text-sm">{benefit.description}</p>
+                            <h4 className={styles.benefitTitle}>{benefit.title}</h4>
+                            <p className={styles.benefitText}>{benefit.description}</p>
                           </div>
                         </div>
                     );
@@ -299,26 +287,26 @@ export default function DonatePage() {
                 </div>
 
                 {/* Impact Box */}
-                <div className="bg-gradient-to-br from-iteka-orange to-orange-600 p-6 rounded-lg text-white">
-                  <p className="font-semibold mb-3 flex items-center gap-2">
-                    <DollarSign className="w-5 h-5" />
+                <div className={styles.impactBox}>
+                  <p className={styles.impactLabel}>
+                    <DollarSign size={20} />
                     Your Impact:
                   </p>
-                  <ul className="space-y-2">
+                  <ul className={styles.impactList}>
                     {impactItems.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
-                          <span className="font-bold">{item.amount}</span>
-                          <span className="opacity-90">{item.impact}</span>
+                        <li key={idx} className={styles.impactItem}>
+                          <span className={styles.impactAmount}>{item.amount}</span>
+                          <span className={styles.impactText}>{item.impact}</span>
                         </li>
                     ))}
                   </ul>
                 </div>
               </div>
 
-              {/* Form - 3 colonnes */}
-              <div className="lg:col-span-3">
-                <div className="bg-white p-8 rounded-lg shadow-md">
-                  <h3 className="text-2xl font-bold text-iteka-dark mb-6">Donation Details</h3>
+              {/* Form */}
+              <div>
+                <div className={styles.formCard}>
+                  <h3 className={styles.formTitle}>Donation Details</h3>
                   <Elements stripe={stripePromise}>
                     <DonateForm />
                   </Elements>
@@ -329,37 +317,30 @@ export default function DonatePage() {
         </section>
 
         {/* FAQ */}
-        <section className="py-20 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-4">
-                <HelpCircle className="w-6 h-6 text-iteka-dark" />
+        <section className={styles.faqSection}>
+          <div className={styles.faqInner}>
+            <div className={styles.faqHeader}>
+              <div className={styles.faqIconCircle}>
+                <HelpCircle size={24} />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4">
-                Frequently Asked Questions
-              </h2>
+              <h2 className={shared.sectionTitleCenter}>Frequently Asked Questions</h2>
             </div>
 
-            <div className="space-y-6">
+            <div className={styles.faqList}>
               {faqs.map((faq, idx) => (
-                  <div key={idx} className="bg-gray-50 p-6 rounded-lg">
-                    <h4 className="font-bold text-iteka-dark mb-2">{faq.question}</h4>
-                    <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                  <div key={idx} className={styles.faqItem}>
+                    <h4 className={styles.faqQuestion}>{faq.question}</h4>
+                    <p className={styles.faqAnswer}>{faq.answer}</p>
                   </div>
               ))}
             </div>
 
-            <div className="mt-12 text-center">
-              <p className="text-gray-600 mb-4">Have more questions?</p>
-              <a
-                href="/contact"
-                className="inline-block bg-iteka-dark text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
-              >
-              Contact Us
-            </a>
+            <div className={styles.faqCta}>
+              <p className={styles.faqCtaText}>Have more questions?</p>
+              <a href="/contact" className={shared.btnPrimary}>Contact Us</a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       </main>
 
   <Footer />

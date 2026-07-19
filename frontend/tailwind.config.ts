@@ -13,7 +13,7 @@ const config: Config = {
       colors: {
         iteka: {
           orange: '#E87722',
-          green: '#2D5F3F',
+          green: '#3F7A4F',
           dark: '#1A1A1A',
           pink: '#E91E63',
           cyan: '#00A3A3',
@@ -21,10 +21,19 @@ const config: Config = {
           brown: '#795548',
           gray: '#808080',
           light: '#FFFFFF',
+          // DA "Virtus-style" — tokens de mise en page
+          cream: '#FDF8F2',
+          ink: '#1F2937',
+          muted: '#6B7280',
+          band: '#FCE29B',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Space Grotesk', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
     },
   },

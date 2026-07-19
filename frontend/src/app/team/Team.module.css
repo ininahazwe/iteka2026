@@ -1,0 +1,193 @@
+/* Styles propres à /team. Boutons, band, container, spinner, hero
+   viennent de src/styles/shared.module.css (`shared`). */
+
+.heroIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: var(--iteka-ink);
+}
+
+/* ============ Leadership ============ */
+.leadershipSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.leadershipGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .leadershipGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .leadershipGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.leaderCard {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.leaderCard:hover {
+  transform: translateY(-4px);
+}
+
+.leaderPhoto {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.leaderPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.leaderCard:hover .leaderPhoto img {
+  transform: scale(1.05);
+}
+
+.leaderBody {
+  padding: 24px;
+}
+
+.leaderName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 4px;
+}
+
+.leaderRole {
+  font-size: 14px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.leaderBio {
+  font-size: 14px;
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.leaderLinkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.leaderLinkedin:hover {
+  text-decoration: underline;
+}
+
+/* ============ Team grid ============ */
+.teamSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 640px) {
+  .teamGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .teamGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.teamCard {
+  background: #fff;
+  border: 2px solid rgba(31, 41, 55, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.teamCard:hover {
+  border-color: var(--iteka-orange);
+}
+
+.teamPhoto {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.teamPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.teamCard:hover .teamPhoto img {
+  transform: scale(1.05);
+}
+
+.teamBody {
+  padding: 16px;
+}
+
+.teamName {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 4px;
+}
+
+.teamRole {
+  font-size: 14px;
+  color: var(--iteka-muted);
+}
+
+/* ============ Empty ============ */
+.emptyWrap {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.emptyText {
+  color: var(--iteka-muted);
+  font-size: 18px;
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 64px 0;
+}

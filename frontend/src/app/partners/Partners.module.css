@@ -1,0 +1,394 @@
+/* Styles propres à /partners. Boutons, band, container, hero, sectionTitle,
+   iconCircle, borderCard viennent de src/styles/shared.module.css (`shared`). */
+
+.accent {
+  color: var(--iteka-orange);
+}
+
+/* ============ Philosophy ============ */
+.philosophySection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.philosophyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .philosophyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.philosophyCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.philosophyTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+@media (min-width: 768px) {
+  .philosophyTitle {
+    font-size: 40px;
+  }
+}
+
+.philosophyText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.statCard {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.statCardValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.statCardLabel {
+  color: var(--iteka-muted);
+  font-size: 14px;
+}
+
+/* ============ Featured partners ============ */
+.featuredSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.featuredGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .featuredGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .featuredGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.featuredCard {
+  padding: 32px;
+}
+
+.featuredLogoWrap {
+  margin-bottom: 24px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--iteka-cream);
+  border-radius: 16px;
+}
+
+.featuredLogoWrap img {
+  max-height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.featuredName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.featuredType {
+  font-size: 14px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.featuredDescription {
+  color: var(--iteka-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.featuredLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.featuredLink:hover {
+  text-decoration: underline;
+}
+
+/* ============ Logo grid (autres partenaires) ============ */
+.logoGridSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.logoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .logoGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .logoGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.logoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  transition: transform 0.2s ease;
+}
+
+.logoCard:hover {
+  transform: translateY(-4px);
+}
+
+.logoCard img {
+  max-height: 64px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-bottom: 12px;
+  transition: transform 0.2s ease;
+}
+
+.logoCard:hover img {
+  transform: scale(1.08);
+}
+
+.logoCardName {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--iteka-muted);
+  text-align: center;
+  transition: color 0.15s ease;
+}
+
+.logoCard:hover .logoCardName {
+  color: var(--iteka-orange);
+}
+
+/* ============ Empty ============ */
+.emptyWrap {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.emptyText {
+  color: var(--iteka-muted);
+  font-size: 18px;
+}
+
+/* ============ Partnership types ============ */
+.typesSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.typesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .typesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.typeCard {
+  background: var(--iteka-band);
+  padding: 32px;
+  border-radius: 24px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.typeCard:hover {
+  transform: translateY(-4px);
+}
+
+.typeIconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: var(--iteka-ink);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.typeCard:hover .typeIconCircle {
+  background: var(--iteka-orange);
+  color: #fff;
+}
+
+.typeTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 12px;
+}
+
+.typeText {
+  color: var(--iteka-muted);
+  line-height: 1.6;
+}
+
+/* ============ Why partner ============ */
+.whySection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.whyInner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.whyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .whyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.whyCard {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.whyCardTitle {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.whyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--iteka-orange);
+  flex-shrink: 0;
+}
+
+.whyCardText {
+  color: var(--iteka-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.ctaInner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.ctaIconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--iteka-band);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: var(--iteka-ink);
+}
+
+.ctaTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .ctaTitle {
+    font-size: 40px;
+  }
+}
+
+.ctaText {
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}

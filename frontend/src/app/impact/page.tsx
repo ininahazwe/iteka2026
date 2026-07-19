@@ -2,10 +2,12 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { ArrowRight, TrendingUp, Users, Award, Globe, Heart, Target, Briefcase, GraduationCap, Lightbulb } from 'lucide-react';
+import { ArrowRight, TrendingUp, Award, Globe, Heart, Target, Briefcase, GraduationCap, Lightbulb } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchImpactStats, fetchTestimonials, fetchGalleryImages } from '@/src/lib/api';
+import styles from './Impact.module.css';
+import shared from '@/src/styles/shared.module.css';
 
 export default function ImpactPage() {
   const { data: stats = [], isLoading: statsLoading } = useQuery({
@@ -23,37 +25,15 @@ export default function ImpactPage() {
     queryFn: fetchGalleryImages,
   });
 
+  const accentColors = ['#E87722', '#00A3A3', '#E91E63', '#3F7A4F'];
+
   const impactAreas = [
-    {
-      title: 'Youth Employment',
-      description: 'We equip young people with job-ready skills and connect them to employment opportunities with leading organizations.',
-      icon: Briefcase,
-    },
-    {
-      title: 'Entrepreneurship',
-      description: 'Through our business training and mentorship, we help youth start and grow their own ventures.',
-      icon: Lightbulb,
-    },
-    {
-      title: 'Education',
-      description: 'We provide scholarships, tutoring, and mentoring to help young people succeed academically.',
-      icon: GraduationCap,
-    },
-    {
-      title: 'Peace & Unity',
-      description: 'Our intercultural programmes build bridges between youth and promote reconciliation and unity.',
-      icon: Heart,
-    },
-    {
-      title: 'Leadership',
-      description: 'We develop future leaders through specialized training and community leadership opportunities.',
-      icon: Award,
-    },
-    {
-      title: 'Community Development',
-      description: 'Young people apply their skills to address local challenges and drive positive community change.',
-      icon: Globe,
-    },
+    { title: 'Youth Employment', description: 'We equip young people with job-ready skills and connect them to employment opportunities with leading organizations.', icon: Briefcase },
+    { title: 'Entrepreneurship', description: 'Through our business training and mentorship, we help youth start and grow their own ventures.', icon: Lightbulb },
+    { title: 'Education', description: 'We provide scholarships, tutoring, and mentoring to help young people succeed academically.', icon: GraduationCap },
+    { title: 'Peace & Unity', description: 'Our intercultural programmes build bridges between youth and promote reconciliation and unity.', icon: Heart },
+    { title: 'Leadership', description: 'We develop future leaders through specialized training and community leadership opportunities.', icon: Award },
+    { title: 'Community Development', description: 'Young people apply their skills to address local challenges and drive positive community change.', icon: Globe },
   ];
 
   return (
@@ -61,182 +41,284 @@ export default function ImpactPage() {
         <Header />
 
         <main>
-          {/* Hero Section - Simple */}
-          <section className="bg-white py-16 md:py-24">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark mb-6">
+          {/* Hero */}
+          <section className={shared.pageHero}>
+            <div className={shared.pageHeroInner}>
+              <h1 className={shared.pageHeroTitle}>
                 Creating Lasting Impact.
                 <br />
-                <span className="text-iteka-orange">Transforming Communities.</span>
+                <span className={shared.accent}>Transforming Communities.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover how we're empowering thousands of young Rwandans to discover their potential
-                and create positive change in their communities.
+              <p className={styles.heroQuote}>
+                &ldquo;Behind every statistic is a story of transformation. By investing in youth, we are
+                building a resilient foundation for the entire community.&rdquo;
+              </p>
+              <p className={styles.heroText}>
+                Through our targeted interventions, we have seen young creatives launch sustainable
+                enterprises, athletes become community leaders, and young people lead essential dialogues
+                that bridge divides. We do not just track numbers; we measure lasting change.
               </p>
             </div>
           </section>
 
-          {/* Impact Statistics - Fond vert */}
-          <section className="py-20 bg-[#E8F5E9]">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
-                Our Impact By The Numbers
-              </h2>
-              <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          {/* Impact Statistics */}
+          <section className={styles.statsSection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter}>Our Impact By The Numbers</h2>
+              <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
                 Measurable results that demonstrate our commitment to youth empowerment
               </p>
 
               {statsLoading ? (
-                  <div className="text-center py-12">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-iteka-orange border-t-transparent"></div>
-                    <p className="text-gray-600 mt-4">Loading impact data...</p>
+                  <div className={shared.loadingWrap}>
+                    <div className={shared.spinner}></div>
+                    <p className={shared.loadingText}>Loading impact data...</p>
                   </div>
               ) : stats.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {stats.map((stat: any) => (
-                        <div key={stat.id} className="bg-white p-8 rounded-lg text-center hover:shadow-lg transition">
-                          <div className="text-5xl font-bold text-iteka-dark mb-2">
+                  <div className={styles.statsGridWhite}>
+                    {stats.map((stat: any, idx: number) => (
+                        <div key={stat.id} className={styles.statCard}>
+                          <div className={styles.statCardValue} style={{ color: accentColors[idx % accentColors.length] }}>
                             {stat.value}
                           </div>
-                          <p className="text-lg font-semibold text-gray-700 mb-2">{stat.label}</p>
-                          {stat.description && (
-                              <p className="text-sm text-gray-600">{stat.description}</p>
-                          )}
+                          <p className={styles.statCardLabel}>{stat.label}</p>
+                          {stat.description && <p className={styles.statCardDesc}>{stat.description}</p>}
                         </div>
                     ))}
                   </div>
               ) : (
-                  <div className="text-center text-gray-600 py-12">No impact statistics available</div>
+                  <div className={styles.emptyText}>No impact statistics available</div>
               )}
             </div>
           </section>
 
-          {/* Impact Story Grid with Image */}
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-                {/* Image */}
-                <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden">
-                  {galleryImages[0]?.image?.data?.url ? (
+          {/* Art for Youth Resilience */}
+          <section className={styles.artSection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 32 }}>
+                The Power of Creative Expression in Healing and Resilience
+              </h2>
+              <div className={styles.proseText}>
+                <p>
+                  For young people displaced by conflict or facing systemic barriers across the Great
+                  Lakes region, art is far more than a form of creative expression&mdash;it is a vital
+                  lifeline. The Art for Youth Resilience and Livelihood Programme was established to
+                  provide a sanctuary where vulnerable youth and displaced persons can heal from trauma,
+                  rebuild social connections, and reclaim their agency.
+                </p>
+                <p>
+                  By bridging the gap between raw creative talent and sustainable economic independence,
+                  we empower participants to transform their artistic passions into viable livelihoods.
+                  Through this intersection of psychosocial support, cultural preservation, and
+                  entrepreneurship, Iteka is fostering a new generation of resilient changemakers who are
+                  actively weaving a fabric of peace and unity across borders.
+                </p>
+                <p>
+                  Through this targeted initiative, we have directly engaged 93 participants across
+                  Burundi, the Democratic Republic of the Congo (DRC), and Rwanda, creating a vibrant
+                  cross-border community rooted in healing, expression, and economic opportunity.
+                </p>
+              </div>
+
+              <div className={styles.glanceGrid}>
+                <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                  <div className={styles.glanceValue}>93</div>
+                  <p className={styles.glanceLabel}>Direct Participants</p>
+                  <p className={styles.glanceSub}>50 Female | 43 Male</p>
+                </div>
+                <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                  <div className={styles.glanceValue}>75%</div>
+                  <p className={styles.glanceLabel}>Refugee Status</p>
+                  <p className={styles.glanceSub}>Supporting displaced youth</p>
+                </div>
+                <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                  <div className={styles.glanceValue}>98%</div>
+                  <p className={styles.glanceLabel}>Youth-Led Impact</p>
+                  <p className={styles.glanceSub}>Aged between 20 and 35</p>
+                </div>
+              </div>
+
+              <div className={styles.disciplinesInner}>
+                <h3 className={styles.disciplinesTitle}>Creative Disciplines and Livelihoods</h3>
+                <p className={styles.disciplinesText}>
+                  To ensure diverse pathways to resilience and economic independence, participants were
+                  engaged and upskilled across 11 distinct art forms:
+                </p>
+                <div className={styles.disciplinesGrid}>
+                  <div className={shared.borderCard}>
+                    <h4 className={styles.disciplineTitle}>Performing Arts</h4>
+                    <p className={styles.disciplineText}>Dance &amp; Choreography, Music &amp; Drumming, Singing, Theatre and Comic Acting</p>
+                  </div>
+                  <div className={shared.borderCard}>
+                    <h4 className={styles.disciplineTitle}>Literary Arts</h4>
+                    <p className={styles.disciplineText}>Poetry and Storytelling, Creative Writing</p>
+                  </div>
+                  <div className={shared.borderCard}>
+                    <h4 className={styles.disciplineTitle}>Visual and Media Arts</h4>
+                    <p className={styles.disciplineText}>Visual Arts and Painting, Film and Photography</p>
+                  </div>
+                  <div className={shared.borderCard}>
+                    <h4 className={styles.disciplineTitle}>Applied Arts and Livelihoods</h4>
+                    <p className={styles.disciplineText}>Fashion and Design, Culinary Arts, Handicrafts</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Iteka Community Project */}
+          <section className={styles.communitySection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter}>The Iteka Community Project</h2>
+              <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
+                In 2024, our community-driven interventions prioritised socio-economic empowerment,
+                health, and holistic well-being through targeted, grassroots campaigns.
+              </p>
+              <div className={styles.communityGrid}>
+                <div className={shared.flatCard}>
+                  <h3 className={styles.communityCardTitle}>Socio-Economic Empowerment: The Sewing Initiative</h3>
+                  <p className={styles.communityCardText}>
+                    To foster local self-reliance, we initiated a specialised sewing and tailoring project.
+                    We trained seven women from the local community, equipping them with vocational skills
+                    to produce high-quality school uniforms for the children at Iteka Junior Academy. This
+                    initiative not only created sustainable livelihood opportunities for the women but also
+                    strengthened our internal community ecosystem.
+                  </p>
+                </div>
+                <div className={shared.flatCard}>
+                  <h3 className={styles.communityCardTitle}>Health and Well-being: Menstrual Hygiene Management</h3>
+                  <p className={styles.communityCardText}>
+                    We actively championed health and dignity by tackling period poverty. Most notably, in
+                    observance of International Women&rsquo;s Day 2024 in the Muhanga District, we launched
+                    an essential outreach campaign. We distributed 30 comprehensive sanitary pad kits and
+                    provided vital reproductive health education and psychosocial support to young girls and
+                    women within the community.
+                  </p>
+                </div>
+                <div className={shared.flatCard}>
+                  <h3 className={styles.communityCardTitle}>Advocacy: Youth and Children&rsquo;s Rights</h3>
+                  <p className={styles.communityCardText}>
+                    Through dynamic public performances and focused advocacy campaigns, we continued to
+                    amplify the voices of the younger generation. Our initiatives focused on raising
+                    awareness of children&rsquo;s and youth rights, celebrating their cultural and academic
+                    achievements, and actively addressing the systemic challenges they face.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Evidence-Based Results */}
+          <section className={styles.storySection}>
+            <div className={shared.container}>
+              <div className={styles.storyGrid}>
+                <div className={styles.storyImage}>
+                  {galleryImages[0]?.image?.data?.url && (
                       <img
                           src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[0].image.data.url}`}
                           alt="Impact Story"
-                          className="w-full h-full object-cover"
                       />
-                  ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-iteka-orange to-iteka-dark"></div>
                   )}
                 </div>
 
-                {/* Content */}
-                <div className="space-y-6">
-                  <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-iteka-dark" />
+                <div className={styles.storyCopy}>
+                  <div className={shared.iconCircle}>
+                    <TrendingUp size={24} />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">
-                    Evidence-Based Results
-                  </h2>
-                  <p className="text-gray-700 leading-relaxed">
-                    We are committed to measuring and demonstrating our impact. Every programme is evaluated
-                    using rigorous metrics to ensure we are creating lasting positive change in the lives of
-                    young people and their communities.
+                  <h2 className={styles.storyHeading}>Evidence-Based Results</h2>
+                  <p className={styles.storyText}>
+                    We are committed to measuring and demonstrating our impact. Every programme is
+                    evaluated using rigorous metrics to ensure we are creating lasting positive change in
+                    the lives of young people and their communities.
                   </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-700">
-                      <strong>Quarterly assessments</strong> to track participant progress and outcomes
-                    </span>
+                  <ul className={shared.bulletList}>
+                    <li className={shared.bulletItem}>
+                      <div className={shared.bulletDot}></div>
+                      <span className={shared.bulletText}>
+                        <strong>Quarterly assessments</strong> to track participant progress and outcomes
+                      </span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-700">
-                      <strong>Annual impact reports</strong> available for transparency and accountability
-                    </span>
+                    <li className={shared.bulletItem}>
+                      <div className={shared.bulletDot}></div>
+                      <span className={shared.bulletText}>
+                        <strong>Annual impact reports</strong> available for transparency and accountability
+                      </span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-700">
-                      <strong>Third-party evaluations</strong> to ensure objectivity and rigor
-                    </span>
+                    <li className={shared.bulletItem}>
+                      <div className={shared.bulletDot}></div>
+                      <span className={shared.bulletText}>
+                        <strong>Third-party evaluations</strong> to ensure objectivity and rigor
+                      </span>
                     </li>
                   </ul>
-                  <Link
-                      href="/contact"
-                      className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                  >
+                  <Link href="/contact" className={shared.btnPrimary}>
                     Request Impact Report
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight size={16} />
                   </Link>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Impact Stories / Testimonials */}
-          <section className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
-                Stories of Transformation
-              </h2>
-              <p className="text-center text-gray-600 mb-12 text-lg max-w-2xl mx-auto">
-                Hear directly from the young people whose lives have been transformed through our programmes
+          {/* Testimonials */}
+          <section className={styles.testimonialsSection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter}>Stories of Transformation</h2>
+              <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
+                Hear directly from the young people whose lives have been transformed through our
+                programmes
               </p>
 
               {testimonialsLoading ? (
-                  <div className="text-center py-12">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-iteka-orange border-t-transparent"></div>
+                  <div className={shared.loadingWrap}>
+                    <div className={shared.spinner}></div>
                   </div>
               ) : testimonials.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className={styles.testimonialsGrid}>
                     {testimonials.map((testimonial: any) => (
-                        <div key={testimonial.id} className="bg-white p-8 rounded-lg shadow-sm hover:shadow-lg transition">
-                          <div className="text-4xl text-iteka-orange mb-4">&ldquo;</div>
-                          <p className="text-gray-700 mb-6 leading-relaxed italic">
-                            {testimonial.quote}
-                          </p>
-                          <div className="flex items-center gap-4">
+                        <div key={testimonial.id} className={shared.testimonialCard}>
+                          <div className={shared.quoteMark}>&ldquo;</div>
+                          <p className={shared.testimonialText}>{testimonial.quote}</p>
+                          <div className={shared.testimonialAuthorRow}>
                             {testimonial.author_photo?.data?.url && (
                                 <img
                                     src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
                                     alt={testimonial.author_name}
-                                    className="w-14 h-14 rounded-full object-cover"
+                                    className={shared.testimonialAvatar}
                                 />
                             )}
                             <div>
-                              <p className="font-bold text-iteka-dark">{testimonial.author_name}</p>
-                              <p className="text-sm text-gray-600">{testimonial.author_role}</p>
+                              <p className={shared.testimonialName}>{testimonial.author_name}</p>
+                              <p className={shared.testimonialRole}>{testimonial.author_role}</p>
                             </div>
                           </div>
                         </div>
                     ))}
                   </div>
               ) : (
-                  <div className="text-center text-gray-600 py-12">No testimonials available</div>
+                  <div className={styles.emptyText}>No testimonials available</div>
               )}
             </div>
           </section>
 
-          {/* Impact Focus Areas - Cards avec icônes */}
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
-                Areas of Impact
-              </h2>
-              <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          {/* Areas of Impact */}
+          <section className={styles.focusSection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter}>Areas of Impact</h2>
+              <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
                 Our programmes create lasting change across six key focus areas
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className={styles.focusGrid}>
                 {impactAreas.map((area, idx) => {
                   const Icon = area.icon;
                   return (
-                      <div key={idx} className="bg-[#E8F5E9] p-8 rounded-lg hover:shadow-lg transition group">
-                        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-6 group-hover:bg-iteka-orange transition">
-                          <Icon className="w-7 h-7 text-iteka-dark group-hover:text-white transition" />
+                      <div key={idx} className={`${shared.tintCard} ${styles.focusCard}`}>
+                        <div className={styles.focusIconWrap}>
+                          <Icon size={26} />
                         </div>
-                        <h3 className="text-xl font-bold text-iteka-dark mb-3">{area.title}</h3>
-                        <p className="text-gray-700 leading-relaxed">{area.description}</p>
+                        <h3 className={styles.focusTitle}>{area.title}</h3>
+                        <p className={styles.focusText}>{area.description}</p>
                       </div>
                   );
                 })}
@@ -246,87 +328,69 @@ export default function ImpactPage() {
 
           {/* Visual Impact Gallery */}
           {galleryImages.length > 0 && (
-              <section className="py-20 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
+              <section className={styles.gallerySection}>
+                <div className={shared.container}>
+                  <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>
                     Impact In Action
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className={shared.photoGrid}>
                     {galleryImages.slice(0, 8).map((img: any, idx: number) => (
-                        <div
-                            key={idx}
-                            className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
-                        >
+                        <div key={idx} className={shared.photoItem}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}
                               alt={img?.caption || 'Impact'}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition"></div>
+                          <div className={shared.photoOverlay}></div>
                         </div>
                     ))}
                   </div>
-                  <div className="text-center mt-8">
-                    <Link
-                        href="/gallery"
-                        className="inline-flex items-center gap-2 border-2 border-iteka-dark px-6 py-3 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                    >
+                  <div className={shared.centerBlock}>
+                    <Link href="/gallery" className={shared.btnOutline}>
                       View Full Gallery
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
                 </div>
               </section>
           )}
 
-          {/* Commitment Statement - Fond vert */}
-          <section className="py-20 bg-[#E8F5E9]">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
-                <Target className="w-8 h-8 text-iteka-dark" />
+          {/* Commitment to Transparency */}
+          <section className={styles.commitmentSection}>
+            <div className={styles.commitmentInner}>
+              <div className={shared.iconCircle} style={{ margin: '0 auto' }}>
+                <Target size={28} />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-6">
-                Our Commitment to Transparency
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto mb-8">
+              <h2 className={styles.commitmentTitle}>Our Commitment to Transparency</h2>
+              <p className={styles.commitmentText}>
                 We are committed to measuring and demonstrating our impact. Every programme is evaluated
                 using rigorous metrics to ensure we are creating lasting positive change in the lives of
                 young people and their communities. Our impact reports are available for transparency and
                 accountability.
               </p>
-              <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 bg-iteka-dark text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
-              >
+              <Link href="/contact" className={shared.btnPrimary}>
                 Request Impact Report
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight size={16} />
               </Link>
             </div>
           </section>
 
           {/* CTA */}
-          <section className="py-20 bg-white">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4">
-                Be Part of Our Impact
-              </h2>
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                Your support helps us expand our reach and deepen our impact across Rwanda
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link
-                    href="/donate"
-                    className="bg-iteka-orange text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition inline-flex items-center gap-2"
-                >
-                  Support Our Work
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                    href="/programmes"
-                    className="border-2 border-iteka-dark text-iteka-dark px-8 py-3 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                >
-                  Explore Programmes
-                </Link>
+          <section className={styles.ctaSection}>
+            <div className={shared.container}>
+              <div className={shared.bandBox}>
+                <h2 className={shared.bandTitle}>Be Part of Our Impact</h2>
+                <p className={shared.bandText}>
+                  Your support helps us expand our reach and deepen our impact across Rwanda
+                </p>
+                <div className={styles.ctaButtons}>
+                  <Link href="/donate" className={shared.btnPrimary}>
+                    Support Our Work
+                    <ArrowRight size={16} />
+                  </Link>
+                  <Link href="/programmes" className={shared.btnOutline}>
+                    Explore Programmes
+                  </Link>
+                </div>
               </div>
             </div>
           </section>

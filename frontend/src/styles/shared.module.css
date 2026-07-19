@@ -1,0 +1,505 @@
+/* ============================================================
+   Styles partagés DA "Virtus/Iteka" — réutilisés par toutes les
+   pages (Home, About, ...). Tokens couleur/police dans globals.css.
+   ============================================================ */
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ---- Boutons & liens ---- */
+.btnPrimary {
+  background: var(--iteka-orange);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s ease;
+  /* Empêche l'étirement pleine largeur dans les parents flex-column */
+  align-self: flex-start;
+  width: fit-content;
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+.btnOutline {
+  border: 2px solid var(--iteka-green);
+  color: var(--iteka-green);
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btnOutline:hover {
+  background: var(--iteka-green);
+  color: #fff;
+}
+
+.linkArrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--iteka-orange);
+  font-weight: 600;
+}
+
+.linkArrow:hover {
+  text-decoration: underline;
+}
+
+/* ---- Toggle responsive (équivalent hidden md:inline-flex / md:hidden) ---- */
+.mobileOnlyCenter {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.centerBlock {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.desktopOnlyFlex {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobileOnlyCenter {
+    display: none;
+  }
+  .desktopOnlyFlex {
+    display: inline-flex;
+  }
+}
+
+/* ---- En-tête de section ---- */
+.sectionHeaderRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  gap: 24px;
+}
+
+.sectionTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+.sectionTitleCenter {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  text-align: center;
+}
+
+.sectionSub {
+  font-size: 15px;
+  color: var(--iteka-muted);
+  margin-top: 4px;
+}
+
+.sectionSubCenter {
+  font-size: 15px;
+  color: var(--iteka-muted);
+  text-align: center;
+  max-width: 640px;
+  margin: 8px auto 0;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .sectionTitle,
+  .sectionTitleCenter {
+    font-size: 36px;
+  }
+}
+
+/* ---- Band (bloc coloré arrondi plein, stats / CTA) ---- */
+.bandBox {
+  background: var(--iteka-band);
+  border-radius: 32px;
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.bandTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-green);
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .bandTitle {
+    font-size: 36px;
+  }
+}
+
+.bandText {
+  color: color-mix(in srgb, var(--iteka-ink) 80%, transparent);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.bandStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .bandStatsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.statValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--iteka-ink) 80%, transparent);
+}
+
+/* ---- Cards ---- */
+.flatCard {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  transition: transform 0.2s ease;
+}
+
+.flatCard:hover {
+  transform: translateY(-4px);
+}
+
+.tintCard {
+  background: color-mix(in srgb, var(--iteka-green) 10%, white);
+  border-radius: 24px;
+  padding: 32px;
+  transition: transform 0.2s ease;
+}
+
+.tintCard:hover {
+  transform: translateY(-4px);
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--iteka-ink);
+}
+
+/* ---- Hero de page interne (About, Programmes, ...) ---- */
+.pageHero {
+  background: var(--iteka-cream);
+  padding: 64px 0;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .pageHero {
+    padding: 96px 0;
+  }
+}
+
+.pageHeroInner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.pageHeroTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--iteka-ink);
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .pageHeroTitle {
+    font-size: 56px;
+  }
+}
+
+.pageHeroTitle .accent {
+  color: var(--iteka-orange);
+}
+
+.pageHeroText {
+  font-size: 17px;
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .pageHeroText {
+    font-size: 19px;
+  }
+}
+
+/* ---- Grille média 2 images décalées (photo left/right + texte) ---- */
+.mediaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mediaTile {
+  height: 256px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.mediaTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mediaTileOffset {
+  margin-top: 32px;
+}
+
+/* ---- Liste à puces (point orange) ---- */
+.bulletList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.bulletDot {
+  margin-top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--iteka-orange);
+  flex-shrink: 0;
+}
+
+.bulletText {
+  color: var(--iteka-muted);
+}
+
+/* ---- Card bordée (hover orange), utilisée pour listes de principes/critères ---- */
+.borderCard {
+  background: #fff;
+  border: 2px solid rgba(31, 41, 55, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+  transition: border-color 0.2s ease;
+}
+
+.borderCard:hover {
+  border-color: var(--iteka-orange);
+}
+
+/* ---- Loading spinner ---- */
+.loadingWrap {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.spinner {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(232, 119, 34, 0.2);
+  border-top-color: var(--iteka-orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  color: var(--iteka-muted);
+  margin-top: 16px;
+}
+
+.fullscreenCenter {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 16px;
+}
+
+/* ---- Contenu riche (WYSIWYG WordPress, dangerouslySetInnerHTML) ---- */
+.richText {
+  color: var(--iteka-muted);
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+.richText p {
+  margin-bottom: 16px;
+}
+
+.richText h2,
+.richText h3,
+.richText h4 {
+  font-family: var(--font-display), sans-serif;
+  color: var(--iteka-ink);
+  font-weight: 700;
+  margin: 24px 0 12px;
+}
+
+.richText ul,
+.richText ol {
+  margin: 0 0 16px 20px;
+}
+
+.richText li {
+  margin-bottom: 8px;
+}
+
+.richText a {
+  color: var(--iteka-orange);
+  text-decoration: underline;
+}
+
+.richText img {
+  border-radius: 16px;
+  margin: 16px 0;
+}
+
+/* ---- Testimonial card (citation + auteur) ---- */
+.testimonialCard {
+  background: #fff;
+  padding: 32px;
+  border-radius: 24px;
+  transition: transform 0.2s ease;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-4px);
+}
+
+.quoteMark {
+  font-size: 40px;
+  color: var(--iteka-orange);
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.testimonialText {
+  color: var(--iteka-ink);
+  opacity: 0.85;
+  margin-bottom: 24px;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.testimonialAuthorRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.testimonialAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonialName {
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+.testimonialRole {
+  font-size: 14px;
+  color: var(--iteka-muted);
+}
+
+/* ---- Grille photo générique (aspect carré, overlay hover) ---- */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .photoGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.photoItem {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #e5e7eb;
+}
+
+.photoItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.photoItem:hover img {
+  transform: scale(1.05);
+}
+
+.photoOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.2s ease;
+}
+
+.photoItem:hover .photoOverlay {
+  background: rgba(0, 0, 0, 0.25);
+}

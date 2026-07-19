@@ -5,6 +5,8 @@ import { Calendar, MapPin, Ticket, Download, Music, Users, Sparkles } from 'luci
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchFestival } from '@/src/lib/api';
+import styles from './Festival.module.css';
+import shared from '@/src/styles/shared.module.css';
 
 export default function FestivalPage() {
     const { data: festival, isLoading } = useQuery({
@@ -12,7 +14,7 @@ export default function FestivalPage() {
         queryFn: fetchFestival,
     });
 
-    const data = festival?.data || festival;
+    const data = (festival as any)?.data || festival;
 
     const getUrl = (media: any) => {
         const url = media?.url || media?.data?.url;
@@ -24,11 +26,9 @@ export default function FestivalPage() {
         return (
             <>
                 <Header />
-                <div className="min-h-screen flex items-center justify-center bg-white">
-                    <div className="text-center">
-                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-iteka-orange border-t-transparent mb-4"></div>
-                        <p className="text-gray-600">Loading festival information...</p>
-                    </div>
+                <div className={shared.fullscreenCenter}>
+                    <div className={shared.spinner}></div>
+                    <p className={shared.loadingText}>Loading festival information...</p>
                 </div>
                 <Footer />
             </>
@@ -39,11 +39,11 @@ export default function FestivalPage() {
         return (
             <>
                 <Header />
-                <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-                    <div className="text-center">
-                        <h2 className="text-2xl font-bold text-iteka-dark mb-4">Festival Information Not Found</h2>
-                        <p className="text-gray-600">Check back soon for festival updates.</p>
-                    </div>
+                <div className={shared.fullscreenCenter}>
+                    <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 12 }}>
+                        Festival Information Not Found
+                    </h2>
+                    <p className={shared.sectionSubCenter}>Check back soon for festival updates.</p>
                 </div>
                 <Footer />
             </>
@@ -55,54 +55,53 @@ export default function FestivalPage() {
             <Header />
 
             <main>
-                {/* Hero Section */}
-                <section className="relative h-[500px] overflow-hidden bg-gradient-to-br from-iteka-dark to-gray-800">
+                {/* Hero */}
+                <section className={styles.hero}>
                     {data.hero_image && (
                         <>
-                            <img
-                                src={getUrl(data.hero_image)}
-                                alt={data.title}
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40"></div>
+                            <img src={getUrl(data.hero_image)} alt={data.title} />
+                            <div className={styles.heroOverlay}></div>
                         </>
                     )}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-                        <div className="max-w-4xl px-4">
-                            <div className="inline-block bg-iteka-orange text-white text-sm px-4 py-2 rounded-full font-semibold mb-4">
-                                Annual Cultural Festival
-                            </div>
-                            <h1 className="text-5xl md:text-7xl font-bold mb-4">{data.title}</h1>
-                            {data.edition && (
-                                <p className="text-2xl md:text-3xl text-gray-200 mb-6">{data.edition}</p>
-                            )}
+                    <svg className={`${styles.heroBlob} ${styles.blob1}`} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#F1C40F" d="M45.3,-58.3C58.1,-49.6,67.4,-34.4,70.9,-18.1C74.4,-1.8,72,15.6,63.8,29.7C55.6,43.8,41.5,54.6,25.9,61.2C10.3,67.8,-6.8,70.2,-22.4,66.1C-38,62,-52.1,51.4,-61.1,37.2C-70.1,23,-74,5.2,-70.8,-10.9C-67.6,-27,-57.3,-41.4,-44.1,-50.3C-30.9,-59.2,-15.5,-62.6,1.4,-64.4C18.2,-66.2,32.5,-67,45.3,-58.3Z" transform="translate(100 100)" />
+                    </svg>
+                    <svg className={`${styles.heroBlob} ${styles.blob2}`} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#E91E63" d="M39.6,-51.2C50.3,-42.6,57.4,-28.9,60.6,-14.2C63.8,0.5,63.1,16.2,56.4,29.3C49.7,42.4,37,52.9,22.5,58.9C8,64.9,-8.3,66.4,-23.4,62.1C-38.5,57.8,-52.4,47.7,-60.5,33.9C-68.6,20.1,-70.9,2.6,-67.1,-13.1C-63.3,-28.8,-53.4,-42.7,-40.4,-51.2C-27.4,-59.7,-13.7,-62.8,0.8,-64C15.3,-65.2,29,-59.8,39.6,-51.2Z" transform="translate(100 100)" />
+                    </svg>
+
+                    <div className={styles.heroContent}>
+                        <div className={styles.heroInner}>
+                            <span className={styles.eventBadge}>Annual Cultural Festival</span>
+                            <h1 className={styles.heroTitle}>{data.title}</h1>
+                            {data.edition && <p className={styles.heroEdition}>{data.edition}</p>}
                             {data.registration_url && (
                                 <a
                                     href={data.registration_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-iteka-orange text-white px-8 py-4 rounded-md font-semibold hover:bg-opacity-90 transition text-lg"
+                                    className={styles.registerBtn}
                                 >
-                                <Ticket className="w-5 h-5" />
-                                Register Now
+                                    <Ticket size={20} />
+                                    Register Now
                                 </a>
-                                )}
+                            )}
                         </div>
                     </div>
                 </section>
 
-                {/* Quick Info Bar - Fond vert */}
-                <section className="bg-[#E8F5E9] py-12 border-b border-gray-200">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Quick Info */}
+                <section className={styles.quickInfoSection}>
+                    <div className={shared.container}>
+                        <div className={styles.quickInfoGrid}>
                             {data.date_start && (
-                                <div className="flex items-center gap-4 bg-white p-6 rounded-lg">
-                                    <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                                        <Calendar className="w-6 h-6 text-iteka-dark" />
+                                <div className={styles.quickInfoCard}>
+                                    <div className={styles.quickInfoIcon}>
+                                        <Calendar size={22} />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 font-semibold uppercase tracking-wide">Date</p>
-                                        <p className="text-lg font-bold text-iteka-dark">
+                                        <p className={styles.quickInfoLabel}>Date</p>
+                                        <p className={styles.quickInfoValue}>
                                             {new Date(data.date_start).toLocaleDateString('en-US', {
                                                 month: 'long',
                                                 day: 'numeric',
@@ -120,24 +119,24 @@ export default function FestivalPage() {
                             )}
 
                             {data.location && (
-                                <div className="flex items-center gap-4 bg-white p-6 rounded-lg">
-                                    <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                                        <MapPin className="w-6 h-6 text-iteka-dark" />
+                                <div className={styles.quickInfoCard}>
+                                    <div className={styles.quickInfoIcon}>
+                                        <MapPin size={22} />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 font-semibold uppercase tracking-wide">Location</p>
-                                        <p className="text-lg font-bold text-iteka-dark">{data.location}</p>
+                                        <p className={styles.quickInfoLabel}>Location</p>
+                                        <p className={styles.quickInfoValue}>{data.location}</p>
                                     </div>
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-4 bg-white p-6 rounded-lg">
-                                <div className="w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                                    <Users className="w-6 h-6 text-iteka-dark" />
+                            <div className={styles.quickInfoCard}>
+                                <div className={styles.quickInfoIcon}>
+                                    <Users size={22} />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 font-semibold uppercase tracking-wide">Expected</p>
-                                    <p className="text-lg font-bold text-iteka-dark">1,000+ Attendees</p>
+                                    <p className={styles.quickInfoLabel}>Expected</p>
+                                    <p className={styles.quickInfoValue}>1,000+ Attendees</p>
                                 </div>
                             </div>
                         </div>
@@ -146,44 +145,37 @@ export default function FestivalPage() {
 
                 {/* Description */}
                 {data.description && (
-                    <section className="py-20 bg-white">
-                        <div className="max-w-4xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-8 text-center">
+                    <section className={styles.descSection}>
+                        <div className={styles.descInner}>
+                            <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 32 }}>
                                 About The Festival
                             </h2>
-                            <div
-                                className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: data.description }}
-                            />
+                            <div className={shared.richText} dangerouslySetInnerHTML={{ __html: data.description }} />
                         </div>
                     </section>
                 )}
 
                 {/* Highlights */}
                 {data.highlights && data.highlights.length > 0 && (
-                    <section className="py-20 bg-gray-50">
-                        <div className="max-w-7xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
+                    <section className={styles.highlightsSection}>
+                        <div className={shared.container}>
+                            <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>
                                 Festival Highlights
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className={styles.highlightsGrid}>
                                 {data.highlights.map((highlight: any, idx: number) => (
-                                    <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
+                                    <div key={idx} className={styles.highlightCard}>
                                         {highlight.image && (
-                                            <div className="aspect-video overflow-hidden bg-gray-200">
-                                                <img
-                                                    src={getUrl(highlight.image)}
-                                                    alt={highlight.title}
-                                                    className="w-full h-full object-cover"
-                                                />
+                                            <div className={styles.highlightImageWrap}>
+                                                <img src={getUrl(highlight.image)} alt={highlight.title} />
                                             </div>
                                         )}
-                                        <div className="p-6">
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Sparkles className="w-5 h-5 text-iteka-orange" />
-                                                <h3 className="text-xl font-bold text-iteka-dark">{highlight.title}</h3>
+                                        <div className={styles.highlightBody}>
+                                            <div className={styles.highlightTopRow}>
+                                                <Sparkles size={18} />
+                                                <h3 className={styles.highlightTitle}>{highlight.title}</h3>
                                             </div>
-                                            <p className="text-gray-600 leading-relaxed">{highlight.description}</p>
+                                            <p className={styles.highlightText}>{highlight.description}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -194,19 +186,15 @@ export default function FestivalPage() {
 
                 {/* Gallery */}
                 {data.gallery && data.gallery.length > 0 && (
-                    <section className="py-20 bg-white">
-                        <div className="max-w-7xl mx-auto px-4">
-                            <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
+                    <section className={styles.gallerySection}>
+                        <div className={shared.container}>
+                            <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>
                                 Festival Moments
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className={styles.galleryGrid}>
                                 {data.gallery.map((img: any, idx: number) => (
-                                    <div key={idx} className="aspect-video overflow-hidden rounded-lg shadow-md group cursor-pointer">
-                                        <img
-                                            src={getUrl(img)}
-                                            alt={`Festival Moment ${idx + 1}`}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                                        />
+                                    <div key={idx} className={styles.galleryTile}>
+                                        <img src={getUrl(img)} alt={`Festival Moment ${idx + 1}`} />
                                     </div>
                                 ))}
                             </div>
@@ -215,78 +203,80 @@ export default function FestivalPage() {
                 )}
 
                 {/* What to Expect */}
-                <section className="py-20 bg-gray-50">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
+                <section className={styles.expectSection}>
+                    <div className={shared.container}>
+                        <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>
                             What to Expect
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div className="bg-white p-8 rounded-lg text-center">
-                                <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
-                                    <Music className="w-8 h-8 text-iteka-dark" />
+                        <div className={styles.expectGrid}>
+                            <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                                <div className={styles.expectIcon}>
+                                    <Music size={28} />
                                 </div>
-                                <h3 className="text-xl font-bold text-iteka-dark mb-3">Live Performances</h3>
-                                <p className="text-gray-600">
-                                    Experience traditional and contemporary Rwandan music, dance, and cultural performances
+                                <h3 className={styles.expectTitle}>Live Performances</h3>
+                                <p className={styles.expectText}>
+                                    Experience traditional and contemporary Rwandan music, dance, and cultural
+                                    performances
                                 </p>
                             </div>
 
-                            <div className="bg-white p-8 rounded-lg text-center">
-                                <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
-                                    <Users className="w-8 h-8 text-iteka-dark" />
+                            <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                                <div className={styles.expectIcon}>
+                                    <Users size={28} />
                                 </div>
-                                <h3 className="text-xl font-bold text-iteka-dark mb-3">Cultural Exchange</h3>
-                                <p className="text-gray-600">
-                                    Connect with youth from across Rwanda and celebrate our diverse cultural heritage
+                                <h3 className={styles.expectTitle}>Cultural Exchange</h3>
+                                <p className={styles.expectText}>
+                                    Connect with youth from across Rwanda and celebrate our diverse cultural
+                                    heritage
                                 </p>
                             </div>
 
-                            <div className="bg-white p-8 rounded-lg text-center">
-                                <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
-                                    <Sparkles className="w-8 h-8 text-iteka-dark" />
+                            <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                                <div className={styles.expectIcon}>
+                                    <Sparkles size={28} />
                                 </div>
-                                <h3 className="text-xl font-bold text-iteka-dark mb-3">Talent Showcase</h3>
-                                <p className="text-gray-600">
-                                    Watch young artists showcase their talents in arts, music, dance, and entrepreneurship
+                                <h3 className={styles.expectTitle}>Talent Showcase</h3>
+                                <p className={styles.expectText}>
+                                    Watch young artists showcase their talents in arts, music, dance, and
+                                    entrepreneurship
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Program PDF */}
+                {/* Programme PDF */}
                 {data.program_pdf && (
-                    <section className="py-20 bg-white">
-                        <div className="max-w-4xl mx-auto px-4 text-center">
-                            <div className="bg-[#E8F5E9] p-12 rounded-lg">
-                                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
-                                    <Download className="w-8 h-8 text-iteka-dark" />
+                    <section className={styles.pdfSection}>
+                        <div className={styles.pdfInner}>
+                            <div className={shared.tintCard} style={{ textAlign: 'center' }}>
+                                <div className={styles.pdfIcon}>
+                                    <Download size={28} />
                                 </div>
-                                <h2 className="text-3xl font-bold text-iteka-dark mb-4">Full Festival Programme</h2>
-                                <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-                                    Download the complete programme to see all performances, activities, and schedule details
+                                <h2 className={styles.pdfTitle}>Full Festival Programme</h2>
+                                <p className={styles.pdfText}>
+                                    Download the complete programme to see all performances, activities, and
+                                    schedule details
                                 </p>
                                 <a
                                     href={getUrl(data.program_pdf)}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-iteka-dark text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
+                                    className={shared.btnPrimary}
                                 >
-                                <Download className="w-5 h-5" />
-                                Download Programme (PDF)
-                            </a>
+                                    <Download size={18} />
+                                    Download Programme (PDF)
+                                </a>
+                            </div>
                         </div>
-                    </div>
                     </section>
-                    )}
+                )}
 
-                {/* CTA Final */}
-                <section className="py-20 bg-iteka-orange text-white">
-                    <div className="max-w-4xl mx-auto px-4 text-center">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                            Don't Miss This Celebration!
-                        </h2>
-                        <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+                {/* Final CTA */}
+                <section className={styles.finalCta}>
+                    <div className={shared.container}>
+                        <h2 className={styles.finalCtaTitle}>Don't Miss This Celebration!</h2>
+                        <p className={styles.finalCtaText}>
                             Join us for an unforgettable celebration of Rwandan culture, talent, and unity
                         </p>
                         {data.registration_url && (
@@ -294,12 +284,12 @@ export default function FestivalPage() {
                                 href={data.registration_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-white text-iteka-orange px-8 py-4 rounded-md font-semibold hover:bg-opacity-90 transition text-lg"
+                                className={styles.finalCtaBtn}
                             >
-                            <Ticket className="w-5 h-5" />
-                            Register for the Festival
+                                <Ticket size={20} />
+                                Register for the Festival
                             </a>
-                            )}
+                        )}
                     </div>
                 </section>
             </main>

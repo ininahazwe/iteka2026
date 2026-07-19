@@ -1,0 +1,398 @@
+/* Styles propres à /impact. Boutons, band, cards, section header,
+   testimonial, richText, spinner, photoGrid viennent de
+   src/styles/shared.module.css (`shared`). */
+
+.heroQuote {
+  font-size: 18px;
+  color: var(--iteka-muted);
+  max-width: 720px;
+  margin: 0 auto;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.heroText {
+  font-size: 17px;
+  color: var(--iteka-muted);
+  max-width: 720px;
+  margin: 24px auto 0;
+  line-height: 1.7;
+}
+
+/* ============ Impact stats ============ */
+.statsSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.statsGridWhite {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .statsGridWhite {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .statsGridWhite {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.statCard {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+}
+
+.statCardValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.statCardLabel {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--iteka-ink);
+  margin-bottom: 6px;
+}
+
+.statCardDesc {
+  font-size: 13px;
+  color: var(--iteka-muted);
+}
+
+.emptyText {
+  text-align: center;
+  color: var(--iteka-muted);
+  padding: 48px 0;
+}
+
+/* ============ Art programme story ============ */
+.artSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.proseText {
+  color: var(--iteka-muted);
+  line-height: 1.75;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.proseText p {
+  margin-bottom: 16px;
+}
+
+.glanceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 880px;
+  margin: 48px auto;
+}
+
+@media (min-width: 768px) {
+  .glanceGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.glanceValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--iteka-orange);
+  margin-bottom: 6px;
+}
+
+.glanceLabel {
+  font-weight: 600;
+  color: var(--iteka-ink);
+  margin-bottom: 4px;
+}
+
+.glanceSub {
+  font-size: 13px;
+  color: var(--iteka-muted);
+}
+
+.disciplinesInner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.disciplinesTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.disciplinesText {
+  color: var(--iteka-muted);
+  text-align: center;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.disciplinesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .disciplinesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.disciplineTitle {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.disciplineText {
+  color: var(--iteka-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============ Community project ============ */
+.communitySection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.communityGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .communityGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.communityCardTitle {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 12px;
+  line-height: 1.35;
+}
+
+.communityCardText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+/* ============ Evidence-based results ============ */
+.storySection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.storyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .storyGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+}
+
+.storyImage {
+  position: relative;
+  height: 320px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, var(--iteka-orange), var(--iteka-green));
+}
+
+@media (min-width: 1024px) {
+  .storyImage {
+    height: 460px;
+  }
+}
+
+.storyImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.storyCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.storyHeading {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+@media (min-width: 768px) {
+  .storyHeading {
+    font-size: 34px;
+  }
+}
+
+.storyText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ Testimonials ============ */
+.testimonialsSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .testimonialsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ============ Focus areas ============ */
+.focusSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.focusGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .focusGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .focusGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.focusIconWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--iteka-ink);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.focusCard:hover .focusIconWrap {
+  background: var(--iteka-orange);
+  color: #fff;
+}
+
+.focusTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 10px;
+}
+
+.focusText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+/* ============ Gallery ============ */
+.gallerySection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+/* ============ Commitment ============ */
+.commitmentSection {
+  padding: 80px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.commitmentInner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.commitmentTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin: 20px 0 16px;
+}
+
+@media (min-width: 768px) {
+  .commitmentTitle {
+    font-size: 34px;
+  }
+}
+
+.commitmentText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 64px 0;
+  background: var(--iteka-cream);
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}

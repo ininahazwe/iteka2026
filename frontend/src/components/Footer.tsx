@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Facebook, Twitter, Linkedin, Mail, MapPin, Phone, ArrowRight, Check } from 'lucide-react';
+import styles from './Footer.module.css';
 
 export default function Footer() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -60,131 +61,109 @@ export default function Footer() {
   ];
 
   return (
-      <footer className="bg-iteka-dark text-white">
+      <footer className={styles.footer}>
         {/* Main Footer */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
-            {/* Brand - 4 cols */}
-            <div className="lg:col-span-4">
-              <Link href="/" className="inline-block mb-6">
-                <h3 className="text-3xl font-bold text-white">iteka</h3>
+        <div className={styles.inner}>
+          <div className={styles.grid}>
+            {/* Brand */}
+            <div className={styles.brandCol}>
+              <Link href="/" className={styles.logoLink}>
+                <h3 className={styles.logoText}>iteka</h3>
               </Link>
-              <p className="text-gray-300 text-sm leading-relaxed mb-6">
+              <p className={styles.tagline}>
                 Empowering young people in Rwanda through talent discovery, skills development,
                 and peace promotion.
               </p>
 
               {/* Newsletter */}
-              <div className="mb-6">
-                <p className="text-sm font-semibold text-white mb-3">Stay Updated</p>
+              <div>
+                <p className={styles.newsletterLabel}>Stay Updated</p>
                 {newsletterStatus === 'success' ? (
-                    <p className="text-sm text-iteka-orange flex items-center gap-2">
-                      <Check className="w-4 h-4" /> Thanks for subscribing!
+                    <p className={styles.newsletterSuccess}>
+                      <Check size={16} /> Thanks for subscribing!
                     </p>
                 ) : (
-                    <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
+                    <form onSubmit={handleNewsletterSubmit} className={styles.newsletterForm}>
                       <input
                           type="email"
                           required
                           value={newsletterEmail}
                           onChange={(e) => setNewsletterEmail(e.target.value)}
                           placeholder="Your email"
-                          className="flex-1 px-4 py-2 rounded-md bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-iteka-orange"
+                          className={styles.newsletterInput}
                       />
                       <button
                           type="submit"
                           disabled={newsletterStatus === 'loading'}
-                          className="bg-iteka-orange text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition disabled:opacity-50"
+                          className={styles.newsletterButton}
                           aria-label="Subscribe"
                       >
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight size={20} />
                       </button>
                     </form>
                 )}
                 {newsletterStatus === 'error' && (
-                    <p className="text-sm text-red-400 mt-2">Something went wrong. Try again.</p>
+                    <p className={styles.newsletterError}>Something went wrong. Try again.</p>
                 )}
               </div>
             </div>
 
-            {/* About - 2 cols */}
-            <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">About</h4>
-              <ul className="space-y-3">
+            {/* About */}
+            <div className={styles.linkCol}>
+              <h4 className={styles.linkColTitle}>About</h4>
+              <ul className={styles.linkList}>
                 {footerLinks.about.map((link, idx) => (
                     <li key={idx}>
-                      <Link
-                          href={link.href}
-                          className="text-gray-300 hover:text-iteka-orange transition text-sm"
-                      >
-                        {link.label}
-                      </Link>
+                      <Link href={link.href}>{link.label}</Link>
                     </li>
                 ))}
               </ul>
             </div>
 
-            {/* Work - 2 cols */}
-            <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Work</h4>
-              <ul className="space-y-3">
+            {/* Work */}
+            <div className={styles.linkCol}>
+              <h4 className={styles.linkColTitle}>Work</h4>
+              <ul className={styles.linkList}>
                 {footerLinks.work.map((link, idx) => (
                     <li key={idx}>
-                      <Link
-                          href={link.href}
-                          className="text-gray-300 hover:text-iteka-orange transition text-sm"
-                      >
-                        {link.label}
-                      </Link>
+                      <Link href={link.href}>{link.label}</Link>
                     </li>
                 ))}
               </ul>
             </div>
 
-            {/* Resources - 2 cols */}
-            <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Resources</h4>
-              <ul className="space-y-3">
+            {/* Resources */}
+            <div className={styles.linkCol}>
+              <h4 className={styles.linkColTitle}>Resources</h4>
+              <ul className={styles.linkList}>
                 {footerLinks.resources.map((link, idx) => (
                     <li key={idx}>
-                      <Link
-                          href={link.href}
-                          className="text-gray-300 hover:text-iteka-orange transition text-sm"
-                      >
-                        {link.label}
-                      </Link>
+                      <Link href={link.href}>{link.label}</Link>
                     </li>
                 ))}
               </ul>
             </div>
 
-            {/* Contact - 2 cols */}
-            <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Contact</h4>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start gap-2 text-gray-300">
-                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-iteka-orange" />
+            {/* Contact */}
+            <div className={styles.contactCol}>
+              <h4 className={styles.linkColTitle}>Contact</h4>
+              <ul className={styles.contactList}>
+                <li className={styles.contactItem}>
+                  <MapPin size={16} />
                   <span>Kigali, Rwanda</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <Mail className="w-4 h-4 mt-0.5 flex-shrink-0 text-iteka-orange" />
-                  <a
-                      href="mailto:hello@itekarwanda.org"
-                      className="text-gray-300 hover:text-iteka-orange transition"
-                  >
-                    hello@itekarwanda.org
-                  </a>
+                <li className={styles.contactItem}>
+                  <Mail size={16} />
+                  <a href="mailto:hello@itekarwanda.org">hello@itekarwanda.org</a>
                 </li>
-                <li className="flex items-start gap-2 text-gray-300">
-                  <Phone className="w-4 h-4 mt-0.5 flex-shrink-0 text-iteka-orange" />
-                  <a href="tel:+250789429057" className="hover:text-iteka-orange transition">
-                    +250 789 429 057
-                  </a>
+                <li className={styles.contactItem}>
+                  <Phone size={16} />
+                  <a href="tel:+250789429057">+250 789 429 057</a>
                 </li>
               </ul>
 
               {/* Social Links */}
-              <div className="flex gap-3 mt-6">
+              <div className={styles.socialRow}>
                 {socialLinks.map((social, idx) => {
                   const Icon = social.icon;
                   return (
@@ -193,10 +172,10 @@ export default function Footer() {
                           href={social.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-9 h-9 rounded-full bg-white/10 hover:bg-iteka-orange flex items-center justify-center transition"
+                          className={styles.socialLink}
                           aria-label={social.label}
                       >
-                      <Icon className="w-4 h-4" />
+                      <Icon size={16} />
                       </a>
                 );
                 })}
@@ -206,20 +185,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-400 text-sm">
-                © {new Date().getFullYear()} Iteka Youth Organization. All rights reserved.
-              </p>
-              <div className="flex gap-6 text-sm">
-                <Link href="/privacy" className="text-gray-400 hover:text-white transition">
-                  Privacy Policy
-                </Link>
-                <Link href="/terms" className="text-gray-400 hover:text-white transition">
-                  Terms of Service
-                </Link>
-              </div>
+        <div className={styles.bottomBar}>
+          <div className={styles.bottomInner}>
+            <p className={styles.copyright}>
+              © {new Date().getFullYear()} Iteka Youth Organization. All rights reserved.
+            </p>
+            <div className={styles.bottomLinks}>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
             </div>
           </div>
         </div>

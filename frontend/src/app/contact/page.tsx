@@ -5,6 +5,8 @@ import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
+import styles from './Contact.module.css';
+import shared from '@/src/styles/shared.module.css';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -78,91 +80,84 @@ export default function ContactPage() {
         <Header />
 
         <main>
-          {/* Hero Section */}
-          <section className="bg-white py-16 md:py-24">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-iteka-dark" />
+          {/* Hero */}
+          <section className={shared.pageHero}>
+            <div className={shared.pageHeroInner}>
+              <div className={styles.heroIcon}>
+                <Mail size={28} />
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark mb-6">
-                Get In Touch
-              </h1>
-              <p className="text-lg md:text-xl text-gray-600">
-                Have questions? We'd love to hear from you
-              </p>
+              <h1 className={shared.pageHeroTitle}>Get In Touch</h1>
+              <p className={shared.pageHeroText}>Have questions? We'd love to hear from you</p>
             </div>
           </section>
 
           {/* Contact Info + Form */}
-          <section className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <section className={styles.section}>
+            <div className={shared.container}>
+              <div className={styles.grid}>
                 {/* Contact Info */}
-                <div className="space-y-8">
+                <div className={styles.infoCol}>
                   <div>
-                    <h2 className="text-2xl font-bold text-iteka-dark mb-6">Contact Information</h2>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                          <Mail className="w-5 h-5 text-iteka-dark" />
+                    <h2 className={styles.infoTitle}>Contact Information</h2>
+                    <div className={styles.infoList}>
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIconCircle}>
+                          <Mail size={20} />
                         </div>
                         <div>
-                          <p className="font-semibold text-iteka-dark">Email</p>
-                          <a href="mailto:hello@itekarwanda.org" className="text-gray-600 hover:text-iteka-orange">
+                          <p className={styles.infoLabel}>Email</p>
+                          <a href="mailto:hello@itekarwanda.org" className={styles.infoValue}>
                             hello@itekarwanda.org
                           </a>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                          <Phone className="w-5 h-5 text-iteka-dark" />
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIconCircle}>
+                          <Phone size={20} />
                         </div>
                         <div>
-                          <p className="font-semibold text-iteka-dark">Phone</p>
-                          <p className="text-gray-600">+250 XXX XXX XXX</p>
+                          <p className={styles.infoLabel}>Phone</p>
+                          <p className={styles.infoValue}>+250 XXX XXX XXX</p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center flex-shrink-0">
-                          <MapPin className="w-5 h-5 text-iteka-dark" />
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIconCircle}>
+                          <MapPin size={20} />
                         </div>
                         <div>
-                          <p className="font-semibold text-iteka-dark">Office</p>
-                          <p className="text-gray-600">Kigali, Rwanda</p>
+                          <p className={styles.infoLabel}>Office</p>
+                          <p className={styles.infoValue}>Kigali, Rwanda</p>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-[#E8F5E9] p-6 rounded-lg">
-                    <h3 className="font-bold text-iteka-dark mb-2">Office Hours</h3>
-                    <p className="text-sm text-gray-700">Monday - Friday: 9:00 AM - 5:00 PM</p>
-                    <p className="text-sm text-gray-700">Saturday - Sunday: Closed</p>
+                  <div className={styles.hoursBox}>
+                    <h3 className={styles.hoursTitle}>Office Hours</h3>
+                    <p className={styles.hoursText}>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                    <p className={styles.hoursText}>Saturday - Sunday: Closed</p>
                   </div>
                 </div>
 
                 {/* Form */}
-                <div className="lg:col-span-2">
+                <div>
                   {status === 'success' ? (
-                      <div className="bg-white p-12 rounded-lg shadow-sm text-center">
-                        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-                          <Send className="w-8 h-8 text-green-600" />
+                      <div className={styles.successCard}>
+                        <div className={styles.successIconCircle}>
+                          <Send size={28} />
                         </div>
-                        <h3 className="text-2xl font-bold text-iteka-dark mb-3">Message Sent!</h3>
-                        <p className="text-gray-600 mb-6">Thank you for contacting us. We'll get back to you soon.</p>
-                        <button
-                            onClick={() => setStatus('idle')}
-                            className="text-iteka-orange hover:underline font-semibold"
-                        >
+                        <h3 className={styles.successTitle}>Message Sent!</h3>
+                        <p className={styles.successText}>Thank you for contacting us. We'll get back to you soon.</p>
+                        <button onClick={() => setStatus('idle')} className={styles.successReset}>
                           Send another message
                         </button>
                       </div>
                   ) : (
-                      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-sm">
+                      <form onSubmit={handleSubmit} className={styles.formCard}>
                         {!recaptchaReady && (
-                            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded">
+                            <div className={styles.captchaNotice}>
                               Loading security verification...
                             </div>
                         )}
@@ -177,10 +172,10 @@ export default function ContactPage() {
                             autoComplete="off"
                         />
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className={styles.fieldGrid}>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                              Name <span className="text-red-500">*</span>
+                            <label className={styles.fieldLabel}>
+                              Name <span className={styles.required}>*</span>
                             </label>
                             <input
                                 type="text"
@@ -188,49 +183,49 @@ export default function ContactPage() {
                                 maxLength={100}
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                                className={styles.textInput}
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                              Email <span className="text-red-500">*</span>
+                            <label className={styles.fieldLabel}>
+                              Email <span className={styles.required}>*</span>
                             </label>
                             <input
                                 type="email"
                                 required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                                className={styles.textInput}
                             />
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div className={styles.fieldGrid}>
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Phone (optional)</label>
+                            <label className={styles.fieldLabel}>Phone (optional)</label>
                             <input
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                                className={styles.textInput}
                             />
                           </div>
 
                           <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                            <label className={styles.fieldLabel}>Subject</label>
                             <input
                                 type="text"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                                className={styles.textInput}
                             />
                           </div>
                         </div>
 
-                        <div className="mb-6">
-                          <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Message <span className="text-red-500">*</span>
+                        <div className={styles.messageField}>
+                          <label className={styles.fieldLabel}>
+                            Message <span className={styles.required}>*</span>
                           </label>
                           <textarea
                               required
@@ -238,44 +233,42 @@ export default function ContactPage() {
                               maxLength={2000}
                               value={formData.message}
                               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-iteka-orange focus:border-transparent outline-none transition"
+                              className={styles.textarea}
                           />
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className={styles.charCount}>
                             {formData.message.length}/2000 characters
                           </p>
                         </div>
 
                         {status === 'error' && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
-                              {errorMessage}
-                            </div>
+                            <div className={styles.errorBox}>{errorMessage}</div>
                         )}
 
                         <button
                             type="submit"
                             disabled={status === 'loading' || !recaptchaReady}
-                            className="w-full bg-iteka-orange text-white py-4 rounded-lg font-semibold hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                            className={styles.submitButton}
                         >
                           {status === 'loading' ? (
                               <>
-                                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                                <div className={styles.spinnerSm}></div>
                                 Sending...
                               </>
                           ) : (
                               <>
-                                <Send className="w-5 h-5" />
+                                <Send size={20} />
                                 Send Message
                               </>
                           )}
                         </button>
 
-                        <p className="text-xs text-gray-500 mt-4 text-center">
+                        <p className={styles.recaptchaNote}>
                           This site is protected by reCAPTCHA and the Google{' '}
-                          <a href="https://policies.google.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">
+                          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
                             Privacy Policy
                           </a>{' '}
                           and{' '}
-                          <a href="https://policies.google.com/terms" className="underline" target="_blank" rel="noopener noreferrer">
+                          <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">
                             Terms of Service
                           </a>{' '}
                           apply.

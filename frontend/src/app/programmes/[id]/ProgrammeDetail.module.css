@@ -1,0 +1,300 @@
+/* Styles propres à /programmes/[id]. Boutons, band, cards, richText,
+   spinner viennent de src/styles/shared.module.css (`shared`). */
+
+/* ============ Hero image ============ */
+.hero {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, var(--iteka-orange), var(--iteka-green));
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35));
+}
+
+.heroContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.heroInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.heroTextWrap {
+  max-width: 720px;
+}
+
+.featuredBadge {
+  display: inline-block;
+  background: var(--iteka-orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 56px;
+  }
+}
+
+.heroLead {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============ Quick info bar ============ */
+.quickInfo {
+  background: var(--iteka-cream);
+  padding: 32px 0;
+}
+
+.quickInfoRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .quickInfoRow {
+    justify-content: flex-start;
+  }
+}
+
+.quickInfoItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quickInfoIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--iteka-ink);
+  flex-shrink: 0;
+}
+
+.quickInfoLabel {
+  font-size: 13px;
+  color: var(--iteka-muted);
+}
+
+.quickInfoValue {
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+/* ============ Main content ============ */
+.contentSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+@media (min-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 2fr 1fr;
+    gap: 64px;
+  }
+}
+
+.mainCol {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.blockTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 20px;
+}
+
+.impactStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+  .impactStatsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.impactStatValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.impactStatLabel {
+  font-size: 13px;
+  color: var(--iteka-muted);
+}
+
+/* ============ Sidebar ============ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.applyCard {
+  background: var(--iteka-orange);
+  color: #fff;
+  border-radius: 24px;
+  padding: 28px;
+}
+
+.applyCardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.applyCardText {
+  font-size: 14px;
+  opacity: 0.92;
+  margin-bottom: 18px;
+}
+
+.applyButton {
+  display: block;
+  width: 100%;
+  background: #fff;
+  color: var(--iteka-orange);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-align: center;
+  transition: opacity 0.15s ease;
+}
+
+.applyButton:hover {
+  opacity: 0.9;
+}
+
+.sidebarCardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 10px;
+}
+
+.sidebarCardText {
+  font-size: 14px;
+  color: var(--iteka-muted);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.gainsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gainsItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--iteka-muted);
+}
+
+.gainsItem svg {
+  color: var(--iteka-orange);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ============ Gallery ============ */
+.gallerySection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .galleryGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .galleryGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.galleryTile {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.galleryTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.galleryTile:hover img {
+  transform: scale(1.05);
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 64px 0;
+  background: #fff;
+}

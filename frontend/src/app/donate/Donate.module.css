@@ -1,0 +1,375 @@
+/* Styles propres à /donate. Container vient de src/styles/shared.module.css. */
+
+.heroIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--iteka-band);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: var(--iteka-ink);
+}
+
+/* ============ Main section ============ */
+.mainSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 2fr 3fr;
+  }
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.infoTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 16px;
+}
+
+.infoText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ---- Benefits ---- */
+.benefitsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.benefitItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.benefitIconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--iteka-band);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--iteka-ink);
+}
+
+.benefitTitle {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 4px;
+}
+
+.benefitText {
+  color: var(--iteka-muted);
+  font-size: 14px;
+}
+
+/* ---- Impact box ---- */
+.impactBox {
+  background: linear-gradient(135deg, var(--iteka-orange), #c2590f);
+  padding: 24px;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.impactLabel {
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.impactList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.impactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.impactAmount {
+  font-weight: 700;
+}
+
+.impactText {
+  opacity: 0.9;
+}
+
+/* ---- Form card ---- */
+.formCard {
+  background: #fff;
+  padding: 32px;
+  border-radius: 24px;
+}
+
+.formTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 16px;
+}
+
+.fieldLabelSm {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.amountGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .amountGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.amountButton {
+  padding: 16px 0;
+  border-radius: 12px;
+  font-weight: 700;
+  background: #fff;
+  color: var(--iteka-ink);
+  border: 2px solid rgba(31, 41, 55, 0.12);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.amountButton:hover {
+  border-color: var(--iteka-orange);
+}
+
+.amountButtonActive {
+  background: var(--iteka-orange);
+  color: #fff;
+  border-color: var(--iteka-orange);
+}
+
+.customAmountWrap {
+  position: relative;
+}
+
+.customAmountIcon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  color: var(--iteka-muted);
+  pointer-events: none;
+}
+
+.textInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid rgba(31, 41, 55, 0.12);
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.textInput:focus {
+  border-color: var(--iteka-orange);
+}
+
+.textInputIndent {
+  padding-left: 40px;
+}
+
+.donorFields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardElementWrap {
+  padding: 16px;
+  border: 2px solid rgba(31, 41, 55, 0.12);
+  border-radius: 12px;
+}
+
+.messageBox {
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.messageSuccess {
+  background: color-mix(in srgb, var(--iteka-green) 12%, white);
+  color: var(--iteka-green);
+  border: 1px solid color-mix(in srgb, var(--iteka-green) 30%, transparent);
+}
+
+.messageError {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.submitButton {
+  width: 100%;
+  background: var(--iteka-orange);
+  color: #fff;
+  padding: 16px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.15s ease;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.spinnerSm {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.secureNote {
+  font-size: 12px;
+  color: var(--iteka-muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ============ FAQ ============ */
+.faqSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.faqInner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.faqHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.faqIconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--iteka-band);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: var(--iteka-ink);
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqItem {
+  background: var(--iteka-cream);
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.faqQuestion {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+}
+
+.faqAnswer {
+  color: var(--iteka-muted);
+  line-height: 1.6;
+}
+
+.faqCta {
+  margin-top: 48px;
+  text-align: center;
+}
+
+.faqCtaText {
+  color: var(--iteka-muted);
+  margin-bottom: 16px;
+}

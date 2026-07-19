@@ -2,12 +2,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /*--background: #FDF8F2;  cream, signature DA Virtus-style */
+  --background: #FFFFFF; /* cream, signature DA Virtus-style */
+  --foreground: #1F2937;
 
   /* Iteka Brand Colors */
   --iteka-orange: #E87722;
-  --iteka-green: #2D5F3F;
+  --iteka-green: #3F7A4F; /* vert doux, dérivé de la main verte du logo (extraction: #1F6939 assombri/saturé -> adouci) */
   --iteka-dark: #1A1A1A;
   --iteka-pink: #E91E63;
   --iteka-cyan: #00A3A3;
@@ -15,13 +16,18 @@
   --iteka-brown: #795548;
   --iteka-gray: #808080;
   --iteka-light: #FFFFFF;
+  --iteka-cream: #FDF8F2;
+  --iteka-ink: #1F2937;
+  --iteka-muted: #6B7280;
+  --iteka-band: #FCE29B;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
 
   /* Iteka Colors */
   --color-iteka-orange: var(--iteka-orange);
@@ -33,17 +39,22 @@
   --color-iteka-brown: var(--iteka-brown);
   --color-iteka-gray: var(--iteka-gray);
   --color-iteka-light: var(--iteka-light);
+  --color-iteka-cream: var(--iteka-cream);
+  --color-iteka-ink: var(--iteka-ink);
+  --color-iteka-muted: var(--iteka-muted);
+  --color-iteka-band: var(--iteka-band);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Site en identité claire uniquement — pas de bascule sombre auto, cohérent avec la DA éditoriale/chaleureuse */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Reproduction fidèle du style Virtus : aucun effet d'ombre sur les blocs */
+.shadow-none-force,
+.no-shadow {
+  box-shadow: none !important;
 }

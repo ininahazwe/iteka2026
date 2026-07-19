@@ -1,0 +1,310 @@
+/* Styles propres à /approach. Boutons, band, section header, cards de
+   base, grille média, liste à puces viennent de src/styles/shared.module.css
+   (importé en tant que `shared`). */
+
+/* ============ Four Pillars ============ */
+.pillarsSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.fourPillarsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .fourPillarsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fourPillarCard {
+  background: color-mix(in srgb, var(--iteka-green) 10%, white);
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  transition: transform 0.2s ease;
+}
+
+.fourPillarCard:hover {
+  transform: translateY(-4px);
+}
+
+.fourPillarCard .iconCircleFixed {
+  flex-shrink: 0;
+}
+
+.pillarNumber {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--iteka-orange);
+  margin-bottom: 6px;
+}
+
+.pillarCardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 10px;
+}
+
+.pillarCardText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ Framework (image + texte) ============ */
+.frameworkSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.frameworkGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .frameworkGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+}
+
+.frameworkCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.frameworkHeading {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+@media (min-width: 768px) {
+  .frameworkHeading {
+    font-size: 34px;
+  }
+}
+
+.frameworkText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ Core Principles ============ */
+.principlesSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.principlesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .principlesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .principlesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.principleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.principleIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--iteka-green) 12%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--iteka-ink);
+}
+
+.principleTitle {
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 4px;
+}
+
+.principleText {
+  font-size: 14px;
+  color: var(--iteka-muted);
+}
+
+/* ============ Methodology (timeline) ============ */
+.methodologySection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.methodologyInner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.methodologyList {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.methodologyItem {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.methodologyStep {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--iteka-orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24px;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.methodologyItem:hover .methodologyStep {
+  transform: scale(1.08);
+}
+
+.methodologyBody {
+  padding-top: 8px;
+}
+
+.methodologyTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 8px;
+  transition: color 0.15s ease;
+}
+
+.methodologyItem:hover .methodologyTitle {
+  color: var(--iteka-orange);
+}
+
+.methodologyText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ Partnerships ============ */
+.partnershipsSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+  text-align: center;
+}
+
+.partnershipsInner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.partnershipsTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin: 20px 0 16px;
+}
+
+@media (min-width: 768px) {
+  .partnershipsTitle {
+    font-size: 34px;
+  }
+}
+
+.partnershipsText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+/* ============ Results Focus ============ */
+.resultsSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .resultsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+}
+
+.resultsCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resultsHeading {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+@media (min-width: 768px) {
+  .resultsHeading {
+    font-size: 34px;
+  }
+}
+
+.resultsText {
+  color: var(--iteka-muted);
+  line-height: 1.7;
+}
+
+/* ============ CTA ============ */
+.ctaSection {
+  padding: 64px 0;
+  background: var(--iteka-cream);
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}

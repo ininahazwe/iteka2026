@@ -1,0 +1,415 @@
+/* Styles propres à /festival. Boutons, section header, cards, richText,
+   spinner viennent de src/styles/shared.module.css (`shared`). Page la
+   plus "festive" du site : formes organiques plus prononcées (cf. brief). */
+
+/* ============ Hero ============ */
+.hero {
+  position: relative;
+  height: 500px;
+  overflow: hidden;
+  background: linear-gradient(to bottom right, var(--iteka-orange), var(--iteka-green));
+}
+
+.hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.35));
+}
+
+.heroBlob {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.blob1 {
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+}
+
+.blob2 {
+  bottom: -80px;
+  left: -40px;
+  width: 220px;
+  height: 220px;
+}
+
+.heroContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+}
+
+.heroInner {
+  max-width: 860px;
+  padding: 0 16px;
+}
+
+.eventBadge {
+  display: inline-block;
+  background: var(--iteka-orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 68px;
+  }
+}
+
+.heroEdition {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 24px;
+}
+
+.registerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: var(--iteka-orange);
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-size: 17px;
+  transition: transform 0.15s ease;
+}
+
+.registerBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* ============ Quick info ============ */
+.quickInfoSection {
+  padding: 48px 0;
+  background: var(--iteka-cream);
+}
+
+.quickInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .quickInfoGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quickInfoCard {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.quickInfoIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--iteka-green) 12%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--iteka-ink);
+  flex-shrink: 0;
+}
+
+.quickInfoLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--iteka-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.quickInfoValue {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+/* ============ Description ============ */
+.descSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.descInner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ============ Highlights ============ */
+.highlightsSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.highlightsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .highlightsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .highlightsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.highlightCard {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.highlightCard:hover {
+  transform: translateY(-4px);
+}
+
+.highlightImageWrap {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.highlightImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.highlightBody {
+  padding: 24px;
+}
+
+.highlightTopRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.highlightTopRow svg {
+  color: var(--iteka-orange);
+}
+
+.highlightTitle {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+}
+
+.highlightText {
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* ============ Gallery ============ */
+.gallerySection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .galleryGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .galleryGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.galleryTile {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.galleryTile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.galleryTile:hover img {
+  transform: scale(1.05);
+}
+
+/* ============ What to Expect ============ */
+.expectSection {
+  padding: 80px 0;
+  background: var(--iteka-cream);
+}
+
+.expectGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .expectGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.expectIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--iteka-ink);
+}
+
+.expectTitle {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 10px;
+}
+
+.expectText {
+  color: var(--iteka-muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* ============ Programme PDF ============ */
+.pdfSection {
+  padding: 80px 0;
+  background: #fff;
+}
+
+.pdfInner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.pdfIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--iteka-ink);
+}
+
+.pdfTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--iteka-ink);
+  margin-bottom: 12px;
+}
+
+.pdfText {
+  color: var(--iteka-muted);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ============ Final CTA — bloc plein bleed orange (moment fort) ============ */
+.finalCta {
+  padding: 80px 0;
+  background: var(--iteka-orange);
+  color: #fff;
+  text-align: center;
+}
+
+.finalCtaTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .finalCtaTitle {
+    font-size: 48px;
+  }
+}
+
+.finalCtaText {
+  font-size: 18px;
+  opacity: 0.92;
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+.finalCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: var(--iteka-orange);
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-size: 17px;
+  transition: transform 0.15s ease;
+}
+
+.finalCtaBtn:hover {
+  transform: translateY(-2px);
+}

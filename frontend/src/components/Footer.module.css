@@ -1,0 +1,267 @@
+.footer {
+  background: var(--iteka-ink);
+  color: #fff;
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 64px 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+
+/* ---- Brand column ---- */
+.brandCol {
+  grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+  .brandCol {
+    grid-column: span 4;
+  }
+}
+
+.logoLink {
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.logoText {
+  font-family: var(--font-display), sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tagline {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.newsletterLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.newsletterSuccess {
+  font-size: 14px;
+  color: var(--iteka-orange);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 8px;
+}
+
+.newsletterInput {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 14px;
+}
+
+.newsletterInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletterInput:focus {
+  outline: 2px solid var(--iteka-orange);
+  outline-offset: 1px;
+}
+
+.newsletterButton {
+  background: var(--iteka-orange);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.newsletterButton:hover {
+  opacity: 0.9;
+}
+
+.newsletterButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.newsletterError {
+  font-size: 14px;
+  color: #f87171;
+  margin-top: 8px;
+}
+
+/* ---- Link columns ---- */
+.linkCol {
+  grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+  .linkCol {
+    grid-column: span 2;
+  }
+}
+
+.linkColTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.linkList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linkList a {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  transition: color 0.15s ease;
+}
+
+.linkList a:hover {
+  color: var(--iteka-orange);
+}
+
+/* ---- Contact column ---- */
+.contactCol {
+  grid-column: span 1;
+}
+
+@media (min-width: 1024px) {
+  .contactCol {
+    grid-column: span 2;
+  }
+}
+
+.contactList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.contactItem svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: var(--iteka-orange);
+}
+
+.contactItem a {
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.15s ease;
+}
+
+.contactItem a:hover {
+  color: var(--iteka-orange);
+}
+
+.socialRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.socialLink {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+  color: #fff;
+}
+
+.socialLink:hover {
+  background: var(--iteka-orange);
+}
+
+/* ---- Bottom bar ---- */
+.bottomBar {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bottomInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .bottomInner {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+.bottomLinks {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+}
+
+.bottomLinks a {
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.15s ease;
+}
+
+.bottomLinks a:hover {
+  color: #fff;
+}

@@ -3,7 +3,9 @@
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { ArrowRight, Users, Target, Globe, Award } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
   fetchProgrammes,
@@ -12,9 +14,12 @@ import {
   fetchImpactStats,
   fetchGalleryImages,
   fetchPartners,
+  fetchEvents,
 } from '../lib/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import styles from './Home.module.css';
+import shared from '../styles/shared.module.css';
 
 export default function Home() {
   const { data: programmes = [] } = useQuery({
@@ -47,6 +52,25 @@ export default function Home() {
     queryFn: fetchPartners,
   });
 
+  const { data: events = [] } = useQuery({
+    queryKey: ['events'],
+    queryFn: () => fetchEvents(),
+  });
+
+  // Événement dont la date de début est la plus proche d'aujourd'hui
+  // (à venir en priorité, sinon le plus récent)
+  const upcomingEvent = (() => {
+    const now = Date.now();
+    const dated = events
+      .filter((e: any) => e?.date_start)
+      .map((e: any) => ({ ...e, ts: new Date(e.date_start).getTime() }))
+      .filter((e: any) => !Number.isNaN(e.ts));
+    if (dated.length === 0) return null;
+    const future = dated.filter((e: any) => e.ts >= now).sort((a: any, b: any) => a.ts - b.ts);
+    if (future.length > 0) return future[0];
+    return dated.sort((a: any, b: any) => b.ts - a.ts)[0];
+  })();
+
   const getLogoUrl = (logo: any) => {
     if (!logo) return null;
     const url = logo.url || logo.data?.url;
@@ -56,6 +80,94 @@ export default function Home() {
 
   const featuredProgrammes = programmes.filter((p: any) => p?.is_featured);
   const featuredNews = actualites.slice(0, 3);
+
+  // --- Animation blobs hero -> About (GSAP ScrollTrigger) ---
+  const blobOrangeRef = useRef<HTMLDivElement>(null);
+  const blobGreenRef = useRef<HTMLDivElement>(null);
+  const aboutBlobTopRef = useRef<HTMLDivElement>(null);
+  const aboutBlobBottomRef = useRef<HTMLDivElement>(null);
+  const aboutSectionRef = useRef<HTMLElement>(null);
+
+  const blobImgA = galleryImages[3]?.image?.data?.url;
+  const blobImgB = galleryImages[4]?.image?.data?.url;
+
+  // Blobs About : filigrane dans le hero au chargement (gauche/droite),
+  // convergent vers leur place naturelle dans About au scroll (scrub).
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    let ctx: gsap.Context | null = null;
+    let resizeTimer: ReturnType<typeof setTimeout>;
+
+    const build = () => {
+      ctx?.revert();
+      ctx = null;
+
+      if (window.innerWidth < 992) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const blobs = [aboutBlobTopRef.current, aboutBlobBottomRef.current];
+      if (blobs.some((b) => !b)) return;
+
+      ctx = gsap.context(() => {
+        // La transition CSS de .blob (hover) se bat avec le scrub GSAP
+        // (chaque frame ré-interpolée avec 0.35s de retard = mouvement erratique)
+        gsap.set(blobs, { transition: 'none', willChange: 'transform' });
+
+        const vh = window.innerHeight;
+        const vw = document.documentElement.clientWidth;
+
+        // Position filigrane souhaitée au chargement (coordonnées viewport, scroll = 0)
+        const filigrane = [
+          (el: HTMLElement) => ({ x: -el.offsetWidth * 0.2, y: vh * 0.16 }), // bord gauche, haut
+          (el: HTMLElement) => ({ x: vw - el.offsetWidth, y: vh * 0.5 }),    // bord droit, plus bas
+        ];
+
+        // Fin du voyage : quand le haut des blobs approche 40% du viewport
+        const firstRect = blobs[0]!.getBoundingClientRect();
+        const endScroll = Math.max(firstRect.top + window.scrollY - vh * 0.4, 1);
+
+        blobs.forEach((el, i) => {
+          const r = el!.getBoundingClientRect();
+          const start = filigrane[i](el!);
+          gsap.fromTo(
+              el!,
+              {
+                x: start.x - (r.left + window.scrollX),
+                y: start.y - (r.top + window.scrollY),
+                opacity: 0.3,
+              },
+              {
+                x: 0,
+                y: 0,
+                opacity: 1,
+                ease: 'none',
+                scrollTrigger: {
+                  start: 0,
+                  end: endScroll,
+                  scrub: 1,
+                },
+              }
+          );
+        });
+      });
+    };
+
+    build();
+    // Recalcule après chargement complet (fonts/images peuvent décaler la mise en page)
+    window.addEventListener('load', build);
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(build, 200);
+    };
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('load', build);
+      window.removeEventListener('resize', onResize);
+      clearTimeout(resizeTimer);
+      ctx?.revert();
+    };
+  }, []);
 
   // État pour les 3 images rotatives
   const [heroImage1, setHeroImage1] = useState(0);
@@ -105,74 +217,118 @@ export default function Home() {
         <Header />
 
         <main>
+          {/* Blobs voyageurs : filigrane fixe sur le hero, puis migrent vers
+              la section About au scroll et se muent en images (GSAP) */}
+          <div ref={blobOrangeRef} className={`${styles.floatBlob} ${styles.floatBlobOrange}`} aria-hidden="true">
+            {blobImgA && (
+                <img src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${blobImgA}`} alt="" />
+            )}
+          </div>
+          <div ref={blobGreenRef} className={`${styles.floatBlob} ${styles.floatBlobGreen}`} aria-hidden="true">
+            {blobImgB && (
+                <img src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${blobImgB}`} alt="" />
+            )}
+          </div>
+
           {/* Hero Section - Grid Layout */}
-          <section className="bg-white py-12 md:py-20">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+          <section className={styles.hero}>
+
+            <div className={styles.heroInner}>
+              <div className={styles.heroGrid}>
                 {/* Left: Text Content */}
-                <div className="lg:col-span-3 space-y-6">
-                  <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark leading-tight">
+                <div className={styles.heroText}>
+                  <h1 className={styles.heroTitle}>
                     Empowerment With Purpose.
                     <br />
-                    <span className="text-iteka-orange">Results With Impact.</span>
+                    <span className={styles.accent}>Results With Impact.</span>
                   </h1>
-                  <p className="text-lg md:text-xl text-gray-600 max-w-2xl">
+                  <p className={styles.heroLead}>
                     Discover talents. Develop skills. Promote peace among Rwandan youth.
                   </p>
-                  <div className="flex flex-wrap gap-4">
-                    <Link
-                        href="/programmes"
-                        className="bg-iteka-dark text-white px-6 py-3 rounded-md font-semibold hover:bg-opacity-90 transition inline-flex items-center gap-2"
-                    >
+                  <div className={styles.heroCtas}>
+                    <Link href="/programmes" className={shared.btnPrimary}>
                       Learn More
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
-                    <Link
-                        href="/contact"
-                        className="border-2 border-iteka-dark text-iteka-dark px-6 py-3 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                    >
+                    <Link href="/contact" className={shared.btnOutline}>
                       Get In Touch
                     </Link>
                   </div>
+
+                  {/* Prochain événement (date de début la plus proche) */}
+                  {upcomingEvent && (
+                      <div className={styles.eventCard}>
+                        {upcomingEvent.hero_image?.data?.url || upcomingEvent.gallery?.[0]?.data?.url ? (
+                            <img
+                                className={styles.eventCardThumb}
+                                src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${upcomingEvent.hero_image?.data?.url || upcomingEvent.gallery?.[0]?.data?.url}`}
+                                alt={upcomingEvent.title}
+                            />
+                        ) : (
+                            <div className={styles.eventCardThumb} />
+                        )}
+                        <div className={styles.eventCardBody}>
+                          <span className={styles.eventCardTitle}>
+                            Join our Upcoming Event: {upcomingEvent.title}
+                          </span>
+                          <span className={styles.eventCardText}>
+                            {(upcomingEvent.description || '').replace(/<[^>]*>/g, '').trim().slice(0, 120)}
+                          </span>
+                          {upcomingEvent.registration_url ? (
+                              <a
+                                  href={upcomingEvent.registration_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={styles.eventCardBtn}
+                              >
+                                Register
+                                <ArrowRight size={14} />
+                              </a>
+                          ) : upcomingEvent.type === 'festival' ? (
+                              <Link href="/festival" className={styles.eventCardBtn}>
+                                Learn More
+                                <ArrowRight size={14} />
+                              </Link>
+                          ) : null}
+                        </div>
+                      </div>
+                  )}
                 </div>
 
                 {/* Right: Images Grid (1 grande verticale + 2 horizontales) */}
-                <div className="lg:col-span-2 grid grid-cols-2 gap-4 h-[500px]">
+                <div className={styles.heroGallery}>
                   {galleryImages.length >= 3 ? (
                       <>
                         {/* Image 1 - Grande verticale (occupe 2 lignes, gauche) */}
-                        <div className="relative row-span-2 rounded-lg overflow-hidden shadow-md">
+                        <div className={`${styles.galleryTile} ${styles.gallerySpan2}`}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage1]?.image?.data?.url}`}
                               alt={galleryImages[heroImage1]?.caption || 'Iteka Youth'}
-                              className="w-full h-full object-cover transition-opacity duration-500"
                           />
                         </div>
 
                         {/* Image 2 - Horizontale en haut (droite) */}
-                        <div className="relative rounded-lg overflow-hidden shadow-md">
+                        <div className={styles.galleryTile}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage2]?.image?.data?.url}`}
                               alt={galleryImages[heroImage2]?.caption || 'Iteka Youth'}
-                              className="w-full h-full object-cover transition-opacity duration-500"
                           />
                         </div>
 
                         {/* Image 3 - Horizontale en bas (droite) */}
-                        <div className="relative rounded-lg overflow-hidden shadow-md">
+                        <div className={styles.galleryTile}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage3]?.image?.data?.url}`}
                               alt={galleryImages[heroImage3]?.caption || 'Iteka Youth'}
-                              className="w-full h-full object-cover transition-opacity duration-500"
                           />
                         </div>
                       </>
                   ) : (
                       // Placeholder si pas assez d'images
                       <>
-                        <div className="row-span-2 rounded-lg bg-gradient-to-br from-iteka-orange to-iteka-dark"></div>
-                        <div className="rounded-lg bg-gradient-to-br from-iteka-dark to-gray-700"></div>
-                        <div className="rounded-lg bg-gradient-to-br from-gray-600 to-iteka-orange"></div>
+                        <div className={`${styles.galleryTile} ${styles.gallerySpan2} ${styles.placeholderOrange}`}></div>
+                        <div className={`${styles.galleryTile} ${styles.placeholderGreen}`}></div>
+                        <div className={`${styles.galleryTile} ${styles.placeholderMix}`}></div>
                       </>
                   )}
                 </div>
@@ -181,143 +337,136 @@ export default function Home() {
           </section>
 
           {/* Partners Logos */}
-          <section className="py-8 bg-gray-50 border-y border-gray-200">
-            <div className="max-w-7xl mx-auto px-4">
-              <p className="text-sm text-gray-500 text-center mb-6">Our Supported Partners</p>
-              <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+          <section className={styles.partners}>
+            <div className={styles.partnersContainer}>
+              <p className={styles.partnersLabel}>Our Supported Partners</p>
+              <div className={styles.partnersRow}>
                 {partners.length > 0 ? (
                     partners.slice(0, 8).map((partner: any) => {
                       const logoUrl = getLogoUrl(partner.logo);
                       return (
-                          <div key={partner.id} className="h-12 w-24 relative grayscale hover:grayscale-0 transition">
+                          <div key={partner.id} className={styles.partnerLogo}>
                             {logoUrl ? (
-                                <img
-                                    src={logoUrl}
-                                    alt={partner.name}
-                                    className="h-full w-full object-contain"
-                                />
+                                <img src={logoUrl} alt={partner.name} />
                             ) : (
-                                <div className="h-12 w-24 bg-gray-300 rounded" />
+                                <div className={styles.partnerPlaceholder} />
                             )}
                           </div>
                       );
                     })
                 ) : (
                     <>
-                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
-                      <div className="h-12 w-24 bg-gray-300 rounded"></div>
+                      <div className={styles.partnerPlaceholder}></div>
+                      <div className={styles.partnerPlaceholder}></div>
+                      <div className={styles.partnerPlaceholder}></div>
+                      <div className={styles.partnerPlaceholder}></div>
                     </>
                 )}
               </div>
             </div>
           </section>
 
-          {/* Who We Are / What We Do - Alternating Grid */}
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 space-y-20">
-              {/* Who We Are */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="h-64 rounded-lg overflow-hidden">
-                    {galleryImages[3]?.image?.data?.url ? (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[3].image.data.url}`}
-                            alt="Who We Are"
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200"></div>
-                    )}
-                  </div>
-                  <div className="h-64 rounded-lg overflow-hidden mt-8">
-                    {galleryImages[4]?.image?.data?.url ? (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[4].image.data.url}`}
-                            alt="Who We Are"
-                            className="w-full h-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200"></div>
-                    )}
-                  </div>
+          {/* Who We Are - Alternating Grid */}
+          <section className={styles.aboutSection} ref={aboutSectionRef}>
+            <div className={styles.aboutContainer}>
+              {/* Who We Are — emplacements cibles des blobs voyageurs */}
+              <div className={styles.whoAreRow}>
+                <div className={styles.whoAreImages}>
+                  <div
+                      ref={aboutBlobTopRef}
+                      className={`${styles.blob} ${styles.blobTop}`}
+                      role="img"
+                      aria-label="Iteka youth"
+                      style={
+                        galleryImages[3]?.image?.data?.url
+                            ? { backgroundImage: `url(${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[3].image.data.url})` }
+                            : undefined
+                      }
+                  />
+                  <div
+                      ref={aboutBlobBottomRef}
+                      className={`${styles.blob} ${styles.blobBottom}`}
+                      role="img"
+                      aria-label="Iteka community"
+                      style={
+                        galleryImages[4]?.image?.data?.url
+                            ? { backgroundImage: `url(${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[4].image.data.url})` }
+                            : undefined
+                      }
+                  />
                 </div>
-                <div className="space-y-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">Who We Are</h2>
-                  <p className="text-gray-600 leading-relaxed">
-                    Iteka Youth Organization is Rwanda's leading platform for youth empowerment. Founded on the belief that every young person has unique talents, we provide comprehensive support through talent discovery, skills development, and peace promotion initiatives.
+                <div className={styles.whoAreCopy}>
+                  <span className={styles.whoAreSubtitle}>About Iteka</span>
+                  <h2 className={styles.whoAreTitle}>You're the Hope for others</h2>
+                  <p className={styles.whoAreText}>
+                    Iteka Youth Organisation is a leading community for youth empowerment in Rwanda, built on the core belief that every young person possesses unique and limitless potential.
                   </p>
-                  <p className="text-gray-600 leading-relaxed">
-                    Since 2015, we've reached over 2,500 young people across Rwanda, creating lasting impact in communities through evidence-based programmes and strategic partnerships.
+                  <p className={styles.whoAreText}>
+                    We are dedicated to nurturing the next generation by championing talent discovery, driving sustainable skills development, and fostering initiatives that promote lasting peace and social cohesion.
                   </p>
-                  <Link
-                      href="/about"
-                      className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                  >
-                    Learn About Us
-                    <ArrowRight className="w-4 h-4" />
+                  <Link href="/about" className={shared.btnPrimary}>
+                    Discover More
                   </Link>
                 </div>
               </div>
 
-              {/* What We Do */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-4 order-2 lg:order-1">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">What We Do</h2>
-                  <p className="text-gray-600 leading-relaxed">
-                    Our programmes are anchored on evidence-based approaches that transform lives through:
+            </div>
+          </section>
+
+          {/* What We Do — section distincte, fond blanc, piliers numérotés */}
+          <section className={styles.whatWeDoSection}>
+            <div className={styles.aboutContainer}>
+              <div className={styles.aboutRow}>
+                <div className={styles.aboutCopy}>
+                  <span className={styles.whoAreSubtitle}>Our Pillars</span>
+                  <h2 className={styles.aboutHeading}>What We Do</h2>
+                  <p className={styles.aboutText}>
+                    Our evidence-based programmes are designed to transform lives by unlocking the potential of young people and equipping them to shape a brighter future. We deliver impact across three core pillars:
                   </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-600">
-                      <strong>Talent Discovery:</strong> Identifying unique abilities in arts, sports, technology, and entrepreneurship
-                    </span>
+                  <ol className={styles.pillarList}>
+                    <li className={styles.pillarItem}>
+                      <span className={styles.pillarNum}>01</span>
+                      <span className={styles.pillarBody}>
+                        <strong>Talent Discovery</strong>
+                        Unearthing and nurturing unique abilities in the arts, sports, technology, and entrepreneurship, providing young people with the stage to showcase their potential.
+                      </span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-600">
-                      <strong>Skills Development:</strong> Professional training and mentorship programmes
-                    </span>
+                    <li className={styles.pillarItem}>
+                      <span className={styles.pillarNum}>02</span>
+                      <span className={styles.pillarBody}>
+                        <strong>Skills Development</strong>
+                        Equipping the next generation for success through targeted education, vocational training, professional mentorship, and practical capacity building.
+                      </span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <div className="mt-1 w-2 h-2 rounded-full bg-iteka-orange flex-shrink-0"></div>
-                      <span className="text-gray-600">
-                      <strong>Peace Building:</strong> Community dialogue and conflict resolution initiatives
-                    </span>
+                    <li className={styles.pillarItem}>
+                      <span className={styles.pillarNum}>03</span>
+                      <span className={styles.pillarBody}>
+                        <strong>Peacebuilding</strong>
+                        Cultivating community harmony, driving conflict resolution, and fostering social cohesion through structured youth-led dialogues and community initiatives.
+                      </span>
                     </li>
-                  </ul>
-                  <Link
-                      href="/programmes"
-                      className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                  >
+                  </ol>
+                  <Link href="/programmes" className={shared.btnPrimary}>
                     Explore Our Programmes
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight size={16} />
                   </Link>
                 </div>
-                <div className="grid grid-cols-2 gap-4 order-1 lg:order-2">
-                  <div className="h-64 rounded-lg overflow-hidden">
+                <div className={styles.aboutMedia}>
+                  <div className={styles.aboutMediaTile}>
                     {galleryImages[5]?.image?.data?.url ? (
                         <img
                             src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[5].image.data.url}`}
                             alt="What We Do"
-                            className="w-full h-full object-cover"
                         />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200"></div>
-                    )}
+                    ) : null}
                   </div>
-                  <div className="h-64 rounded-lg overflow-hidden mt-8">
+                  <div className={`${styles.aboutMediaTile} ${styles.aboutMediaTileOffset}`}>
                     {galleryImages[6]?.image?.data?.url ? (
                         <img
                             src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[6].image.data.url}`}
                             alt="What We Do"
-                            className="w-full h-full object-cover"
                         />
-                    ) : (
-                        <div className="w-full h-full bg-gray-200"></div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -326,22 +475,17 @@ export default function Home() {
 
           {/* Our Expertise - Cards with Icons */}
           {featuredProgrammes.length > 0 && (
-              <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="flex justify-between items-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">
-                      Our Expertise, Your Impact
-                    </h2>
-                    <Link
-                        href="/programmes"
-                        className="hidden md:inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                    >
+              <section className={styles.expertiseSection}>
+                <div className={shared.container}>
+                  <div className={shared.sectionHeaderRow}>
+                    <h2 className={shared.sectionTitle}>Our Expertise, Your Impact</h2>
+                    <Link href="/programmes" className={`${shared.btnPrimary} ${shared.desktopOnlyFlex}`}>
                       View All Programmes
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className={styles.expertiseGrid}>
                     {featuredProgrammes.slice(0, 6).map((prog: any, idx: number) => {
                       const icons = [Users, Target, Globe, Award, Users, Target];
                       const Icon = icons[idx % icons.length];
@@ -350,149 +494,118 @@ export default function Home() {
                           <Link
                               key={prog.id}
                               href={`/programmes/${prog?.slug}`}
-                              className="group bg-[#E8F5E9] p-6 rounded-lg hover:shadow-lg transition"
+                              className={styles.expertiseCard}
                           >
-                            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 group-hover:bg-iteka-orange group-hover:text-white transition">
-                              <Icon className="w-6 h-6 text-iteka-dark group-hover:text-white" />
+                            <div className={styles.expertiseIconWrap}>
+                              <Icon size={24} />
                             </div>
-                            <h3 className="text-xl font-bold text-iteka-dark mb-2">
-                              {prog?.name}
-                            </h3>
-                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                              {prog?.short_description}
-                            </p>
+                            <h3 className={styles.expertiseCardTitle}>{prog?.name}</h3>
+                            <p className={styles.expertiseCardText}>{prog?.short_description}</p>
                           </Link>
                       );
                     })}
                   </div>
 
-                  <div className="text-center mt-8 md:hidden">
-                    <Link
-                        href="/programmes"
-                        className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                    >
+                  <div className={shared.mobileOnlyCenter}>
+                    <Link href="/programmes" className={shared.btnPrimary}>
                       View All Programmes
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
                 </div>
               </section>
           )}
 
-          {/* Impact Stats */}
+          {/* Impact Stats — band color, un accent par stat (rainbow contrôlé, cf. brief Impact) */}
           {stats.length > 0 && (
-              <section className="py-16 bg-[#E8F5E9]">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    {stats.map((stat: any) => (
-                        <div key={stat.id}>
-                          <div className="text-4xl md:text-5xl font-bold text-iteka-dark mb-2">
-                            {stat?.value}
-                          </div>
-                          <p className="text-sm md:text-base text-gray-600">{stat?.label}</p>
-                        </div>
-                    ))}
+              <section className={styles.statsSection}>
+                <div className={shared.container}>
+                  <div className={shared.bandBox}>
+                    <h2 className={shared.bandTitle}>Our Impact In Numbers</h2>
+                    <div className={shared.bandStatsGrid}>
+                      {stats.map((stat: any, idx: number) => {
+                        const accentColors = ['#E87722', '#00A3A3', '#E91E63', '#3F7A4F'];
+                        return (
+                            <div key={stat.id}>
+                              <div className={shared.statValue} style={{ color: accentColors[idx % accentColors.length] }}>
+                                {stat?.value}
+                              </div>
+                              <p className={shared.statLabel}>{stat?.label}</p>
+                            </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </section>
           )}
 
-          {/* Latest News - Carousel Style */}
+          {/* Latest News */}
           {featuredNews.length > 0 && (
-              <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="flex justify-between items-center mb-12">
+              <section className={styles.newsSection}>
+                <div className={shared.container}>
+                  <div className={shared.sectionHeaderRow}>
                     <div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-2">
-                        Driving Development Through Insight
-                      </h2>
-                      <p className="text-gray-600">Stay updated with our latest initiatives</p>
+                      <h2 className={shared.sectionTitle}>Driving Development Through Insight</h2>
+                      <p className={shared.sectionSub}>Stay updated with our latest initiatives</p>
                     </div>
-                    <Link
-                        href="/news"
-                        className="hidden md:inline-flex items-center gap-2 border-2 border-iteka-dark px-4 py-2 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                    >
+                    <Link href="/news" className={`${shared.btnOutline} ${shared.desktopOnlyFlex}`}>
                       View All News
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className={styles.newsGrid}>
                     {featuredNews.map((article: any) => (
-                        <Link
-                            key={article.id}
-                            href={`/news/${article?.slug}`}
-                            className="group bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition"
-                        >
+                        <Link key={article.id} href={`/news/${article?.slug}`} className={styles.newsCard}>
                           {article?.featured_image?.data && (
-                              <div className="relative h-48 overflow-hidden bg-gray-200">
+                              <div className={styles.newsImageWrap}>
                                 <img
                                     src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.featured_image.data.url}`}
                                     alt={article?.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                 />
                               </div>
                           )}
-                          <div className="p-6">
-                      <span className="text-xs text-gray-500 uppercase tracking-wide">
-                        {article?.category}
-                      </span>
-                            <h3 className="text-lg font-bold text-iteka-dark mt-2 mb-2 group-hover:text-iteka-orange transition line-clamp-2">
-                              {article?.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 line-clamp-2">
-                              {article?.excerpt}
-                            </p>
+                          <div className={styles.newsBody}>
+                            <span className={styles.newsCategory}>{article?.category}</span>
+                            <h3 className={styles.newsCardTitle}>{article?.title}</h3>
+                            <p className={styles.newsExcerpt}>{article?.excerpt}</p>
                           </div>
                         </Link>
                     ))}
                   </div>
 
-                  <div className="text-center mt-8 md:hidden">
-                    <Link
-                        href="/news"
-                        className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                    >
+                  <div className={shared.mobileOnlyCenter}>
+                    <Link href="/news" className={shared.btnPrimary}>
                       View All News
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
                 </div>
               </section>
           )}
 
-          {/* Testimonials - Simplified */}
+          {/* Testimonials */}
           {testimonials.length > 0 && (
-              <section className="py-20 bg-gray-50">
-                <div className="max-w-5xl mx-auto px-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
-                    Voices From Our Community
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <section className={styles.testimonialsSection}>
+                <div className={styles.testimonialsContainer}>
+                  <h2 className={styles.testimonialsTitle}>Voices From Our Community</h2>
+                  <div className={styles.testimonialsGrid}>
                     {testimonials.slice(0, 2).map((testimonial: any) => (
-                        <div
-                            key={testimonial.id}
-                            className="bg-white p-8 rounded-lg shadow-sm"
-                        >
-                          <div className="text-4xl text-iteka-orange mb-4">&ldquo;</div>
-                          <p className="text-gray-700 mb-6 leading-relaxed">
-                            {testimonial?.quote}
-                          </p>
-                          <div className="flex items-center gap-4">
+                        <div key={testimonial.id} className={styles.testimonialCard}>
+                          <div className={styles.quoteMark}>&ldquo;</div>
+                          <p className={styles.testimonialText}>{testimonial?.quote}</p>
+                          <div className={styles.testimonialAuthorRow}>
                             {testimonial?.author_photo?.data && (
                                 <img
                                     src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
                                     alt={testimonial?.author_name}
-                                    className="w-14 h-14 rounded-full object-cover"
+                                    className={styles.testimonialAvatar}
                                 />
                             )}
                             <div>
-                              <p className="font-bold text-iteka-dark">
-                                {testimonial?.author_name}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {testimonial?.author_role}
-                              </p>
+                              <p className={styles.testimonialName}>{testimonial?.author_name}</p>
+                              <p className={styles.testimonialRole}>{testimonial?.author_role}</p>
                             </div>
                           </div>
                         </div>
@@ -503,63 +616,48 @@ export default function Home() {
           )}
 
           {/* CTA Section */}
-          <section className="py-20 bg-[#E8F5E9]">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4">
-                Join Us And Let's Make A Better World Today!
-              </h2>
-              <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-                Your support empowers Rwandan youth to discover their potential and create lasting change in their communities.
-              </p>
-              <Link
-                  href="/donate"
-                  className="inline-block bg-iteka-orange text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
-              >
-                Donate Now
-              </Link>
+          <section className={styles.ctaSection}>
+            <div className={shared.container}>
+              <div className={shared.bandBox}>
+                <h2 className={shared.bandTitle}>Join Us And Let's Make A Better World Today!</h2>
+                <p className={shared.bandText}>
+                  Your support empowers Rwandan youth to discover their potential and create lasting change in their communities.
+                </p>
+                <Link href="/donate" className={shared.btnPrimary}>
+                  Donate Now
+                </Link>
+              </div>
             </div>
           </section>
 
           {/* Impact Gallery */}
           {galleryImages.length > 0 && (
-              <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="flex justify-between items-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">
-                      Our Impact In Action
-                    </h2>
-                    <Link
-                        href="/gallery"
-                        className="hidden md:inline-flex items-center gap-2 border-2 border-iteka-dark px-4 py-2 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                    >
+              <section className={styles.gallerySection}>
+                <div className={shared.container}>
+                  <div className={shared.sectionHeaderRow}>
+                    <h2 className={shared.sectionTitle}>Our Impact In Action</h2>
+                    <Link href="/gallery" className={`${shared.btnOutline} ${shared.desktopOnlyFlex}`}>
                       View All
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className={shared.photoGrid}>
                     {galleryImages.slice(0, 8).map((img: any, idx: number) => (
-                        <div
-                            key={idx}
-                            className="relative aspect-square rounded-lg overflow-hidden group cursor-pointer"
-                        >
+                        <div key={idx} className={shared.photoItem}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}
                               alt={img?.caption || 'Impact'}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition"></div>
+                          <div className={shared.photoOverlay}></div>
                         </div>
                     ))}
                   </div>
 
-                  <div className="text-center mt-8 md:hidden">
-                    <Link
-                        href="/gallery"
-                        className="inline-flex items-center gap-2 text-iteka-orange font-semibold hover:underline"
-                    >
+                  <div className={shared.mobileOnlyCenter}>
+                    <Link href="/gallery" className={shared.btnPrimary}>
                       View All
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
                   </div>
                 </div>

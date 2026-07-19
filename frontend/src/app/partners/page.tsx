@@ -6,6 +6,8 @@ import { ArrowRight, Handshake, DollarSign, Lightbulb, Target, Mail } from 'luci
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
 import { fetchPartners } from '@/src/lib/api';
+import styles from './Partners.module.css';
+import shared from '@/src/styles/shared.module.css';
 
 export default function PartnersPage() {
   const { data: partners = [], isLoading } = useQuery({
@@ -46,15 +48,15 @@ export default function PartnersPage() {
         <Header />
 
         <main>
-          {/* Hero Section - Simple */}
-          <section className="bg-white py-16 md:py-24">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <h1 className="text-4xl md:text-6xl font-bold text-iteka-dark mb-6">
+          {/* Hero */}
+          <section className={shared.pageHero}>
+            <div className={shared.pageHeroInner}>
+              <h1 className={shared.pageHeroTitle}>
                 Partnering For Impact.
                 <br />
-                <span className="text-iteka-orange">Together We Achieve More.</span>
+                <span className={shared.accent}>Together We Achieve More.</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className={shared.pageHeroText}>
                 Our work is strengthened through strategic partnerships with organizations committed
                 to empowering Rwanda's youth and creating sustainable change.
               </p>
@@ -62,47 +64,41 @@ export default function PartnersPage() {
           </section>
 
           {/* Partnership Philosophy */}
-          <section className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                {/* Content */}
-                <div className="space-y-6">
-                  <div className="w-14 h-14 rounded-full bg-[#E8F5E9] flex items-center justify-center">
-                    <Handshake className="w-7 h-7 text-iteka-dark" />
+          <section className={styles.philosophySection}>
+            <div className={shared.container}>
+              <div className={styles.philosophyGrid}>
+                <div className={styles.philosophyCopy}>
+                  <div className={shared.iconCircle} style={{ marginBottom: 0 }}>
+                    <Handshake size={24} />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark">
-                    Building a Powerful Ecosystem
-                  </h2>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h2 className={styles.philosophyTitle}>Building a Powerful Ecosystem</h2>
+                  <p className={styles.philosophyText}>
                     Our partnerships with government agencies, NGOs, private sector companies, educational
                     institutions, and community organizations create a powerful ecosystem that enables us
                     to reach more young people and create sustainable impact.
                   </p>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className={styles.philosophyText}>
                     Together, we leverage complementary strengths, share resources, and coordinate efforts
                     to maximize our collective impact on youth empowerment across Rwanda.
                   </p>
                 </div>
 
-                {/* Stats or Visual */}
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                    <div className="text-4xl font-bold text-iteka-dark mb-2">
-                      {partners.length}+
-                    </div>
-                    <p className="text-gray-600">Active Partners</p>
+                <div className={styles.statsGrid}>
+                  <div className={styles.statCard}>
+                    <div className={styles.statCardValue}>{partners.length}+</div>
+                    <p className={styles.statCardLabel}>Active Partners</p>
                   </div>
-                  <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                    <div className="text-4xl font-bold text-iteka-dark mb-2">12+</div>
-                    <p className="text-gray-600">Districts Reached</p>
+                  <div className={styles.statCard}>
+                    <div className={styles.statCardValue}>12+</div>
+                    <p className={styles.statCardLabel}>Districts Reached</p>
                   </div>
-                  <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                    <div className="text-4xl font-bold text-iteka-dark mb-2">2.5K+</div>
-                    <p className="text-gray-600">Youth Impacted</p>
+                  <div className={styles.statCard}>
+                    <div className={styles.statCardValue}>2.5K+</div>
+                    <p className={styles.statCardLabel}>Youth Impacted</p>
                   </div>
-                  <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                    <div className="text-4xl font-bold text-iteka-dark mb-2">5+</div>
-                    <p className="text-gray-600">Years Collaborating</p>
+                  <div className={styles.statCard}>
+                    <div className={styles.statCardValue}>5+</div>
+                    <p className={styles.statCardLabel}>Years Collaborating</p>
                   </div>
                 </div>
               </div>
@@ -111,52 +107,37 @@ export default function PartnersPage() {
 
           {/* Featured Partners */}
           {featured.length > 0 && (
-              <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
-                    Strategic Partners
-                  </h2>
-                  <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+              <section className={styles.featuredSection}>
+                <div className={shared.container}>
+                  <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 16 }}>Strategic Partners</h2>
+                  <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
                     Long-term collaborators driving transformative change with us
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className={styles.featuredGrid}>
                     {featured.map((partner: any) => {
                       const logoUrl = getLogoUrl(partner.logo);
                       return (
-                          <div
-                              key={partner.id}
-                              className="bg-white border-2 border-gray-200 p-8 rounded-lg hover:border-iteka-orange hover:shadow-lg transition group"
-                          >
+                          <div key={partner.id} className={`${shared.borderCard} ${styles.featuredCard}`}>
                             {logoUrl && (
-                                <div className="mb-6 h-24 flex items-center justify-center bg-gray-50 rounded-lg group-hover:bg-white transition">
-                                  <img
-                                      src={logoUrl}
-                                      alt={partner.name}
-                                      className="max-h-20 max-w-full object-contain"
-                                  />
+                                <div className={styles.featuredLogoWrap}>
+                                  <img src={logoUrl} alt={partner.name} />
                                 </div>
                             )}
-                            <h3 className="text-xl font-bold text-iteka-dark mb-2">
-                              {partner.name}
-                            </h3>
-                            <p className="text-sm text-iteka-orange font-semibold mb-3">
-                              {partner.partnership_type}
-                            </p>
+                            <h3 className={styles.featuredName}>{partner.name}</h3>
+                            <p className={styles.featuredType}>{partner.partnership_type}</p>
                             {partner.description && (
-                                <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                                  {partner.description}
-                                </p>
+                                <p className={styles.featuredDescription}>{partner.description}</p>
                             )}
                             {partner.website && (
                                 <a
                                     href={partner.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-iteka-orange hover:underline text-sm font-semibold"
+                                    className={styles.featuredLink}
                                 >
                                   Visit Website
-                                  <ArrowRight className="w-3 h-3" />
+                                  <ArrowRight size={14} />
                                 </a>
                             )}
                           </div>
@@ -169,30 +150,17 @@ export default function PartnersPage() {
 
           {/* All Partners - Logo Grid */}
           {others.length > 0 && (
-              <section className="py-20 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-4">
-                  <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
-                    Our Partner Network
-                  </h2>
+              <section className={styles.logoGridSection}>
+                <div className={shared.container}>
+                  <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>Our Partner Network</h2>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  <div className={styles.logoGrid}>
                     {others.map((partner: any) => {
                       const logoUrl = getLogoUrl(partner.logo);
                       return (
-                          <div
-                              key={partner.id}
-                              className="flex flex-col items-center justify-center p-6 bg-white rounded-lg hover:shadow-md transition group"
-                          >
-                            {logoUrl && (
-                                <img
-                                    src={logoUrl}
-                                    alt={partner.name}
-                                    className="max-h-16 max-w-full object-contain mb-3 group-hover:scale-110 transition"
-                                />
-                            )}
-                            <p className="text-xs text-gray-600 text-center group-hover:text-iteka-orange transition font-semibold">
-                              {partner.name}
-                            </p>
+                          <div key={partner.id} className={styles.logoCard}>
+                            {logoUrl && <img src={logoUrl} alt={partner.name} />}
+                            <p className={styles.logoCardName}>{partner.name}</p>
                           </div>
                       );
                     })}
@@ -203,45 +171,37 @@ export default function PartnersPage() {
 
           {/* Loading State */}
           {isLoading && (
-              <section className="py-20 bg-white">
-                <div className="text-center">
-                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-iteka-orange border-t-transparent"></div>
-                  <p className="text-gray-600 mt-4">Loading partners...</p>
-                </div>
-              </section>
+              <div className={shared.loadingWrap}>
+                <div className={shared.spinner}></div>
+                <p className={shared.loadingText}>Loading partners...</p>
+              </div>
           )}
 
           {/* Empty State */}
           {!isLoading && partners.length === 0 && (
-              <section className="py-20 bg-white">
-                <div className="text-center">
-                  <p className="text-gray-600 text-lg">No partners available at the moment.</p>
-                </div>
-              </section>
+              <div className={styles.emptyWrap}>
+                <p className={styles.emptyText}>No partners available at the moment.</p>
+              </div>
           )}
 
           {/* Partnership Types */}
-          <section className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4 text-center">
-                Types of Partnerships
-              </h2>
-              <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          <section className={styles.typesSection}>
+            <div className={shared.container}>
+              <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 16 }}>Types of Partnerships</h2>
+              <p className={shared.sectionSubCenter} style={{ marginBottom: 48 }}>
                 We collaborate with partners in various ways to maximize impact
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className={styles.typesGrid}>
                 {partnershipTypes.map((type, idx) => {
                   const Icon = type.icon;
                   return (
-                      <div key={idx} className="bg-[#E8F5E9] p-8 rounded-lg text-center hover:shadow-lg transition group">
-                        <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6 group-hover:bg-iteka-orange transition">
-                          <Icon className="w-8 h-8 text-iteka-dark group-hover:text-white transition" />
+                      <div key={idx} className={styles.typeCard}>
+                        <div className={styles.typeIconCircle}>
+                          <Icon size={28} />
                         </div>
-                        <h3 className="text-xl font-bold text-iteka-dark mb-3">{type.title}</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                          {type.description}
-                        </p>
+                        <h3 className={styles.typeTitle}>{type.title}</h3>
+                        <p className={styles.typeText}>{type.description}</p>
                       </div>
                   );
                 })}
@@ -250,49 +210,47 @@ export default function PartnersPage() {
           </section>
 
           {/* Partnership Benefits */}
-          <section className="py-20 bg-gray-50">
-            <div className="max-w-4xl mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-12 text-center">
-                Why Partner With Us
-              </h2>
+          <section className={styles.whySection}>
+            <div className={styles.whyInner}>
+              <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 48 }}>Why Partner With Us</h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-lg">
-                  <h3 className="font-bold text-iteka-dark mb-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-iteka-orange"></div>
+              <div className={styles.whyGrid}>
+                <div className={styles.whyCard}>
+                  <h3 className={styles.whyCardTitle}>
+                    <span className={styles.whyDot}></span>
                     Proven Track Record
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className={styles.whyCardText}>
                     Over 2,500 youth empowered across Rwanda through evidence-based programmes
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg">
-                  <h3 className="font-bold text-iteka-dark mb-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-iteka-orange"></div>
+                <div className={styles.whyCard}>
+                  <h3 className={styles.whyCardTitle}>
+                    <span className={styles.whyDot}></span>
                     Local Expertise
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className={styles.whyCardText}>
                     Deep understanding of Rwanda's youth landscape and community needs
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg">
-                  <h3 className="font-bold text-iteka-dark mb-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-iteka-orange"></div>
+                <div className={styles.whyCard}>
+                  <h3 className={styles.whyCardTitle}>
+                    <span className={styles.whyDot}></span>
                     Measurable Impact
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className={styles.whyCardText}>
                     Rigorous monitoring and evaluation to demonstrate tangible results
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg">
-                  <h3 className="font-bold text-iteka-dark mb-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-iteka-orange"></div>
+                <div className={styles.whyCard}>
+                  <h3 className={styles.whyCardTitle}>
+                    <span className={styles.whyDot}></span>
                     Strong Network
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className={styles.whyCardText}>
                     Extensive connections across government, civil society, and private sector
                   </p>
                 </div>
@@ -301,30 +259,22 @@ export default function PartnersPage() {
           </section>
 
           {/* Become a Partner - CTA */}
-          <section className="py-20 bg-[#E8F5E9]">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-iteka-dark" />
+          <section className={styles.ctaSection}>
+            <div className={styles.ctaInner}>
+              <div className={styles.ctaIconCircle}>
+                <Mail size={28} />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-iteka-dark mb-4">
-                Become a Partner
-              </h2>
-              <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              <h2 className={styles.ctaTitle}>Become a Partner</h2>
+              <p className={styles.ctaText}>
                 We welcome partnerships with organizations committed to youth empowerment.
                 Let's work together to create lasting impact across Rwanda.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                    href="mailto:hello@itekarwanda.org?subject=Partnership Inquiry"
-                    className="inline-flex items-center gap-2 bg-iteka-dark text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition"
-                >
+              <div className={styles.ctaButtons}>
+                <a href="mailto:hello@itekarwanda.org?subject=Partnership Inquiry" className={shared.btnPrimary}>
                   Get In Touch
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight size={16} />
                 </a>
-                <Link
-                    href="/contact"
-                    className="border-2 border-iteka-dark text-iteka-dark px-8 py-3 rounded-md font-semibold hover:bg-iteka-dark hover:text-white transition"
-                >
+                <Link href="/contact" className={shared.btnOutline}>
                   Contact Us
                 </Link>
               </div>

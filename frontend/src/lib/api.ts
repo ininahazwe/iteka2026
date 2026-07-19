@@ -28,7 +28,9 @@ async function wpFetch<T = any>(query: string, variables: Record<string, any> = 
   const json = await res.json();
 
   if (json.errors) {
-    console.error('WPGraphQL error:', JSON.stringify(json.errors, null, 2));
+    // console.warn (pas console.error) : évite de déclencher l'overlay plein écran
+    // de Next.js en dev pour des erreurs de schéma WPGraphQL déjà gérées par l'appelant.
+    console.warn('WPGraphQL error:', JSON.stringify(json.errors, null, 2));
     throw new Error(json.errors[0]?.message || 'GraphQL error');
   }
 
@@ -147,7 +149,6 @@ const NEWS_QUERY_FIELDS = `
   title
   date
   content
-  excerpt
   featuredImage { node { sourceUrl } }
   newsFields {
     source
@@ -166,7 +167,8 @@ function mapNews(node: any) {
     slug: node.slug,
     title: node.title,
     content: node.content,
-    excerpt: node.excerpt,
+    // Le CPT News n'a pas le support "excerpt" côté WP : on le dérive du contenu
+    excerpt: (node.content || '').replace(/<[^>]*>/g, '').trim().slice(0, 200),
     featured_image: mediaFromEdge(node.featuredImage),
     source: f.source,
     source_url: f.sourceUrl,
@@ -174,7 +176,8 @@ function mapNews(node: any) {
     // alias attendu par un fallback existant dans news/[id]/page.tsx
     publishedAt: node.date,
     author: f.author,
-    category: f.category,
+    // ACF select renvoie un tableau (["Event"]) : on normalise en string
+    category: Array.isArray(f.category) ? f.category[0] : f.category,
     is_featured: !!f.isFeatured,
     // Pas de taxonomie "tags" branchée côté WP pour l'instant (ACF gratuit
     // n'a pas de Répéteur). Tableau vide = section Tags masquée proprement.
@@ -183,26 +186,39 @@ function mapNews(node: any) {
 }
 
 export const fetchActualites = async () => {
-  const data = await wpFetch(`
-    query News {
-      news(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
-        nodes { ${NEWS_QUERY_FIELDS} }
+  // Le CPT "News" a un nom GraphQL singulier == pluriel ("news"), donc
+  // WPGraphQL expose la connection liste sous "allNews" (et "news" reste la
+  // query single-item par ID/slug).
+  try {
+    const data = await wpFetch(`
+      query News {
+        allNews(first: 100, where: { orderby: { field: DATE, order: DESC } }) {
+          nodes { ${NEWS_QUERY_FIELDS} }
+        }
       }
-    }
-  `);
-  return (data.news?.nodes || []).map(mapNews);
+    `);
+    return (data.allNews?.nodes || []).map(mapNews);
+  } catch (err) {
+    console.warn('fetchActualites: erreur WPGraphQL "allNews", fallback []', err);
+    return [];
+  }
 };
 
 export const fetchActualiteBySlug = async (slug: string) => {
-  const data = await wpFetch(
-    `
-    query SingleNews($slug: ID!) {
-      news(id: $slug, idType: SLUG) { ${NEWS_QUERY_FIELDS} }
-    }
-  `,
-    { slug }
-  );
-  return data.news ? mapNews(data.news) : null;
+  try {
+    const data = await wpFetch(
+      `
+      query SingleNews($slug: ID!) {
+        news(id: $slug, idType: SLUG) { ${NEWS_QUERY_FIELDS} }
+      }
+    `,
+      { slug }
+    );
+    return data.news ? mapNews(data.news) : null;
+  } catch (err) {
+    console.warn('fetchActualiteBySlug: schéma WPGraphQL "news" indisponible, fallback null', err);
+    return null;
+  }
 };
 
 // --- Gallery ---
@@ -225,7 +241,8 @@ function mapGalleryItem(node: any) {
     id: node.databaseId,
     image: mediaFromEdge(node.featuredImage),
     caption: f.caption,
-    category: f.category,
+    // ACF select renvoie un tableau (["Events"]) : on normalise en string
+    category: Array.isArray(f.category) ? f.category[0] : f.category,
     date_taken: f.dateTaken,
     photographer: f.photographer,
     order: f.order ?? 0,
@@ -414,12 +431,17 @@ export const fetchTestimonials = async () => {
     .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
 };
 
-// --- Festival (singleton : premier et unique article publié du CPT) ---
+// --- Events (ex-CPT Festival, généralisé) ---
+// Champ ACF `type` : festival | training | conference | other.
+// La page /festival consomme l'event de type "festival" le plus récent.
 
-const FESTIVAL_QUERY_FIELDS = `
+const EVENT_QUERY_FIELDS = `
+  databaseId
   title
+  date
   featuredImage { node { sourceUrl } }
-  festivalFields {
+  eventFields {
+    type
     edition
     description
     dateStart
@@ -431,19 +453,16 @@ const FESTIVAL_QUERY_FIELDS = `
   }
 `;
 
-export const fetchFestival = async () => {
-  const data = await wpFetch(`
-    query Festival {
-      festivals(first: 1) {
-        nodes { ${FESTIVAL_QUERY_FIELDS} }
-      }
-    }
-  `);
-  const node = data.festivals?.nodes?.[0];
-  if (!node) return null;
-  const f = node.festivalFields || {};
+function mapEvent(node: any) {
+  const f = node.eventFields || {};
   return {
+    id: node.databaseId,
     title: node.title,
+    // select ACF : peut revenir en tableau selon la config, on normalise
+    // Valeurs ACF capitalisées ("Festival") : normalisées en minuscules
+    type: String(Array.isArray(f.type) ? f.type[0] : f.type || '').toLowerCase(),
+    // NB: le champ ACF s'appelle "title" (name) mais WPGraphQL l'expose
+    // toujours sous "edition" (GraphQL field name figé)
     edition: f.edition,
     description: f.description,
     date_start: f.dateStart,
@@ -454,6 +473,25 @@ export const fetchFestival = async () => {
     program_pdf: f.programPdf?.node?.mediaItemUrl || null,
     registration_url: f.registrationUrl,
   };
+}
+
+export const fetchEvents = async (type?: string) => {
+  const data = await wpFetch(`
+    query Events {
+      events(first: 100) {
+        nodes { ${EVENT_QUERY_FIELDS} }
+      }
+    }
+  `);
+  let items = (data.events?.nodes || []).map(mapEvent);
+  if (type) items = items.filter((e: any) => e.type === type);
+  return items;
+};
+
+// Rétro-compatible : la page /festival continue d'appeler fetchFestival()
+export const fetchFestival = async () => {
+  const events = await fetchEvents('festival');
+  return events[0] || null;
 };
 
 // --- Contact (inchangé : géré par /api/contact, pas par WordPress) ---
