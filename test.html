@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're the Hope for others</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Utilisation d'une police moderne et épurée proche de la maquette -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f3f2ed;          /* Fond beige chaud de la maquette */
+            --grid-color: #e4e3de;        /* Couleur des lignes de la grille */
+            --text-navy: #063162;         /* Bleu marine des titres */
+            --text-body: #3c3c3c;         /* Couleur du texte de description */
+            --btn-lime: #e2f797;          /* Vert/jaune lime du bouton */
+            --btn-text: #063162;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+
+            /* Génération de la grille d'arrière-plan subtile */
+            background-image:
+                    linear-gradient(var(--grid-color) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 45px 45px;
+            background-position: center;
+        }
+
+        .section-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* --- SECTION IMAGES (GAUCHE) --- */
+        .images-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Style commun pour les masques d'images organiques */
+        .organic-blob {
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%); /* Effet noir et blanc de l'image */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: transform 0.4s ease;
+        }
+
+        .organic-blob:hover {
+            transform: scale(1.02);
+        }
+
+        /* Blob Supérieur (Groupe d'enfants) */
+        .blob-top {
+            width: 310px;
+            height: 290px;
+            align-self: flex-start;
+            margin-left: 20px;
+            /* Remplacement par l'image correspondante ou placeholder */
+            background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600&auto=format&fit=crop');
+
+            /* Arrondis asymétriques calculés pour correspondre à la forme haute */
+            border-radius: 53% 47% 43% 57% / 64% 45% 55% 36%;
+        }
+
+        /* Blob Inférieur (Personne avec pancarte HELP) */
+        .blob-bottom {
+            width: 440px;
+            height: 410px;
+            align-self: flex-start;
+            margin-top: -40px; /* Léger chevauchement visuel */
+            background-image: url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=600&auto=format&fit=crop');
+
+            /* Arrondis spécifiques étirés vers le bas et la droite */
+            border-radius: 46% 54% 74% 26% / 44% 33% 67% 56%;
+        }
+
+        /* --- SECTION TEXTE (DROITE) --- */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-right: 40px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-navy);
+            margin-bottom: 16px;
+            letter-spacing: -0.2px;
+        }
+
+        .title {
+            font-size: 54px;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--text-navy);
+            margin-bottom: 28px;
+            letter-spacing: -1px;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-body);
+            margin-bottom: 20px;
+            max-width: 520px;
+        }
+
+        .description:last-of-type {
+            margin-bottom: 36px;
+        }
+
+        /* --- BOUTON --- */
+        .btn-discover {
+            display: inline-block;
+            background-color: var(--btn-lime);
+            color: var(--btn-text);
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 14px 36px;
+            border-radius: 50px; /* Arrondi parfait du bouton */
+            box-shadow: 0 4px 15px rgba(226, 247, 151, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-discover:hover {
+            background-color: #d1ec76;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(226, 247, 151, 0.3);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .section-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            .images-wrapper {
+                align-items: center;
+            }
+            .blob-top, .blob-bottom {
+                align-self: center;
+                margin-left: 0;
+                margin-top: 0;
+                max-width: 100%;
+            }
+            .content-wrapper {
+                padding-right: 0;
+                align-items: center;
+                text-align: center;
+            }
+            .title {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<section class="section-container">
+
+    <!-- Partie Gauche : Images Organiques -->
+    <div class="images-wrapper">
+        <div class="organic-blob blob-top" role="img" aria-label="Enfants souriants"></div>
+        <div class="organic-blob blob-bottom" role="img" aria-label="Personne demandant de l'aide"></div>
+    </div>
+
+    <!-- Partie Droite : Textes et Bouton -->
+    <div class="content-wrapper">
+        <span class="subtitle">About Company</span>
+        <h1 class="title">You’re the Hope for others</h1>
+
+        <p class="description">
+            This is a dedicated non-profit committed to supporting individuals and families in need. We provide essential resources, including food, clothing, shelter, and educational opportunities, to empower those facing challenging circumstances.
+        </p>
+
+        <p class="description">
+            Our mission is to uplift and bring hope to the less fortunate, fostering a compassionate community where everyone has the chance to thrive. Through generous donations and volunteer efforts, we strive to make a positive impact and create lasting change in the lives of those we serve.
+        </p>
+
+        <a href="#" class="btn-discover">Discover more</a>
+    </div>
+
+</section>
+
+</body>
+</html>

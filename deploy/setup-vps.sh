@@ -6,7 +6,10 @@ set -e
 echo "== Mise à jour système =="
 dnf update -y
 
-echo "== Pare-feu : ouverture HTTP/HTTPS =="
+echo "== Pare-feu : installation + ouverture HTTP/HTTPS =="
+dnf install -y firewalld
+systemctl enable --now firewalld
+firewall-cmd --permanent --add-service=ssh
 firewall-cmd --permanent --add-service=http
 firewall-cmd --permanent --add-service=https
 firewall-cmd --reload

@@ -1,0 +1,45 @@
+name: Deploy frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            APP_DIR="/var/www/iteka2026"
+            PM2_NAME="iteka-frontend"
+
+            if [ ! -d "$APP_DIR" ]; then
+              mkdir -p "$(dirname "$APP_DIR")"
+              git clone https://github.com/ininahazwe/iteka2026.git "$APP_DIR"
+            fi
+
+            cd "$APP_DIR"
+            git fetch origin
+            git checkout main
+            git pull origin main
+
+            cd frontend
+            npm ci
+            npm run build
+
+            if pm2 describe "$PM2_NAME" > /dev/null 2>&1; then
+              pm2 restart "$PM2_NAME"
+            else
+              pm2 start npm --name "$PM2_NAME" -- start -- -p 3000
+              pm2 save
+            fi
