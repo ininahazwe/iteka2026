@@ -88,8 +88,12 @@ export default function Home() {
   const aboutBlobBottomRef = useRef<HTMLDivElement>(null);
   const aboutSectionRef = useRef<HTMLElement>(null);
 
-  const blobImgA = galleryImages[3]?.image?.data?.url;
-  const blobImgB = galleryImages[4]?.image?.data?.url;
+  // Blobs About : récupérés depuis Gallery avec page_location
+  const blobsAbout = galleryImages
+    .filter((img: any) => img.page_location === 'home_about_blobs_top' || img.page_location === 'home_about_blobs_bottom')
+    .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+  const blobImgA = blobsAbout[0]?.image?.data?.url;
+  const blobImgB = blobsAbout[1]?.image?.data?.url;
 
   // Blobs About : filigrane dans le hero au chargement (gauche/droite),
   // convergent vers leur place naturelle dans About au scroll (scrub).
@@ -452,22 +456,31 @@ export default function Home() {
                   </Link>
                 </div>
                 <div className={styles.aboutMedia}>
-                  <div className={styles.aboutMediaTile}>
-                    {galleryImages[5]?.image?.data?.url ? (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[5].image.data.url}`}
-                            alt="What We Do"
-                        />
-                    ) : null}
-                  </div>
-                  <div className={`${styles.aboutMediaTile} ${styles.aboutMediaTileOffset}`}>
-                    {galleryImages[6]?.image?.data?.url ? (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[6].image.data.url}`}
-                            alt="What We Do"
-                        />
-                    ) : null}
-                  </div>
+                  {(() => {
+                    const whatWeDoImages = galleryImages
+                      .filter((img: any) => img.page_location === 'home_what_we_do')
+                      .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+                    return (
+                        <>
+                          <div className={styles.aboutMediaTile}>
+                            {whatWeDoImages[0]?.image?.data?.url ? (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${whatWeDoImages[0].image.data.url}`}
+                                    alt="What We Do"
+                                />
+                            ) : null}
+                          </div>
+                          <div className={`${styles.aboutMediaTile} ${styles.aboutMediaTileOffset}`}>
+                            {whatWeDoImages[1]?.image?.data?.url ? (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${whatWeDoImages[1].image.data.url}`}
+                                    alt="What We Do"
+                                />
+                            ) : null}
+                          </div>
+                        </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

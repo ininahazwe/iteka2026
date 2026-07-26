@@ -167,13 +167,15 @@
 
 @media (min-width: 768px) {
   .logoGrid {
-    grid-template-columns: repeat(4, 1fr);
+    /*grid-template-columns: repeat(4, 1fr);*/
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
 @media (min-width: 1024px) {
   .logoGrid {
-    grid-template-columns: repeat(5, 1fr);
+    /*grid-template-columns: repeat(5, 1fr);*/
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 

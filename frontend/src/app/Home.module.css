@@ -291,9 +291,9 @@
 .aboutSection {
   padding: 80px 0;
   background-color: var(--iteka-cream);
-  background-image:
+  /*background-image:
     linear-gradient(#eee7d8 1px, transparent 1px),
-    linear-gradient(90deg, #eee7d8 1px, transparent 1px);
+    linear-gradient(90deg, #eee7d8 1px, transparent 1px);*/
   background-size: 45px 45px;
 }
 

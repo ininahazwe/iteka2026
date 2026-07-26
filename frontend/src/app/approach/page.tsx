@@ -137,22 +137,32 @@ export default function ApproachPage() {
             <div className={shared.container}>
               <div className={styles.frameworkGrid}>
                 <div className={shared.mediaGrid}>
-                  <div className={shared.mediaTile}>
-                    {galleryImages[7]?.image?.data?.url && (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[7].image.data.url}`}
-                            alt="Our Approach"
-                        />
-                    )}
-                  </div>
-                  <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
-                    {galleryImages[8]?.image?.data?.url && (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[8].image.data.url}`}
-                            alt="Our Approach"
-                        />
-                    )}
-                  </div>
+                  {/* Images filtrées par section "approach_framework" */}
+                  {(() => {
+                    const imgs = galleryImages
+                      .filter((img: any) => img.page_location === 'approach_holistic_framework')
+                      .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+                    return (
+                        <>
+                          <div className={shared.mediaTile}>
+                            {imgs[0]?.image?.data?.url && (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[0].image.data.url}`}
+                                    alt="Our Approach"
+                                />
+                            )}
+                          </div>
+                          <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
+                            {imgs[1]?.image?.data?.url && (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[1].image.data.url}`}
+                                    alt="Our Approach"
+                                />
+                            )}
+                          </div>
+                        </>
+                    );
+                  })()}
                 </div>
 
                 <div className={styles.frameworkCopy}>
@@ -286,22 +296,32 @@ export default function ApproachPage() {
                 </div>
 
                 <div className={shared.mediaGrid}>
-                  <div className={shared.mediaTile}>
-                    {galleryImages[9]?.image?.data?.url && (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[9].image.data.url}`}
-                            alt="Impact"
-                        />
-                    )}
-                  </div>
-                  <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
-                    {galleryImages[10]?.image?.data?.url && (
-                        <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[10].image.data.url}`}
-                            alt="Impact"
-                        />
-                    )}
-                  </div>
+                  {/* Images filtrées par section "approach_measured" */}
+                  {(() => {
+                    const imgs = galleryImages
+                      .filter((img: any) => img.page_location === 'approach_measured_for_impact')
+                      .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
+                    return (
+                        <>
+                          <div className={shared.mediaTile}>
+                            {imgs[0]?.image?.data?.url && (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[0].image.data.url}`}
+                                    alt="Impact"
+                                />
+                            )}
+                          </div>
+                          <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
+                            {imgs[1]?.image?.data?.url && (
+                                <img
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[1].image.data.url}`}
+                                    alt="Impact"
+                                />
+                            )}
+                          </div>
+                        </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

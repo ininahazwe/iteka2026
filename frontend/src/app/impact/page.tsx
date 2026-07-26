@@ -213,12 +213,15 @@ export default function ImpactPage() {
             <div className={shared.container}>
               <div className={styles.storyGrid}>
                 <div className={styles.storyImage}>
-                  {galleryImages[0]?.image?.data?.url && (
-                      <img
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[0].image.data.url}`}
-                          alt="Impact Story"
-                      />
-                  )}
+                  {(() => {
+                    const storyImg = galleryImages.find((img: any) => img.page_location === 'impact_story');
+                    return storyImg?.image?.data?.url && (
+                        <img
+                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${storyImg.image.data.url}`}
+                            alt="Impact Story"
+                        />
+                    );
+                  })()}
                 </div>
 
                 <div className={styles.storyCopy}>
@@ -334,7 +337,11 @@ export default function ImpactPage() {
                     Impact In Action
                   </h2>
                   <div className={shared.photoGrid}>
-                    {galleryImages.slice(0, 8).map((img: any, idx: number) => (
+                    {galleryImages
+                      .filter((img: any) => img.page_location === 'impact_gallery')
+                      .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
+                      .slice(0, 8)
+                      .map((img: any, idx: number) => (
                         <div key={idx} className={shared.photoItem}>
                           <img
                               src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}

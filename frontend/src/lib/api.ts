@@ -229,6 +229,7 @@ const GALLERY_QUERY_FIELDS = `
   galleryFields {
     caption
     category
+    pageLocation
     dateTaken
     photographer
     order
@@ -237,16 +238,30 @@ const GALLERY_QUERY_FIELDS = `
 
 function mapGalleryItem(node: any) {
   const f = node.galleryFields || {};
-  return {
+  let loc = Array.isArray(f.pageLocation) ? f.pageLocation[0] : f.pageLocation;
+
+  // ACF retourne "key → label" ou string "null" : extraire juste la clé
+  if (typeof loc === 'string') {
+    loc = loc.split(' → ')[0].trim();
+    if (loc === 'null' || loc === 'Null' || !loc) {
+      loc = null;
+    }
+  }
+
+  const result = {
     id: node.databaseId,
     image: mediaFromEdge(node.featuredImage),
     caption: f.caption,
     // ACF select renvoie un tableau (["Events"]) : on normalise en string
     category: Array.isArray(f.category) ? f.category[0] : f.category,
+    // pageLocation optionnel : defaults à 'gallery' si vide
+    page_location: loc || 'gallery',
     date_taken: f.dateTaken,
     photographer: f.photographer,
     order: f.order ?? 0,
   };
+  console.log('Gallery item:', result.id, 'pageLocation clean:', loc, 'final:', result.page_location);
+  return result;
 }
 
 export const fetchGalleries = async (category?: string) => {

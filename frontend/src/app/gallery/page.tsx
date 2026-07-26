@@ -34,9 +34,11 @@ export default function GalleryPage() {
         })),
     ];
 
-    const filteredImages = images.filter((item: any) =>
-        filter === 'all' || (typeof item.category === 'string' && item.category.toLowerCase() === filter)
-    );
+    const filteredImages = images
+        .filter((item: any) => item.page_location === 'gallery')
+        .filter((item: any) =>
+            filter === 'all' || (typeof item.category === 'string' && item.category.toLowerCase() === filter)
+        );
 
     return (
         <>
