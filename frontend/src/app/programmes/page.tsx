@@ -31,8 +31,7 @@ export default function ProgrammesPage() {
                             <span className={shared.accent}>Real Impact.</span>
                         </h1>
                         <p className={shared.pageHeroText}>
-                            Discover our comprehensive suite of programmes designed to empower Rwandan youth
-                            through talent discovery, skills development, and peace promotion.
+                            Discover our comprehensive suite of programmes designed to empower young people through talent discovery, skills development, and peace promotion.
                         </p>
                     </div>
                 </section>

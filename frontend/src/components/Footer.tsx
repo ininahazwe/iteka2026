@@ -38,7 +38,7 @@ export default function Footer() {
     about: [
       { href: '/about', label: 'About Us' },
       { href: '/approach', label: 'Our Approach' },
-      { href: '/team', label: 'Team' },
+      // { href: '/team', label: 'Team' },
       { href: '/partners', label: 'Partners' },
     ],
     work: [
@@ -158,7 +158,7 @@ export default function Footer() {
                 </li>
                 <li className={styles.contactItem}>
                   <Phone size={16} />
-                  <a href="tel:+250789429057">+250 789 429 057</a>
+                  <a href="tel:+250791511388">+250 791 511 388</a>
                 </li>
               </ul>
 

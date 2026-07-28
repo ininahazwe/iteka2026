@@ -25,7 +25,7 @@ export default function Header() {
       label: 'More',
       sublinks: [
         { href: '/partners', label: 'Partners' },
-        { href: '/team', label: 'Team' },
+        // { href: '/team', label: 'Team' },
         { href: '/gallery', label: 'Gallery' },
       ]
     },

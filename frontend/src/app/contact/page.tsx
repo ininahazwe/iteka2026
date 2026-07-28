@@ -106,8 +106,8 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <p className={styles.infoLabel}>Email</p>
-                          <a href="mailto:hello@itekarwanda.org" className={styles.infoValue}>
-                            hello@itekarwanda.org
+                          <a href="mailto:contact@itekarwanda.org" className={styles.infoValue}>
+                            contact@itekarwanda.org
                           </a>
                         </div>
                       </div>

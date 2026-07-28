@@ -238,29 +238,33 @@ const GALLERY_QUERY_FIELDS = `
 
 function mapGalleryItem(node: any) {
   const f = node.galleryFields || {};
-  let loc = Array.isArray(f.pageLocation) ? f.pageLocation[0] : f.pageLocation;
 
-  // ACF retourne "key → label" ou string "null" : extraire juste la clé
-  if (typeof loc === 'string') {
-    loc = loc.split(' → ')[0].trim();
-    if (loc === 'null' || loc === 'Null' || !loc) {
-      loc = null;
+  // Parser helper : ACF retourne "key → label" ou string "null"
+  const parseACFSelect = (val: any): string | null => {
+    let result = Array.isArray(val) ? val[0] : val;
+    if (typeof result === 'string') {
+      result = result.split(' → ')[0].trim();
+      if (result === 'null' || result === 'Null' || !result) {
+        return null;
+      }
     }
-  }
+    return result || null;
+  };
+
+  const loc = parseACFSelect(f.pageLocation);
+  const cat = parseACFSelect(f.category);
 
   const result = {
     id: node.databaseId,
     image: mediaFromEdge(node.featuredImage),
     caption: f.caption,
-    // ACF select renvoie un tableau (["Events"]) : on normalise en string
-    category: Array.isArray(f.category) ? f.category[0] : f.category,
-    // pageLocation optionnel : defaults à 'gallery' si vide
+    category: cat,
     page_location: loc || 'gallery',
     date_taken: f.dateTaken,
     photographer: f.photographer,
     order: f.order ?? 0,
   };
-  console.log('Gallery item:', result.id, 'pageLocation clean:', loc, 'final:', result.page_location);
+  console.log('Gallery item:', result.id, 'category:', cat, 'pageLocation:', loc);
   return result;
 }
 
