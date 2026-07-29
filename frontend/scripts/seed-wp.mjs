@@ -147,8 +147,8 @@ const impactStats = [
     acf: { label: 'Art for Youth Participants', value: '100', description: 'Directly engaged across Burundi, DRC, and Rwanda (50 female, 43 male)', icon: 'palette', order: 3 },
   },
   {
-    title: 'IACF Festival-Goers',
-    acf: { label: 'IACF Festival-Goers', value: '600+', description: 'Attendance at the Iteka African Cultural Festival, with 94% likely to recommend', icon: 'calendar', order: 4 },
+    title: 'IACF 4th edition',
+    acf: { label: 'IACF 4th edition', value: '600+', description: 'Attendance at the Iteka African Cultural Festival, with 94% likely to recommend', icon: 'calendar', order: 4 },
   },
 ];
 
@@ -222,7 +222,7 @@ const festival = {
       p('The Iteka African Cultural Festival (IACF) is an annual, multi-day celebration of African heritage that brings together artists, musicians, dancers, performers, culinary experts, schools, and communities from across the region.') +
       p('Through live performances, workshops, intercultural competitions, and exhibitions, the festival creates a vibrant, high-visibility space where culture is both honoured and reimagined, growing in scale, reach, and impact with every edition. At its core, IACF is driven by a commitment to youth empowerment, cultural preservation, and social transformation.') +
       p('It is a place where communities gather in pride, where emerging talent shares the stage with established artists, and where the richness of African identity is celebrated in all its forms. With a strong network of institutional partners and a proven track record of growth, IACF stands as one of the region\'s most meaningful platforms for culture, creativity, and community.') +
-      p('<strong>Attendance:</strong> 600+ festival-goers &middot; <strong>Mean experience score:</strong> 7.7/10 &middot; <strong>Would recommend:</strong> 94% likely or very likely &middot; <strong>Rated 8 or above:</strong> 62.5%'),
+      p('<strong>Attendance:</strong> 600+ 4th edition &middot; <strong>Mean experience score:</strong> 7.7/10 &middot; <strong>Would recommend:</strong> 94% likely or very likely &middot; <strong>Rated 8 or above:</strong> 62.5%'),
   },
 };
 
