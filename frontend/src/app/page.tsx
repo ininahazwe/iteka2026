@@ -343,7 +343,7 @@ export default function Home() {
           {/* Partners Logos */}
           <section className={styles.partners}>
             <div className={styles.partnersContainer}>
-              <p className={styles.partnersLabel}>Our Supported Partners</p>
+              <p className={styles.partnersLabel}>Our Partners</p>
               <div className={styles.partnersRow}>
                 {partners.length > 0 ? (
                     partners.slice(0, 8).map((partner: any) => {
