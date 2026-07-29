@@ -54,7 +54,7 @@ export default function ProgrammesPage() {
                                     <p className={shared.statLabel}>Partner Organizations</p>
                                 </div>
                                 <div>
-                                    <div className={shared.statValue} style={{ color: '#3F7A4F' }}>12+</div>
+                                    <div className={shared.statValue} style={{ color: '#3F7A4F' }}>6+</div>
                                     <p className={shared.statLabel}>Districts Covered</p>
                                 </div>
                             </div>
