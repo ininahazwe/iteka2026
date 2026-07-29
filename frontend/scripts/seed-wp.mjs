@@ -143,8 +143,8 @@ const impactStats = [
     acf: { label: 'Social Media Views', value: '31,000+', description: "Views across IYO's platforms: X, Instagram, YouTube, Facebook and LinkedIn", icon: 'eye', order: 2 },
   },
   {
-    title: 'Art for Youth Participants',
-    acf: { label: 'Art for Youth Participants', value: '93', description: 'Directly engaged across Burundi, DRC, and Rwanda (50 female, 43 male)', icon: 'palette', order: 3 },
+    title: 'Art for Youth Resilience and Livelihood',
+    acf: { label: 'Art for Youth Participants', value: '100', description: 'Directly engaged across Burundi, DRC, and Rwanda (50 female, 43 male)', icon: 'palette', order: 3 },
   },
   {
     title: 'IACF Festival-Goers',

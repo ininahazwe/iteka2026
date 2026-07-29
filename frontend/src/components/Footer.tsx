@@ -154,7 +154,7 @@ export default function Footer() {
                 </li>
                 <li className={styles.contactItem}>
                   <Mail size={16} />
-                  <a href="mailto:hello@itekarwanda.org">hello@itekarwanda.org</a>
+                  <a href="mailto:contact@itekarwanda.org">contact@itekarwanda.org</a>
                 </li>
                 <li className={styles.contactItem}>
                   <Phone size={16} />

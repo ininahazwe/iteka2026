@@ -247,7 +247,7 @@ export default function Home() {
                     <span className={styles.accent}>Results With Impact.</span>
                   </h1>
                   <p className={styles.heroLead}>
-                    Discover talents. Develop skills. Promote peace among Rwandan youth.
+                    Discover talents. Develop skills. Peacebuilding.
                   </p>
                   <div className={styles.heroCtas}>
                     <Link href="/programmes" className={shared.btnPrimary}>
