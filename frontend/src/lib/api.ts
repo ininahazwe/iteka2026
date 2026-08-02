@@ -458,6 +458,7 @@ const EVENT_QUERY_FIELDS = `
   databaseId
   title
   date
+  content
   featuredImage { node { sourceUrl } }
   eventFields {
     type
@@ -472,8 +473,45 @@ const EVENT_QUERY_FIELDS = `
   }
 `;
 
+// Bloc Galerie natif WordPress (Gutenberg) : les images collées dans le
+// contenu de l'event ("Festival Moments") sont rendues en HTML
+// (<figure class="wp-block-gallery">...<img src="...">...</figure>).
+// On les extrait par regex plutôt que DOMParser (indisponible côté SSR).
+function extractGalleryImages(html?: string | null): { url: string }[] {
+  if (!html) return [];
+
+  let scope = html;
+  const openMatch = html.match(/<figure\b[^>]*wp-block-gallery[^>]*>/i);
+  if (openMatch && openMatch.index !== undefined) {
+    // Chaque image du bloc Galerie est elle-même wrappée dans un <figure>
+    // (wp-block-image) imbriqué : il faut compter les ouvertures/fermetures
+    // pour trouver le </figure> qui referme la galerie, pas le premier venu.
+    const rest = html.slice(openMatch.index + openMatch[0].length);
+    const tagRe = /<figure\b[^>]*>|<\/figure>/gi;
+    let depth = 1;
+    let endIdx = rest.length;
+    let m: RegExpExecArray | null;
+    while ((m = tagRe.exec(rest)) !== null) {
+      if (m[0].toLowerCase().startsWith('</')) {
+        depth--;
+        if (depth === 0) {
+          endIdx = m.index;
+          break;
+        }
+      } else {
+        depth++;
+      }
+    }
+    scope = rest.slice(0, endIdx);
+  }
+
+  const urls = Array.from(scope.matchAll(/<img[^>]+src="([^"]+)"/gi)).map((m) => m[1]);
+  return urls.map((url) => ({ url }));
+}
+
 function mapEvent(node: any) {
   const f = node.eventFields || {};
+  const contentGallery = extractGalleryImages(node.content);
   return {
     id: node.databaseId,
     title: node.title,
@@ -488,7 +526,9 @@ function mapEvent(node: any) {
     date_end: f.dateEnd,
     location: f.locationName,
     hero_image: mediaFromEdge(node.featuredImage),
-    gallery: f.galleryImage ? [mediaFromEdge(f.galleryImage)] : [],
+    // Priorité au bloc Galerie natif WP (multi-images) collé dans le contenu
+    // de l'event ; fallback sur l'ancien champ ACF galleryImage (1 image).
+    gallery: contentGallery.length > 0 ? contentGallery : (f.galleryImage ? [mediaFromEdge(f.galleryImage)] : []),
     program_pdf: f.programPdf?.node?.mediaItemUrl || null,
     registration_url: f.registrationUrl,
   };
