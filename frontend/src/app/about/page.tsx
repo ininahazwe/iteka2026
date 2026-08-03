@@ -171,7 +171,7 @@ export default function AboutPage() {
                   <h3 className={styles.pillarTitle}>Talent Discovery</h3>
                   <p className={styles.pillarText}>
                     We employ structured, community-embedded approaches to identify exceptional ability
-                    in arts, sports, technology, entrepreneurship, and leadership among young people who
+                    in arts, technology, entrepreneurship, and leadership among young people who
                     are too often overlooked. Our frameworks surface potential early and create clear
                     pathways from identification to opportunity.
                   </p>

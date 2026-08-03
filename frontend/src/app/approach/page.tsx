@@ -20,7 +20,7 @@ export default function ApproachPage() {
       number: '01',
       title: 'Talent Discovery',
       description:
-          'We employ structured, community-embedded approaches to identify exceptional ability in arts, sports, technology, entrepreneurship, and leadership among young people who are too often overlooked. Our talent discovery frameworks are designed to surface potential early and create clear pathways from identification to opportunity.',
+          'We employ structured, community-embedded approaches to identify exceptional ability in arts, technology, entrepreneurship, and leadership among young people who are too often overlooked. Our talent discovery frameworks are designed to surface potential early and create clear pathways from identification to opportunity.',
       icon: Search,
     },
     {

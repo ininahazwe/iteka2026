@@ -94,7 +94,7 @@ export default function FestivalPage() {
                 <section className={styles.quickInfoSection}>
                     <div className={shared.container}>
                         <div className={styles.quickInfoGrid}>
-                            {data.date_start && (
+                            {/*{data.date_start && (
                                 <div className={styles.quickInfoCard}>
                                     <div className={styles.quickInfoIcon}>
                                         <Calendar size={22} />
@@ -116,7 +116,7 @@ export default function FestivalPage() {
                                         </p>
                                     </div>
                                 </div>
-                            )}
+                            )}*/}
 
                             {data.location && (
                                 <div className={styles.quickInfoCard}>
@@ -130,7 +130,7 @@ export default function FestivalPage() {
                                 </div>
                             )}
 
-                            <div className={styles.quickInfoCard}>
+                           {/*<div className={styles.quickInfoCard}>
                                 <div className={styles.quickInfoIcon}>
                                     <Users size={22} />
                                 </div>
@@ -138,7 +138,7 @@ export default function FestivalPage() {
                                     <p className={styles.quickInfoLabel}>Expected</p>
                                     <p className={styles.quickInfoValue}>1,000+ Attendees</p>
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
                 </section>
@@ -215,7 +215,7 @@ export default function FestivalPage() {
                                 </div>
                                 <h3 className={styles.expectTitle}>Live Performances</h3>
                                 <p className={styles.expectText}>
-                                    Experience traditional and contemporary Rwandan music, dance, and cultural
+                                    Experience traditional and contemporary african music, dance, and cultural
                                     performances
                                 </p>
                             </div>

@@ -432,7 +432,7 @@ export default function Home() {
                       <span className={styles.pillarNum}>01</span>
                       <span className={styles.pillarBody}>
                         <strong>Talent Discovery</strong>
-                        Unearthing and nurturing unique abilities in the arts, sports, technology, and entrepreneurship, providing young people with the stage to showcase their potential.
+                        Unearthing and nurturing unique abilities in the arts, technology, and entrepreneurship, providing young people with the stage to showcase their potential.
                       </span>
                     </li>
                     <li className={styles.pillarItem}>

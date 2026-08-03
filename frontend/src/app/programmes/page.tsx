@@ -77,7 +77,7 @@ export default function ProgrammesPage() {
                                 </div>
                                 <h3 className={styles.focusTitle}>Talent Discovery</h3>
                                 <p className={styles.focusText}>
-                                    Programmes focused on identifying unique abilities in arts, sports, technology,
+                                    Programmes focused on identifying unique abilities in arts, technology,
                                     and entrepreneurship
                                 </p>
                             </div>
