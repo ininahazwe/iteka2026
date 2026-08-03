@@ -277,7 +277,7 @@ export default function FestivalPage() {
                     <div className={shared.container}>
                         <h2 className={styles.finalCtaTitle}>Don't Miss This Celebration!</h2>
                         <p className={styles.finalCtaText}>
-                            Join us for an unforgettable celebration of Rwandan culture, talent, and unity
+                            Join us for an unforgettable celebration of african culture, talent, and unity
                         </p>
                         {data.registration_url && (
                             <a

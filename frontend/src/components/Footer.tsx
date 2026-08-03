@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { Facebook, Twitter, Linkedin, Mail, MapPin, Phone, ArrowRight, Check } from 'lucide-react';
+import {Facebook, Twitter, Linkedin, Mail, MapPin, Phone, ArrowRight, Check, Instagram, Youtube} from 'lucide-react';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -57,6 +57,8 @@ export default function Footer() {
   const socialLinks = [
     { href: 'https://www.facebook.com/itekayouthorganization/', icon: Facebook, label: 'Facebook' },
     { href: 'https://x.com/ItekaYouth', icon: Twitter, label: 'Twitter' },
+    { href: 'https://www.instagram.com/itekayouthorganisation/', icon: Instagram, label: 'Instagram' },
+    { href: 'https://www.youtube.com/@ItekaYouthOrganizationRwanda', icon: Youtube, label: 'Youtube' },
     { href: 'https://www.linkedin.com/company/iteka-youth-organization', icon: Linkedin, label: 'LinkedIn' },
   ];
 

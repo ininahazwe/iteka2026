@@ -209,19 +209,19 @@
 }
 
 .socialLink {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  /*background: rgba(255, 255, 255, 0.1);*/
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s ease;
+  transition: opacity 0.15s ease;
   color: #fff;
 }
 
 .socialLink:hover {
-  background: var(--iteka-orange);
+  opacity: 0.8;
 }
 
 /* ---- Bottom bar ---- */
