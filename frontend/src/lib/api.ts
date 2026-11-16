@@ -20,9 +20,9 @@ async function wpFetch<T = any>(query: string, variables: Record<string, any> = 
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
-    // Les pages qui appellent ces fonctions via React Query gèrent déjà le
-    // cache côté client ; pas besoin du cache Next ici.
-    cache: 'no-store',
+    // Côté serveur (pages SEO, sitemap) : revalidation ISR toutes les 5 minutes.
+    // Côté navigateur (React Query), l'option `next` est ignorée.
+    next: { revalidate: 300 },
   });
 
   const json = await res.json();

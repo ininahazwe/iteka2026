@@ -1,11 +1,13 @@
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
+import { pageMetadata } from '@/src/lib/seo';
 import styles from '../legal.module.css';
 
-export const metadata = {
-    title: 'Terms of Service | Iteka Youth Organization',
+export const metadata = pageMetadata({
+    title: 'Terms of Service',
     description: 'Terms governing the use of the Iteka Youth Organization website.',
-};
+    path: '/terms',
+});
 
 export default function TermsPage() {
     const lastUpdated = 'July 2026';

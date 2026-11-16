@@ -1,58 +1,76 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
+import { cache } from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, User, ExternalLink, Share2 } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
-import { fetchActualiteBySlug } from '@/src/lib/api';
+import { ArticleSchema, BreadcrumbSchema } from '@/src/components/StructureData';
+import { fetchActualiteBySlug, fetchActualites } from '@/src/lib/api';
+import { SITE_URL, pageMetadata, toDescription, toIsoDate, mediaAbsoluteUrl } from '@/src/lib/seo';
 import styles from './NewsDetail.module.css';
 import shared from '@/src/styles/shared.module.css';
 
-export default function NewsDetailPage() {
-    const params = useParams();
-    const slug = params.id as string;
+// Rendu serveur + ISR : le contenu est dans le HTML initial et régénéré toutes les 5 minutes.
+export const revalidate = 300;
 
-    const { data: article, isLoading } = useQuery({
-        queryKey: ['actualite', slug],
-        queryFn: () => fetchActualiteBySlug(slug),
-    });
+const getArticle = cache((slug: string) => fetchActualiteBySlug(slug));
 
-    if (isLoading) {
-        return (
-            <>
-                <Header />
-                <div className={shared.fullscreenCenter}>
-                    <div className={shared.spinner}></div>
-                    <p className={shared.loadingText}>Loading article...</p>
-                </div>
-                <Footer />
-            </>
-        );
+type Props = { params: Promise<{ id: string }> };
+
+export async function generateStaticParams() {
+    try {
+        const articles = await fetchActualites();
+        return articles.filter((a: any) => a.slug).map((a: any) => ({ id: a.slug }));
+    } catch {
+        return [];
     }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { id } = await params;
+    const article = await getArticle(id);
+    if (!article) {
+        return { title: 'Article Not Found', robots: { index: false, follow: false } };
+    }
+    return pageMetadata({
+        title: article.title,
+        description: toDescription(article.excerpt || article.content) || article.title,
+        path: `/news/${article.slug}`,
+        image: mediaAbsoluteUrl(article.featured_image?.data?.url),
+        type: 'article',
+        publishedTime: toIsoDate(article.article_date || article.publishedAt),
+    });
+}
+
+export default async function NewsDetailPage({ params }: Props) {
+    const { id: slug } = await params;
+    const article = await getArticle(slug);
 
     if (!article) {
-        return (
-            <>
-                <Header />
-                <div className={shared.fullscreenCenter}>
-                    <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 16 }}>Article Not Found</h2>
-                    <p className={shared.sectionSubCenter} style={{ marginBottom: 16 }}>
-                        The article you're looking for doesn't exist.
-                    </p>
-                    <Link href="/news" className={shared.btnPrimary}>
-                        <ArrowLeft size={16} />
-                        Back to News
-                    </Link>
-                </div>
-                <Footer />
-            </>
-        );
+        notFound();
     }
+
+    const url = `${SITE_URL}/news/${article.slug}`;
 
     return (
         <>
+            <ArticleSchema
+                title={article.title}
+                description={toDescription(article.excerpt || article.content) || article.title}
+                url={url}
+                image={mediaAbsoluteUrl(article.featured_image?.data?.url)}
+                datePublished={toIsoDate(article.article_date || article.publishedAt)}
+                dateModified={toIsoDate(article.publishedAt)}
+                author={article.author}
+            />
+            <BreadcrumbSchema
+                items={[
+                    { name: 'Home', url: SITE_URL },
+                    { name: 'News', url: `${SITE_URL}/news` },
+                    { name: article.title, url },
+                ]}
+            />
             <Header />
 
             <main>

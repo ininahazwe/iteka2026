@@ -1,8 +1,8 @@
 // app/sitemap.ts
 import { MetadataRoute } from 'next';
 import { fetchProgrammes, fetchActualites } from '@/src/lib/api';
+import { SITE_URL, toIsoDate } from '@/src/lib/seo';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://2026.itekarwanda.org';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const [programmes, news] = await Promise.all([
@@ -94,7 +94,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const newsUrls = news.map((article: any) => ({
         url: `${SITE_URL}/news/${article.slug}`,
-        lastModified: new Date(article.article_date || Date.now()),
+        lastModified: new Date(toIsoDate(article.article_date) || Date.now()),
         changeFrequency: 'never' as const,
         priority: 0.6,
     }));

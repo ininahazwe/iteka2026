@@ -1,60 +1,82 @@
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
+import { cache } from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, CheckCircle, Users, Calendar, MapPin } from 'lucide-react';
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
-import { fetchProgrammeBySlug } from '@/src/lib/api';
+import { ProgrammeSchema, BreadcrumbSchema } from '@/src/components/StructureData';
+import { fetchProgrammeBySlug, fetchProgrammes } from '@/src/lib/api';
+import { SITE_URL, pageMetadata, toDescription, mediaAbsoluteUrl } from '@/src/lib/seo';
 import styles from './ProgrammeDetail.module.css';
 import shared from '@/src/styles/shared.module.css';
 
-export default function ProgrammeDetailPage() {
-    const params = useParams();
-    const slug = params.id as string;
+// Rendu serveur + ISR : le contenu est dans le HTML initial et régénéré toutes les 5 minutes.
+export const revalidate = 300;
 
-    const { data: programme, isLoading } = useQuery({
-        queryKey: ['programme', slug],
-        queryFn: () => fetchProgrammeBySlug(slug),
-    });
+// Mémoïse la requête pour qu'elle ne soit faite qu'une fois par rendu
+// (generateMetadata et la page l'appellent tous les deux).
+const getProgramme = cache((slug: string) => fetchProgrammeBySlug(slug));
 
-    const accentColors = ['#E87722', '#00A3A3', '#E91E63', '#3F7A4F'];
+type Props = { params: Promise<{ id: string }> };
 
-    if (isLoading) {
-        return (
-            <>
-                <Header />
-                <div className={shared.fullscreenCenter}>
-                    <div className={shared.spinner}></div>
-                    <p className={shared.loadingText}>Loading programme...</p>
-                </div>
-                <Footer />
-            </>
-        );
+export async function generateStaticParams() {
+    try {
+        const programmes = await fetchProgrammes();
+        return programmes.filter((p: any) => p.slug).map((p: any) => ({ id: p.slug }));
+    } catch {
+        // WordPress injoignable au build : les pages seront générées à la demande (ISR).
+        return [];
     }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { id } = await params;
+    const programme = await getProgramme(id);
+    if (!programme) {
+        return { title: 'Programme Not Found', robots: { index: false, follow: false } };
+    }
+    return pageMetadata({
+        title: programme.name,
+        description:
+            toDescription(programme.short_description) ||
+            toDescription(programme.description) ||
+            `${programme.name} - a youth programme by Iteka Youth Organization in Rwanda.`,
+        path: `/programmes/${programme.slug}`,
+        image: mediaAbsoluteUrl(programme.featured_image?.data?.url),
+    });
+}
+
+export default async function ProgrammeDetailPage({ params }: Props) {
+    const { id: slug } = await params;
+    const programme = await getProgramme(slug);
 
     if (!programme) {
-        return (
-            <>
-                <Header />
-                <div className={shared.fullscreenCenter}>
-                    <h2 className={shared.sectionTitleCenter} style={{ marginBottom: 16 }}>Programme Not Found</h2>
-                    <p className={shared.sectionSubCenter} style={{ marginBottom: 16 }}>
-                        The programme you're looking for doesn't exist.
-                    </p>
-                    <Link href="/programmes" className={shared.btnPrimary}>
-                        <ArrowLeft size={16} />
-                        Back to Programmes
-                    </Link>
-                </div>
-                <Footer />
-            </>
-        );
+        notFound();
     }
+
+    const accentColors = ['#E87722', '#00A3A3', '#E91E63', '#3F7A4F'];
+    const url = `${SITE_URL}/programmes/${programme.slug}`;
 
     return (
         <>
+            <ProgrammeSchema
+                name={programme.name}
+                description={
+                    toDescription(programme.short_description) ||
+                    toDescription(programme.description) ||
+                    programme.name
+                }
+                url={url}
+                image={mediaAbsoluteUrl(programme.featured_image?.data?.url)}
+            />
+            <BreadcrumbSchema
+                items={[
+                    { name: 'Home', url: SITE_URL },
+                    { name: 'Programmes', url: `${SITE_URL}/programmes` },
+                    { name: programme.name, url },
+                ]}
+            />
             <Header />
 
             <main>
@@ -242,7 +264,7 @@ export default function ProgrammeDetailPage() {
                                     <div key={idx} className={styles.galleryTile}>
                                         <img
                                             src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img.url}`}
-                                            alt={`Gallery ${idx + 1}`}
+                                            alt={`${programme.name} - photo ${idx + 1}`}
                                         />
                                     </div>
                                 ))}

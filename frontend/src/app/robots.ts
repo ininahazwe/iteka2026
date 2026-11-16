@@ -1,9 +1,8 @@
 // app/robots.ts
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/src/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://iteka-frontend.vercel.app';
-
     return {
         rules: [
             {
@@ -12,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: ['/api/', '/_next/', '/admin/'],
             },
         ],
-        sitemap: `${siteUrl}/sitemap.xml`,
+        sitemap: `${SITE_URL}/sitemap.xml`,
     };
 }

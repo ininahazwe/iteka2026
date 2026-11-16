@@ -1,11 +1,13 @@
 import Header from '@/src/components/Header';
 import Footer from '@/src/components/Footer';
+import { pageMetadata } from '@/src/lib/seo';
 import styles from '../legal.module.css';
 
-export const metadata = {
-    title: 'Privacy Policy | Iteka Youth Organization',
+export const metadata = pageMetadata({
+    title: 'Privacy Policy',
     description: 'How Iteka Youth Organization collects, uses, and protects your personal data.',
-};
+    path: '/privacy',
+});
 
 export default function PrivacyPage() {
     const lastUpdated = 'July 2026';
