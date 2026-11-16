@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -208,7 +209,7 @@ export default function ImpactPage() {
                     const storyImg = galleryImages.find((img: any) => img.page_location === 'impact_story');
                     return storyImg?.image?.data?.url && (
                         <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${storyImg.image.data.url}`}
+                            src={`${WP_URL}${storyImg.image.data.url}`}
                             alt="Impact Story"
                         />
                     );
@@ -276,7 +277,7 @@ export default function ImpactPage() {
                           <div className={shared.testimonialAuthorRow}>
                             {testimonial.author_photo?.data?.url && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
+                                    src={`${WP_URL}${testimonial.author_photo.data.url}`}
                                     alt={testimonial.author_name}
                                     className={shared.testimonialAvatar}
                                 />
@@ -335,7 +336,7 @@ export default function ImpactPage() {
                       .map((img: any, idx: number) => (
                         <div key={idx} className={shared.photoItem}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}
+                              src={`${WP_URL}${img?.image?.data?.url}`}
                               alt={img?.caption || 'Impact'}
                           />
                           <div className={shared.photoOverlay}></div>

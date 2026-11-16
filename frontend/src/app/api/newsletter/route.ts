@@ -1,6 +1,6 @@
 // app/api/newsletter/route.ts
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { sendMail, escapeHtml } from '@/src/lib/mailer';
 
 async function verifyRecaptcha(token?: string): Promise<boolean> {
     if (!token) return true; // reCAPTCHA optional for newsletter signup
@@ -32,20 +32,13 @@ export async function POST(request: Request) {
 
         const destination = process.env.CONTACT_EMAIL || 'hello@itekarwanda.org';
 
-        // Instancié ici (et non au chargement du module) pour ne pas exiger la clé au build.
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const { error } = await resend.emails.send({
-            from: 'Iteka Newsletter <onboarding@resend.dev>',
-            to: [destination],
+        await sendMail({
+            fromName: 'Iteka Newsletter',
+            to: destination,
             replyTo: email,
             subject: 'New newsletter subscriber',
-            html: `<p>New newsletter signup: <strong>${email}</strong></p>`,
+            html: `<p>New newsletter signup: <strong>${escapeHtml(email)}</strong></p>`,
         });
-
-        if (error) {
-            console.error('Resend error (newsletter):', error);
-            return NextResponse.json({ error: 'Failed to subscribe' }, { status: 500 });
-        }
 
         return NextResponse.json({ success: true });
     } catch (error) {

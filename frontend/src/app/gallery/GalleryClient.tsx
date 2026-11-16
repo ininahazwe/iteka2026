@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -95,7 +96,7 @@ export default function GalleryPage() {
                                 {filteredImages.map((item: any) => (
                                     <div key={item.id} className={styles.imageTile}>
                                         <img
-                                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${item.image?.data?.url || item.image?.url}`}
+                                            src={`${WP_URL}${item.image?.data?.url || item.image?.url}`}
                                             alt={item.caption || 'Gallery image'}
                                         />
                                         <div className={styles.imageGradient}></div>

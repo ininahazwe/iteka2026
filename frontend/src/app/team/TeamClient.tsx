@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import { Users, Linkedin } from 'lucide-react';
@@ -47,7 +48,7 @@ export default function TeamPage() {
                         {member?.photo?.data?.url && (
                             <div className={styles.leaderPhoto}>
                               <img
-                                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.photo.data.url}`}
+                                  src={`${WP_URL}${member.photo.data.url}`}
                                   alt={member?.name}
                               />
                             </div>
@@ -91,7 +92,7 @@ export default function TeamPage() {
                         {member?.photo?.data?.url && (
                             <div className={styles.teamPhoto}>
                               <img
-                                  src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.photo.data.url}`}
+                                  src={`${WP_URL}${member.photo.data.url}`}
                                   alt={member?.name}
                               />
                             </div>

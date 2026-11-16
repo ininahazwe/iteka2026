@@ -8,16 +8,17 @@ export const SITE_NAME = 'Iteka Youth Organization';
 export const SITE_DESCRIPTION =
   "Iteka Youth Organization empowers Rwanda's youth through talent discovery, skills development and peacebuilding.";
 
+import { WP_URL } from './config';
+
 // Image par défaut pour les aperçus de partage (idéalement 1200x630, à remplacer plus tard).
 export const DEFAULT_OG_IMAGE = '/logo-iteka.png';
 
-const WP_ORIGIN = (process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.itekarwanda.org').replace(/\/$/, '');
 
 /** Transforme un chemin média WordPress (relatif) en URL absolue. */
 export function mediaAbsoluteUrl(path?: string | null): string | undefined {
   if (!path) return undefined;
   if (/^https?:\/\//i.test(path)) return path;
-  return `${WP_ORIGIN}${path.startsWith('/') ? '' : '/'}${path}`;
+  return `${WP_URL}${path.startsWith('/') ? '' : '/'}${path}`;
 }
 
 /** Retire le HTML, normalise les espaces et tronque proprement (pour meta description). */

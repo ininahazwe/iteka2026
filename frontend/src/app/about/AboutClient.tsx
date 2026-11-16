@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/src/components/Header';
@@ -94,7 +95,7 @@ export default function AboutPage() {
                     const storyImg = galleryImages.find((img: any) => img.page_location === 'about_our_story');
                     return storyImg?.image?.data?.url && (
                         <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${storyImg.image.data.url}`}
+                            src={`${WP_URL}${storyImg.image.data.url}`}
                             alt="Our Story"
                         />
                     );
@@ -211,7 +212,7 @@ export default function AboutPage() {
                           {member?.photo?.data?.url && (
                               <div className={styles.leadershipPhoto}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.photo.data.url}`}
+                                    src={`${WP_URL}${member.photo.data.url}`}
                                     alt={member?.name}
                                 />
                               </div>
@@ -253,7 +254,7 @@ export default function AboutPage() {
                       .map((img: any, idx: number) => (
                         <div key={idx} className={shared.photoItem}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}
+                              src={`${WP_URL}${img?.image?.data?.url}`}
                               alt={img?.caption || 'Iteka in action'}
                           />
                           <div className={shared.photoOverlay}></div>

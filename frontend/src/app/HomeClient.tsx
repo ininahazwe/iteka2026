@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -46,7 +47,7 @@ export default function Home() {
     if (!logo) return null;
     const url = logo.url || logo.data?.url;
     if (!url) return null;
-    return url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+    return url.startsWith('http') ? url : `${WP_URL}${url}`;
   };
 
   const featuredProgrammes = programmes.filter((p: any) => p?.is_featured);
@@ -196,12 +197,12 @@ export default function Home() {
               la section About au scroll et se muent en images (GSAP) */}
           <div ref={blobOrangeRef} className={`${styles.floatBlob} ${styles.floatBlobOrange}`} aria-hidden="true">
             {blobImgA && (
-                <img src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${blobImgA}`} alt="" />
+                <img src={`${WP_URL}${blobImgA}`} alt="" />
             )}
           </div>
           <div ref={blobGreenRef} className={`${styles.floatBlob} ${styles.floatBlobGreen}`} aria-hidden="true">
             {blobImgB && (
-                <img src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${blobImgB}`} alt="" />
+                <img src={`${WP_URL}${blobImgB}`} alt="" />
             )}
           </div>
 
@@ -236,7 +237,7 @@ export default function Home() {
                         {upcomingEvent.hero_image?.data?.url || upcomingEvent.gallery?.[0]?.data?.url ? (
                             <img
                                 className={styles.eventCardThumb}
-                                src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${upcomingEvent.hero_image?.data?.url || upcomingEvent.gallery?.[0]?.data?.url}`}
+                                src={`${WP_URL}${upcomingEvent.hero_image?.data?.url || upcomingEvent.gallery?.[0]?.data?.url}`}
                                 alt={upcomingEvent.title}
                             />
                         ) : (
@@ -277,7 +278,7 @@ export default function Home() {
                         {/* Image 1 - Grande verticale (occupe 2 lignes, gauche) */}
                         <div className={`${styles.galleryTile} ${styles.gallerySpan2}`}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage1]?.image?.data?.url}`}
+                              src={`${WP_URL}${galleryImages[heroImage1]?.image?.data?.url}`}
                               alt={galleryImages[heroImage1]?.caption || 'Iteka Youth'}
                           />
                         </div>
@@ -285,7 +286,7 @@ export default function Home() {
                         {/* Image 2 - Horizontale en haut (droite) */}
                         <div className={styles.galleryTile}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage2]?.image?.data?.url}`}
+                              src={`${WP_URL}${galleryImages[heroImage2]?.image?.data?.url}`}
                               alt={galleryImages[heroImage2]?.caption || 'Iteka Youth'}
                           />
                         </div>
@@ -293,7 +294,7 @@ export default function Home() {
                         {/* Image 3 - Horizontale en bas (droite) */}
                         <div className={styles.galleryTile}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[heroImage3]?.image?.data?.url}`}
+                              src={`${WP_URL}${galleryImages[heroImage3]?.image?.data?.url}`}
                               alt={galleryImages[heroImage3]?.caption || 'Iteka Youth'}
                           />
                         </div>
@@ -354,7 +355,7 @@ export default function Home() {
                       aria-label="Iteka youth"
                       style={
                         galleryImages[3]?.image?.data?.url
-                            ? { backgroundImage: `url(${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[3].image.data.url})` }
+                            ? { backgroundImage: `url(${WP_URL}${galleryImages[3].image.data.url})` }
                             : undefined
                       }
                   />
@@ -365,7 +366,7 @@ export default function Home() {
                       aria-label="Iteka community"
                       style={
                         galleryImages[4]?.image?.data?.url
-                            ? { backgroundImage: `url(${process.env.NEXT_PUBLIC_STRAPI_URL}${galleryImages[4].image.data.url})` }
+                            ? { backgroundImage: `url(${WP_URL}${galleryImages[4].image.data.url})` }
                             : undefined
                       }
                   />
@@ -436,7 +437,7 @@ export default function Home() {
                           <div className={styles.aboutMediaTile}>
                             {whatWeDoImages[0]?.image?.data?.url ? (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${whatWeDoImages[0].image.data.url}`}
+                                    src={`${WP_URL}${whatWeDoImages[0].image.data.url}`}
                                     alt={whatWeDoImages[0].caption || 'Young people taking part in Iteka programmes in Rwanda'}
                                 />
                             ) : null}
@@ -444,7 +445,7 @@ export default function Home() {
                           <div className={`${styles.aboutMediaTile} ${styles.aboutMediaTileOffset}`}>
                             {whatWeDoImages[1]?.image?.data?.url ? (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${whatWeDoImages[1].image.data.url}`}
+                                    src={`${WP_URL}${whatWeDoImages[1].image.data.url}`}
                                     alt={whatWeDoImages[1].caption || 'Young people taking part in Iteka programmes in Rwanda'}
                                 />
                             ) : null}
@@ -545,7 +546,7 @@ export default function Home() {
                           {article?.featured_image?.data && (
                               <div className={styles.newsImageWrap}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.featured_image.data.url}`}
+                                    src={`${WP_URL}${article.featured_image.data.url}`}
                                     alt={article?.title}
                                 />
                               </div>
@@ -582,7 +583,7 @@ export default function Home() {
                           <div className={styles.testimonialAuthorRow}>
                             {testimonial?.author_photo?.data && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${testimonial.author_photo.data.url}`}
+                                    src={`${WP_URL}${testimonial.author_photo.data.url}`}
                                     alt={testimonial?.author_name}
                                     className={styles.testimonialAvatar}
                                 />
@@ -630,7 +631,7 @@ export default function Home() {
                     {galleryImages.slice(0, 8).map((img: any, idx: number) => (
                         <div key={idx} className={shared.photoItem}>
                           <img
-                              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img?.image?.data?.url}`}
+                              src={`${WP_URL}${img?.image?.data?.url}`}
                               alt={img?.caption || 'Impact'}
                           />
                           <div className={shared.photoOverlay}></div>

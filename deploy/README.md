@@ -26,10 +26,8 @@ NEXT_PUBLIC_SITE_URL=https://itekarwanda.org
 
 # --- Backend WordPress ----------------------------------------------------
 NEXT_PUBLIC_WP_GRAPHQL_URL=https://admin.itekarwanda.org/graphql
-# Conservé sous ce nom pour des raisons historiques : sert d'origine WordPress
-# pour préfixer les URLs d'images (voir le commentaire en tête de src/lib/api.ts).
-NEXT_PUBLIC_STRAPI_URL=https://admin.itekarwanda.org
-STRAPI_API_TOKEN=
+# Origine WordPress, utilisée pour préfixer les URLs d'images (src/lib/config.ts).
+NEXT_PUBLIC_WP_URL=https://admin.itekarwanda.org
 
 # --- Stripe ---------------------------------------------------------------
 # NON UTILISÉ dans le projet. À décommenter si la page /donate est activée.
@@ -43,8 +41,9 @@ SMTP_HOST=
 SMTP_PORT=
 SMTP_USER=
 SMTP_PASS=
+# Adresse d'expédition (optionnel, par défaut SMTP_USER)
+# SMTP_FROM=
 CONTACT_EMAIL=contact@itekarwanda.org
-RESEND_API_KEY=
 
 # --- reCAPTCHA v3 ---------------------------------------------------------
 # Les clés sont liées à une liste de domaines côté Google : ajouter

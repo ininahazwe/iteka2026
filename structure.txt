@@ -57,7 +57,6 @@
 │   │   └── lib
 │   ├── tailwind.config.ts
 │   └── tsconfig.json
-├── railway.json
 └── structure.txt
 
 24 directories, 37 files

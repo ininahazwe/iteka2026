@@ -1,3 +1,4 @@
+import { WP_URL } from '@/src/lib/config';
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -85,7 +86,7 @@ export default async function ProgrammeDetailPage({ params }: Props) {
                     {programme.featured_image?.data?.url && (
                         <>
                             <img
-                                src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${programme.featured_image.data.url}`}
+                                src={`${WP_URL}${programme.featured_image.data.url}`}
                                 alt={programme.name}
                             />
                             <div className={styles.heroOverlay}></div>
@@ -263,7 +264,7 @@ export default async function ProgrammeDetailPage({ params }: Props) {
                                 {programme.gallery.data.slice(0, 6).map((img: any, idx: number) => (
                                     <div key={idx} className={styles.galleryTile}>
                                         <img
-                                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${img.url}`}
+                                            src={`${WP_URL}${img.url}`}
                                             alt={`${programme.name} - photo ${idx + 1}`}
                                         />
                                     </div>

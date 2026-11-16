@@ -1,6 +1,6 @@
 // app/api/contact/route.ts
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { sendMail, escapeHtml } from '@/src/lib/mailer';
 
 // Validation reCAPTCHA
 async function verifyRecaptcha(token: string): Promise<boolean> {
@@ -38,49 +38,25 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
         }
 
-        // Envoyer l'email via Resend
-        // Instancié ici (et non au chargement du module) pour ne pas exiger la clé au build.
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const { data, error } = await resend.emails.send({
-            from: 'Iteka Contact Form <onboarding@resend.dev>', // Email par défaut Resend
-            to: [process.env.CONTACT_EMAIL || 'contact@itekarwanda.org'],
+        // Envoi de l'email via SMTP
+        await sendMail({
+            fromName: 'Iteka Contact Form',
+            to: process.env.CONTACT_EMAIL || 'contact@itekarwanda.org',
             replyTo: email,
             subject: subject || `New Contact Form Submission from ${name}`,
             html: `
         <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
-        <p><strong>Subject:</strong> ${subject || 'No subject'}</p>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        ${phone ? `<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>` : ''}
+        <p><strong>Subject:</strong> ${escapeHtml(subject || 'No subject')}</p>
         <hr />
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
+        <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
       `,
         });
 
-        if (error) {
-            console.error('Resend error:', error);
-            return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
-        }
-
-        // Optionnel : Enregistrer dans Strapi
-        try {
-            await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/contact-messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.STRAPI_API_TOKEN}`,
-                },
-                body: JSON.stringify({
-                    data: { name, email, subject, message, phone, is_read: false }
-                }),
-            });
-        } catch (err) {
-            console.error('Strapi save error:', err);
-            // Continuer même si Strapi échoue
-        }
-
-        return NextResponse.json({ success: true, data });
+        return NextResponse.json({ success: true });
 
     } catch (error) {
         console.error('Contact form error:', error);

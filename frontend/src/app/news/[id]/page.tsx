@@ -1,3 +1,4 @@
+import { WP_URL } from '@/src/lib/config';
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -78,7 +79,7 @@ export default async function NewsDetailPage({ params }: Props) {
                 {article.featured_image?.data?.url && (
                     <section className={styles.heroImageSection}>
                         <img
-                            src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.featured_image.data.url}`}
+                            src={`${WP_URL}${article.featured_image.data.url}`}
                             alt={article.title}
                         />
                         <div className={styles.heroImageOverlay}></div>

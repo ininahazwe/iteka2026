@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Header from '@/src/components/Header';
@@ -144,7 +145,7 @@ export default function ApproachPage() {
                           <div className={shared.mediaTile}>
                             {imgs[0]?.image?.data?.url && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[0].image.data.url}`}
+                                    src={`${WP_URL}${imgs[0].image.data.url}`}
                                     alt="Our Approach"
                                 />
                             )}
@@ -152,7 +153,7 @@ export default function ApproachPage() {
                           <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
                             {imgs[1]?.image?.data?.url && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[1].image.data.url}`}
+                                    src={`${WP_URL}${imgs[1].image.data.url}`}
                                     alt="Our Approach"
                                 />
                             )}
@@ -303,7 +304,7 @@ export default function ApproachPage() {
                           <div className={shared.mediaTile}>
                             {imgs[0]?.image?.data?.url && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[0].image.data.url}`}
+                                    src={`${WP_URL}${imgs[0].image.data.url}`}
                                     alt="Impact"
                                 />
                             )}
@@ -311,7 +312,7 @@ export default function ApproachPage() {
                           <div className={`${shared.mediaTile} ${shared.mediaTileOffset}`}>
                             {imgs[1]?.image?.data?.url && (
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${imgs[1].image.data.url}`}
+                                    src={`${WP_URL}${imgs[1].image.data.url}`}
                                     alt="Impact"
                                 />
                             )}

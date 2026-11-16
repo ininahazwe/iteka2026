@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -42,7 +43,7 @@ export default function NewsPage() {
                                     {featuredArticle.featured_image?.data?.url && (
                                         <div className={styles.featuredImageWrap}>
                                             <img
-                                                src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${featuredArticle.featured_image.data.url}`}
+                                                src={`${WP_URL}${featuredArticle.featured_image.data.url}`}
                                                 alt={featuredArticle.title}
                                             />
                                             <span className={styles.featuredBadge}>Featured</span>
@@ -95,7 +96,7 @@ export default function NewsPage() {
                                         {article.featured_image?.data?.url && (
                                             <div className={styles.articleImageWrap}>
                                                 <img
-                                                    src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${article.featured_image.data.url}`}
+                                                    src={`${WP_URL}${article.featured_image.data.url}`}
                                                     alt={article.title}
                                                 />
                                             </div>

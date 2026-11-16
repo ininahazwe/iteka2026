@@ -68,7 +68,7 @@ export default function PrivacyPage() {
                                 <p>We rely on the following processors to operate this site:</p>
                                 <ul className={styles.list}>
                                     <li><strong>Stripe</strong> — payment processing for donations.</li>
-                                    <li><strong>Resend</strong> — transactional email delivery (contact form, newsletter notifications).</li>
+                                    <li><strong>Email (SMTP) provider</strong> — delivery of contact form messages and newsletter notifications.</li>
                                     <li><strong>Google reCAPTCHA</strong> — spam and bot protection on our forms.</li>
                                     <li><strong>Cloudinary</strong> — hosting of images displayed on the site.</li>
                                 </ul>

@@ -4,10 +4,6 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'iteka2026.onrender.com',
-            },
-            {
-                protocol: 'https',
                 hostname: 'res.cloudinary.com',
             },
         ],

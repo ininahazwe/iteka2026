@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -19,7 +20,7 @@ export default function PartnersPage() {
     if (!logo) return null;
     const url = logo.url || logo.data?.url;
     if (!url) return null;
-    return url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
+    return url.startsWith('http') ? url : `${WP_URL}${url}`;
   };
 
   const partnershipTypes = [

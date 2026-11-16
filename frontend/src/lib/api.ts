@@ -1,19 +1,14 @@
 // src/lib/api.ts
-// Backend: WordPress + WPGraphQL (remplace Strapi)
+// Backend : WordPress + WPGraphQL.
 //
-// IMPORTANT sur les URLs d'images :
-// Les composants font tous `${process.env.NEXT_PUBLIC_STRAPI_URL}${x.data.url}`
-// (préfixage naïf, sans vérifier si l'URL est déjà absolue). Pour ne pas avoir
-// à toucher aux ~14 pages qui consomment l'API, on garde le même nom de
-// variable d'env (NEXT_PUBLIC_STRAPI_URL) et on renvoie `data.url` comme un
-// chemin RELATIF (origine WordPress retirée), exactement comme le faisait
-// Strapi. Il suffit de pointer NEXT_PUBLIC_STRAPI_URL vers
-// https://admin.itekarwanda.org dans les env Vercel/serveur.
+// Les URLs d'images sont renvoyées comme chemins RELATIFS (origine WordPress retirée) ;
+// les composants les préfixent avec WP_URL (voir src/lib/config.ts, variable
+// d'environnement NEXT_PUBLIC_WP_URL, par défaut https://admin.itekarwanda.org).
+
+import { WP_URL } from './config';
 
 const WP_GRAPHQL_URL =
-  process.env.NEXT_PUBLIC_WP_GRAPHQL_URL || 'https://admin.itekarwanda.org/graphql';
-
-const WP_ORIGIN = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.itekarwanda.org';
+  process.env.NEXT_PUBLIC_WP_GRAPHQL_URL || `${WP_URL}/graphql`;
 
 async function wpFetch<T = any>(query: string, variables: Record<string, any> = {}): Promise<T> {
   const res = await fetch(WP_GRAPHQL_URL, {
@@ -37,7 +32,7 @@ async function wpFetch<T = any>(query: string, variables: Record<string, any> = 
   return json.data as T;
 }
 
-// --- Helpers de normalisation (forme identique à ce que renvoyait Strapi) ---
+// --- Helpers de normalisation (forme attendue par les pages) ---
 
 type MediaShape = { url: string; data: { url: string } } | null;
 
@@ -92,7 +87,7 @@ const PROGRAMME_QUERY_FIELDS = `
   }
 `;
 
-// Forme "Strapi v4 multi-media" attendue par les pages : { data: [{url}, ...] }
+// Forme multi-média attendue par les pages : { data: [{url}, ...] }
 function mediaListShape(items: MediaShape[]) {
   return { data: items.filter(Boolean).map((m) => ({ url: (m as { url: string }).url })) };
 }
@@ -108,7 +103,7 @@ function mapProgramme(node: any) {
     short_description: f.shortDescription,
     featured_image: mediaFromEdge(node.featuredImage),
     // Un seul champ Image côté ACF gratuit (pas de Galerie/Répéteur) :
-    // on renvoie un tableau à 0 ou 1 élément dans la même forme que Strapi.
+    // on renvoie un tableau à 0 ou 1 élément dans la forme { data: [{url}] }.
     gallery: mediaListShape(galleryImage ? [galleryImage] : []),
     impact_stats: parseImpactStats(f.impactStats),
     requirements: f.requirements,

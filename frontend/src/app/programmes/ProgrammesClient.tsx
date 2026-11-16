@@ -1,4 +1,5 @@
 'use client';
+import { WP_URL } from '@/src/lib/config';
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -130,7 +131,7 @@ export default function ProgrammesPage() {
                                             {programme.featured_image?.data?.url && (
                                                 <div className={styles.programmeImageWrap}>
                                                     <img
-                                                        src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${programme.featured_image.data.url}`}
+                                                        src={`${WP_URL}${programme.featured_image.data.url}`}
                                                         alt={programme.name}
                                                     />
                                                 </div>
