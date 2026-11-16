@@ -138,7 +138,7 @@ export default function ApproachPage() {
                   {/* Images filtrées par section "approach_framework" */}
                   {(() => {
                     const imgs = galleryImages
-                      .filter((img: any) => img.page_location === 'approach_holistic_framework')
+                      .filter((img: any) => img.page_locations?.includes('approach_holistic_framework'))
                       .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
                     return (
                         <>
@@ -297,7 +297,7 @@ export default function ApproachPage() {
                   {/* Images filtrées par section "approach_measured" */}
                   {(() => {
                     const imgs = galleryImages
-                      .filter((img: any) => img.page_location === 'approach_measured_for_impact')
+                      .filter((img: any) => img.page_locations?.includes('approach_measured_for_impact'))
                       .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
                     return (
                         <>

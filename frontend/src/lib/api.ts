@@ -247,6 +247,10 @@ function mapGalleryItem(node: any) {
   };
 
   const loc = parseACFSelect(f.pageLocation);
+  // Une image peut être assignée à plusieurs pages (select multiple ACF) : on garde toutes les valeurs
+  const locs: string[] = (Array.isArray(f.pageLocation) ? f.pageLocation : [f.pageLocation])
+    .map((v: any) => parseACFSelect(v))
+    .filter((v: string | null): v is string => !!v);
   const cat = parseACFSelect(f.category);
 
   const result = {
@@ -255,6 +259,7 @@ function mapGalleryItem(node: any) {
     caption: f.caption,
     category: cat,
     page_location: loc || 'gallery',
+    page_locations: locs.length ? locs : ['gallery'],
     date_taken: f.dateTaken,
     photographer: f.photographer,
     order: f.order ?? 0,

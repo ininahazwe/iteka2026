@@ -92,7 +92,7 @@ export default function AboutPage() {
               <div className={styles.storyGrid}>
                 <div className={styles.storyImage}>
                   {(() => {
-                    const storyImg = galleryImages.find((img: any) => img.page_location === 'about_our_story');
+                    const storyImg = galleryImages.find((img: any) => img.page_locations?.includes('about_our_story'));
                     return storyImg?.image?.data?.url && (
                         <img
                             src={`${WP_URL}${storyImg.image.data.url}`}
@@ -248,7 +248,7 @@ export default function AboutPage() {
 
                   <div className={shared.photoGrid}>
                     {galleryImages
-                      .filter((img: any) => img.page_location === 'about_gallery')
+                      .filter((img: any) => img.page_locations?.includes('about_gallery'))
                       .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
                       .slice(0, 8)
                       .map((img: any, idx: number) => (

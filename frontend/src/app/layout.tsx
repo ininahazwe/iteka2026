@@ -1,5 +1,7 @@
 // app/layout.tsx
 import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import WebVitals from '@/src/components/WebVitals';
 import localFont from 'next/font/local';
 import './globals.css';
 import Providers from "@/src/components/providers";
@@ -64,6 +66,12 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebSiteSchema />
         <Providers>{children}</Providers>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+            <>
+                <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+                <WebVitals />
+            </>
+        )}
         </body>
         </html>
     );

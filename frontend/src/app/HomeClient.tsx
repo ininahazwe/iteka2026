@@ -62,7 +62,7 @@ export default function Home() {
 
   // Blobs About : récupérés depuis Gallery avec page_location
   const blobsAbout = galleryImages
-    .filter((img: any) => img.page_location === 'home_about_blobs_top' || img.page_location === 'home_about_blobs_bottom')
+    .filter((img: any) => img.page_locations?.includes('home_about_blobs_top') || img.page_locations?.includes('home_about_blobs_bottom'))
     .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
   const blobImgA = blobsAbout[0]?.image?.data?.url;
   const blobImgB = blobsAbout[1]?.image?.data?.url;
@@ -430,7 +430,7 @@ export default function Home() {
                 <div className={styles.aboutMedia}>
                   {(() => {
                     const whatWeDoImages = galleryImages
-                      .filter((img: any) => img.page_location === 'home_what_we_do')
+                      .filter((img: any) => img.page_locations?.includes('home_what_we_do'))
                       .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0));
                     return (
                         <>

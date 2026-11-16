@@ -206,7 +206,7 @@ export default function ImpactPage() {
               <div className={styles.storyGrid}>
                 <div className={styles.storyImage}>
                   {(() => {
-                    const storyImg = galleryImages.find((img: any) => img.page_location === 'impact_story');
+                    const storyImg = galleryImages.find((img: any) => img.page_locations?.includes('impact_story'));
                     return storyImg?.image?.data?.url && (
                         <img
                             src={`${WP_URL}${storyImg.image.data.url}`}
@@ -330,7 +330,7 @@ export default function ImpactPage() {
                   </h2>
                   <div className={shared.photoGrid}>
                     {galleryImages
-                      .filter((img: any) => img.page_location === 'impact_gallery')
+                      .filter((img: any) => img.page_locations?.includes('impact_gallery'))
                       .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
                       .slice(0, 8)
                       .map((img: any, idx: number) => (
