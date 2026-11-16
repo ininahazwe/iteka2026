@@ -1,14 +1,26 @@
 // app/layout.tsx
 import Script from 'next/script';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import Providers from "@/src/components/providers";
 import type { Metadata } from 'next';
 import { OrganizationSchema, WebSiteSchema } from '@/src/components/StructureData';
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE } from '@/src/lib/seo';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display', weight: ['500', '600', '700'] });
+// Polices hébergées localement (fichiers dans src/fonts) : le build ne dépend plus
+// de Google Fonts. Ce sont des polices variables, donc toutes les graisses sont disponibles.
+const inter = localFont({
+    src: '../fonts/inter-latin-wght-normal.woff2',
+    variable: '--font-sans',
+    weight: '100 900',
+    display: 'swap',
+});
+const spaceGrotesk = localFont({
+    src: '../fonts/space-grotesk-latin-wght-normal.woff2',
+    variable: '--font-display',
+    weight: '300 700',
+    display: 'swap',
+});
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
