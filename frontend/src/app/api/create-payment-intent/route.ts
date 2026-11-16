@@ -2,10 +2,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-    apiVersion: '2024-12-18.acacia' as any,
-});
-
 export async function POST(req: Request) {
     if (!process.env.STRIPE_SECRET_KEY) {
         return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
@@ -17,6 +13,12 @@ export async function POST(req: Request) {
         if (!amount || amount <= 0) {
             return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
         }
+
+        // Instancié ici (et non au chargement du module) : le build Next.js n'exige
+        // ainsi pas la clé Stripe, seule la requête en a besoin.
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+            apiVersion: '2024-12-18.acacia' as any,
+        });
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(amount), // Déjà en centimes depuis frontend

@@ -2,8 +2,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 async function verifyRecaptcha(token?: string): Promise<boolean> {
     if (!token) return true; // reCAPTCHA optional for newsletter signup
     const secret = process.env.RECAPTCHA_SECRET_KEY;
@@ -34,6 +32,8 @@ export async function POST(request: Request) {
 
         const destination = process.env.CONTACT_EMAIL || 'hello@itekarwanda.org';
 
+        // Instancié ici (et non au chargement du module) pour ne pas exiger la clé au build.
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const { error } = await resend.emails.send({
             from: 'Iteka Newsletter <onboarding@resend.dev>',
             to: [destination],
